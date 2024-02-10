@@ -17,15 +17,12 @@ end
 
 function love.update(dt)
     dt = math.min(0.01666667, dt)
-    gdt = dt
-
     Screen:update(dt)
 end
 
 function love.draw()
     Screen:draw()
-
-    if Env.showfps or Env.showdrawcalls or Env.showcursor or Env.showwindow then
+    if Env.showfps or Env.showdrawcalls or Env.showcursor then
         love.graphics.setColor(1,1,1)
         local text = ""
         if Env.showfps then
