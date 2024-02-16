@@ -44,24 +44,27 @@ function DesktopButton:hover(mx,my,i)
 end
 
 function DesktopButton:mousepressed(mx,my,i,b)
-    if b ~= 1 then return end
     if self:hover(mx,my,i) then
-        self.clicking = true
+        self.clicking = b
     end
 end
 function DesktopButton:mousereleased(mx,my,i,b)
-    if b ~= 1 then return end
-    if self.clicking and self:hover(mx,my,i) then
-        self:click()
+    if self.clicking == b and self.window then
+        if self.clicking and self:hover(mx,my,i) then
+            if b == 1 then
+                self:click()
+            elseif b == 2 then
+                self.desktop:windowClose(self.window)
+            end
+        end
+        self.clicking = false
+    elseif self.clicking == b and not self.window then
+        self.desktop.startMenu.open = not self.desktop.startMenu.open
+        self.clicking = false
     end
-    self.clicking = false
 end
 
 function DesktopButton:click()
-    if not self.window then
-        self.desktop.startMenu.open = not self.desktop.startMenu.open
-        return
-    end
     if self.desktop.focus ~= self.window then
         self.desktop.focus = self.window
         self.window.minimized = false

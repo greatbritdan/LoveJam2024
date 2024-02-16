@@ -2,7 +2,8 @@ Desktop = Class("Desktop")
 
 function Desktop:initialize()
     self.w, self.h = Env.width, Env.height
-    self.background = {t="color", color={0.4,0.7,1}}
+    --self.background = {t="color", color={0.4,0.7,1}}
+    self.background = {t="image", img=love.graphics.newImage("graphics/background.png")}
 
     self.startMenu = {
         w = 200, h = 300,
@@ -101,7 +102,7 @@ function Desktop:initialize()
         }
     }
 
-    self.theme = "dark"
+    self.theme = "dark_blue"
     self.themes = {
         dark = {
             taskbar = {
@@ -113,6 +114,20 @@ function Desktop:initialize()
                 subbackground = {0.2,0.2,0.2},
                 navbar = {
                     background = {0.3,0.3,0.3},
+                    text = {1,1,1}
+                }
+            }
+        },
+        dark_blue = {
+            taskbar = {
+                background = {0.2,0.2,0.4,0.9},
+                text = {1,1,1},
+            },
+            window = {
+                background = {0.1,0.1,0.3},
+                subbackground = {0.2,0.2,0.4},
+                navbar = {
+                    background = {0.3,0.3,0.5},
                     text = {1,1,1}
                 }
             }
@@ -137,8 +152,13 @@ function Desktop:draw()
     -- Draw background
     if self.background.t == "color" then
         love.graphics.setColor(self.background.color)
+        love.graphics.rectangle("fill", 0, 0, self.w, self.h)
+    elseif self.background.t == "image" then
+        love.graphics.setColor(1,1,1)
+        local scaleX = self.w/self.background.img:getWidth()
+        local scaleY = self.h/self.background.img:getHeight()
+        love.graphics.draw(self.background.img, 0, 0, 0, scaleX, scaleY)
     end
-    love.graphics.rectangle("fill", 0, 0, self.w, self.h)
 
     -- Draw desktop icons
     local files = self:getFile("b:/desktop")
@@ -177,6 +197,10 @@ function Desktop:draw()
     -- Draw windows below task bar and icons
     for i = #self.windows, 1, -1 do
         local window = self.windows[i]
+        love.graphics.setColor(1,1,1,0.25)
+        love.graphics.rectangle("fill", window.x-1, window.y-1, window.w, window.h)
+        love.graphics.setColor(0,0,0,0.25)
+        love.graphics.rectangle("fill", window.x+4, window.y+4, window.w, window.h)
         window:draw()
     end
 

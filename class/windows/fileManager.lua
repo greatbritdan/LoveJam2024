@@ -3,10 +3,10 @@ WindowFileManager = Class("fileManager", Window)
 function WindowFileManager:initialize(desktop, x, y, w, h, startPath)
     startPath = startPath or "b:/"
     Window.initialize(self, desktop, x, y, w, h, "file manager")
-    self.elements.path = UI.input({x=4, y=4, w=self.w-28, h=16, text=startPath, mc=50, resize=function (element)
-        element.w = self.w-28
+    self.elements.path = UI.input({x=2, y=2, w=self.w-22, h=16, text=startPath, mc=50, desktop=desktop, resize=function (element)
+        element.w = self.w-22
     end})
-    self.elements.back = UI.button({x=self.w-20, y=4, w=16, h=16, text="<", func=function (element)
+    self.elements.back = UI.button({x=self.w-18, y=2, w=16, h=16, text="<", desktop=desktop, func=function (element)
         local path = self.elements.path.text
         if path == "b:/" then
             return
@@ -21,7 +21,7 @@ function WindowFileManager:initialize(desktop, x, y, w, h, startPath)
             self.elements.path.text = "b:/"
         end
     end, resize=function (element)
-        element.x = self.x+self.w-20
+        element.x = self.x+self.w-18
     end})
     self:sync()
 
@@ -35,14 +35,14 @@ function WindowFileManager:draw()
     -- Draw window
     Window.draw(self)
     love.graphics.setColor(self:getColor("subbackground"))
-    love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 24)
+    love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
     -- Print out all files in path
     local files = self.desktop:getFile(self.elements.path.text)
     if files then
-        local y = self.y+self.navbar.h+28
+        local y = self.y+self.navbar.h+24
         for i, file in ipairs(files) do
-            love.graphics.setColor({0.5,0.5,0.5})
+            love.graphics.setColor({1,1,1,0.5})
             if self:hoveringFile() == i then
                 love.graphics.setColor({1,1,1})
             end

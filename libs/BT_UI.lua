@@ -60,11 +60,12 @@ function ui:initialize(t,data)
         end
     end
 
+    self.desktop = data.desktop or false
     self.resize = data.resize or nil
 
     self.style = {
         padding = 8,
-        shape = { curve=0, point=100, outline=1 },
+        shape = { curve=0, point=1 },
         text = { scale=1 },
         color = {
             void = {normal={0,0,0,.5}, hover={0,0,0,.5}, pressed={0,0,0,.5}, inactive={0,0,0,.5}},
