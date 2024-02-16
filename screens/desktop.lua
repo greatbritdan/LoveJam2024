@@ -16,5 +16,8 @@ end
 function desktop.mousereleased(mx, my, b)
     desktopclass:mousereleased(mx, my, b)
 end
+function desktop.keypressed(key, scancode, isrepeat)
+    desktopclass:keypressed(key, scancode, isrepeat)
+end
 
 return desktop

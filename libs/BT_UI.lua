@@ -181,6 +181,7 @@ function ui:scroll(x,y)
             return true
         end
     end
+    return false
 end
 
 function ui:textinput(t)

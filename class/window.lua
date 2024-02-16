@@ -1,10 +1,13 @@
 Window = Class("Window")
 
-function Window:initialize(desktop, w, h, minW, minH)
+function Window:initialize(desktop, x, y, w, h, text, minW, minH)
     self.desktop = desktop
     self.taskbar = desktop.taskbar
 
-    self.x, self.y, self.w, self.h = (Env.width/2)-(w/2), ((Env.height-self.taskbar.h)/2)-(h/2), w, h
+    self.minimized = false
+
+    self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.taskbar.h)/2)-(h/2)
+    self.w, self.h = w, h
     self.minW, self.minH = minW or 100, minH or 100
 
     self.navbar = {
@@ -14,7 +17,7 @@ function Window:initialize(desktop, w, h, minW, minH)
     self.navbar.buttons[1] = {
         name = "minimize",
         color = {normal={1,1,0},hover={1,1,0.5},click={0.75,0.75,0}},
-        func = function() self.desktop:windowMinimize(self) end
+        func = function() self.minimized = true end
     }
     self.navbar.buttons[2] = {
         name = "close",
@@ -22,7 +25,7 @@ function Window:initialize(desktop, w, h, minW, minH)
         func = function() self.desktop:windowClose(self) end
     }
 
-    self.text = "test omg its a widow"
+    self.text = text
 
     self.moving = false
     self.resizing = false
@@ -33,6 +36,7 @@ function Window:initialize(desktop, w, h, minW, minH)
 end
 
 function Window:update(dt)
+    if self.minimized then return end
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.moving then
         self.x, self.y = mx-self.mx, my-self.my
@@ -70,6 +74,7 @@ function Window:update(dt)
 end
 
 function Window:draw()
+    if self.minimized then return end
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local hover = self:hovering(mx, my)
 
@@ -106,9 +111,10 @@ function Window:draw()
 end
 
 function Window:mousepressed(mx,my, b)
+    if self.minimized then return end
     if b ~= 1 then return end
     local hover = self:hovering(mx, my)
-    if not hover then return end
+    if not hover then return false end
     if hover[1] == "navbar" then
         self.moving = true
         self.mx, self.my = mx-self.x, my-self.y
@@ -120,9 +126,11 @@ function Window:mousepressed(mx,my, b)
     if hover[1] == "navbarbutton" then
         self.clicking = hover[2]
     end
+    return true
 end
 
 function Window:mousereleased(mx, my, b)
+    if self.minimized then return end
     if b ~= 1 then return end
     if self.moving then
         self.moving = false

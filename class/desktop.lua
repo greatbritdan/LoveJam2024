@@ -5,8 +5,7 @@ function Desktop:initialize()
     self.background = {t="color", color={0.4,0.7,1}}
 
     self.taskbar = {
-        h = 20,
-        icons = {"test","test2","folder","folder/test3"}
+        h = 20
     }
 
     self.filesystem = {
@@ -28,7 +27,8 @@ function Desktop:initialize()
     }
 
     self.windows = {
-        welcome = Window:new(self,200,100)
+        Window:new(self,50,50,200,100,"window 1"),
+        Window:new(self,150,100,200,100,"window 2")
     }
 end
 
@@ -46,7 +46,8 @@ function Desktop:draw()
     love.graphics.rectangle("fill", 0, 0, self.w, self.h)
 
     -- Draw windows below task bar and icons
-    for _, window in pairs(self.windows) do
+    for i = #self.windows, 1, -1 do
+        local window = self.windows[i]
         window:draw()
     end
 
@@ -54,26 +55,46 @@ function Desktop:draw()
     love.graphics.setColor(0,0,0,0.75)
     love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
 
-    -- Draw icons
-    for i, icon in ipairs(self.taskbar.icons) do
-        local file = self:getFile(icon)
-        if file.type == "folder" then
-            love.graphics.setColor(237/255, 226/255, 121/255)
+    -- Draw window icons
+    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
+    for i, window in pairs(self.windows) do
+        if AABB(mx, my, 1, 1, (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h) then
+            love.graphics.setColor(0.75,0.75,0.75)
         else
             love.graphics.setColor(1,1,1)
         end
-        love.graphics.rectangle("fill", 2+((i-1)*(self.taskbar.h-2)), self.h-self.taskbar.h+2, (self.taskbar.h-4), (self.taskbar.h-4))
+        love.graphics.rectangle("fill", (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h)
     end
 end
 
 function Desktop:mousepressed(mx, my, b)
-    for _, window in pairs(self.windows) do
-        window:mousepressed(mx, my, b)
+    for i, window in pairs(self.windows) do
+        --[[if b == 1 and AABB(mx, my, 1, 1, (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h) then
+            if window.minimized then
+                window.minimized = false
+            end
+            self:windowBringToFront(window)
+            return
+        end]]
+    end
+    for i, window in pairs(self.windows) do
+        if window:mousepressed(mx, my, b) then
+            self:windowBringToFront(window)
+            return
+        end
     end
 end
 function Desktop:mousereleased(mx, my, b)
     for _, window in pairs(self.windows) do
         window:mousereleased(mx, my, b)
+    end
+end
+
+function Desktop:keypressed(key, scancode, isrepeat)
+    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
+    if key == "n" then
+        table.insert(self.windows, Window:new(self,mx,my,200,100,"window "..(#self.windows+1)))
+        self:windowBringToFront(self.windows[#self.windows])
     end
 end
 
@@ -86,4 +107,23 @@ function Desktop:getFile(path)
         file = file[path[i]]
     end
     return file
+end
+
+function Desktop:windowClose(targetWindow)
+    for i, window in pairs(self.windows) do
+        if window == targetWindow then
+            table.remove(self.windows, i)
+            return
+        end
+    end
+end
+function Desktop:windowBringToFront(targetWindow)
+    local newWindows = {}
+    table.insert(newWindows, targetWindow)
+    for i, window in pairs(self.windows) do
+        if window ~= targetWindow then
+            table.insert(newWindows, window)
+        end
+    end
+    self.windows = newWindows
 end
