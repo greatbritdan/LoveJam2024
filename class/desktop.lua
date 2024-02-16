@@ -34,6 +34,43 @@ function Desktop:initialize()
             }
         }
     }
+
+    self.theme = "dark"
+    self.themes = {
+        light = {
+            taskbar = {
+                background = {0.8,0.8,0.8,0.9},
+                text = {0,0,0},
+            },
+            window = {
+                background = {0.9,0.9,0.9},
+                navbar = {
+                    background = {0.7,0.7,0.7},
+                    text = {0,0,0}
+                }
+            }
+        },
+        dark = {
+            taskbar = {
+                background = {0.2,0.2,0.2,0.9},
+                text = {1,1,1},
+            },
+            window = {
+                background = {0.1,0.1,0.1},
+                navbar = {
+                    background = {0.3,0.3,0.3},
+                    text = {1,1,1}
+                }
+            }
+        }
+    }
+end
+
+function Desktop:getColor(name,subname)
+    if subname then
+        return self.themes[self.theme]["taskbar"][name][subname]
+    end
+    return self.themes[self.theme]["taskbar"][name]
 end
 
 function Desktop:update(dt)
@@ -56,7 +93,7 @@ function Desktop:draw()
     end
 
     -- Draw task bar
-    love.graphics.setColor(0,0,0,0.75)
+    love.graphics.setColor(self:getColor("background"))
     love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
 
     -- Draw task bar buttons
@@ -65,7 +102,7 @@ function Desktop:draw()
     end
 
     -- Draw time
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(self:getColor("text"))
     love.graphics.printf(os.date("%H:%M"), self.w-50, self.h-self.taskbar.h+2, 50, "center")
     love.graphics.printf(os.date("%x"), self.w-50, self.h-self.taskbar.h+11, 50, "center")
 end
@@ -96,6 +133,13 @@ function Desktop:mousereleased(mx, my, b)
 end
 
 function Desktop:keypressed(key, scancode, isrepeat)
+    if key == "1" then
+        if self.theme == "dark" then
+            self.theme = "light"
+        else
+            self.theme = "dark"
+        end
+    end
 end
 
 --

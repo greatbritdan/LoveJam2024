@@ -57,6 +57,13 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     self.debug = false
 end
 
+function Window:getColor(name,subname)
+    if subname then
+        return self.desktop.themes[self.desktop.theme]["window"][name][subname]
+    end
+    return self.desktop.themes[self.desktop.theme]["window"][name]
+end
+
 function Window:update(dt)
     if self.minimized then return end
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
@@ -101,12 +108,12 @@ function Window:draw()
     local hover = self:hovering(mx, my)
 
     -- Draw window
-    love.graphics.setColor(1,1,1,0.75)
+    love.graphics.setColor(self:getColor("background"))
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 
-    love.graphics.setColor(0,0,0,0.75)
+    love.graphics.setColor(self:getColor("navbar","background"))
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.navbar.h)
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(self:getColor("navbar","text"))
     love.graphics.print(self.title, self.x+3, self.y+3)
 
     -- Draw navbar buttons
