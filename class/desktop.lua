@@ -24,6 +24,11 @@ function Desktop:initialize()
             icon = "desktop",
             type = "folder",
             {
+                name = "bin (shortcut)",
+                type = "shortcut",
+                target = "b:/bin/"
+            },
+            {
                 name = "junk",
                 type = "folder",
                 {
@@ -278,6 +283,8 @@ end
 function Desktop:getFileFromShortcut(file)
     local target = self:getFile(file.target)
     if target then
+        -- this is ugly, but it's a jam game
+        target.target = file.target
         return target
     end
     return false
@@ -320,10 +327,13 @@ function Desktop:openFile(file,window)
     -- Open folder
     if file.type == "folder" then
         if window and window.program == "filemanager" then
-            window.elements.path.text = window.elements.path.text..file.name.."/"
+            local path = window.elements.path.text..file.name.."/"
+            if file.target then path = file.target end
+            window.elements.path.text = path
             return
         end
         local path = "b:/desktop/"..file.name.."/"
+        if file.target then path = file.target end
         local windowP = self:windowExists("filemanager")
         if windowP then
             windowP.elements.path.text = path
