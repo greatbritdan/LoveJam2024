@@ -17,7 +17,7 @@ function love.load()
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"test","filemanager","text","folder","program"}
+    IconsImgNames = {"test","filemanager","text","folder","program","shortcut"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())

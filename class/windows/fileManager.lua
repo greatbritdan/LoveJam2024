@@ -48,20 +48,27 @@ function WindowFileManager:draw()
                 love.graphics.setColor({1,1,1})
             end
             local file = file
+            local isShortcut = false
             if file.type == "shortcut" then
                 file = self.desktop:getFileFromShortcut(file)
+                isShortcut = true
             end
-            if file.type ~= "folder" then
-                love.graphics.print(file.name.."."..file.type, self.x+44, y+4)
-            else
-                love.graphics.print(file.name, self.x+44, y+4)
+            if file then
+                if file.type ~= "folder" then
+                    love.graphics.print(file.name.."."..file.type, self.x+44, y+4)
+                else
+                    love.graphics.print(file.name, self.x+44, y+4)
+                end
+                if file.icon then
+                    love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+24, y)
+                else
+                    love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+24, y)
+                end
+                if isShortcut then
+                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.x+24, y)
+                end
+                y = y + 20
             end
-            if file.icon then
-                love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+24, y)
-            else
-                love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+24, y)
-            end
-            y = y + 20
         end
     end
 

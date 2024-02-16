@@ -128,7 +128,10 @@ function Window:drawWindow()
 
     love.graphics.setColor(self:getColor("navbar","background"))
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.navbar.h)
-    love.graphics.setColor(self:getColor("navbar","text"))
+    love.graphics.setColor({0.5,0.5,0.5})
+    if self.desktop.focus == self then
+        love.graphics.setColor(self:getColor("navbar","text"))
+    end
     love.graphics.print(self.title, self.x+3, self.y+3)
 
     -- Draw navbar buttons

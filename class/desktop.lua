@@ -71,6 +71,7 @@ function Desktop:initialize()
                 name = "filemanager",
                 type = "program",
                 icon = "filemanager",
+                program = "filemanager",
                 window = WindowFileManager
             }
         }
@@ -136,8 +137,10 @@ function Desktop:draw()
         local hover = self:hoveringFile()
         for i, file in ipairs(files) do
             local file = file
+            local isShortcut = false
             if file.type == "shortcut" then
                 file = self:getFileFromShortcut(file)
+                isShortcut = true
             end
             if file then
                 love.graphics.setColor(0,0,0)
@@ -152,6 +155,9 @@ function Desktop:draw()
                     love.graphics.draw(IconsImg, IconsQuads[file.icon], 8, y, 0, 2, 2)
                 else
                     love.graphics.draw(IconsImg, IconsQuads[file.type], 8, y, 0, 2, 2)
+                end
+                if isShortcut then
+                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], 8, y, 0, 2, 2)
                 end
                 y = y + 44
             end
@@ -267,22 +273,48 @@ end
 function Desktop:openFile(file,window)
     -- Open program
     if file.type == "program" then
+        local windowP = self:windowExists(file.program)
+        if windowP then
+            self:windowBringToFront(windowP)
+            self.focus = windowP
+            return
+        end
         table.insert(self.windows, file.window:new(self,nil,nil,400,300))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        self.focus = self.windows[#self.windows]
+        return
     end
 
     -- Open folder
     if file.type == "folder" then
         if window and window.program == "filemanager" then
             window.elements.path.text = window.elements.path.text..file.name.."/"
-        else
-            table.insert(self.windows, WindowFileManager:new(self,nil,nil,400,300,"b:/desktop/"..file.name.."/"))
-            table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+            return
         end
+        local windowP = self:windowExists("filemanager")
+        if windowP then
+            windowP.elements.path.text = "b:/desktop/"..file.name.."/"
+            self:windowBringToFront(windowP)
+            self.focus = windowP
+            return
+        end
+        table.insert(self.windows, WindowFileManager:new(self,nil,nil,400,300,"b:/desktop/"..file.name.."/"))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        self.focus = self.windows[#self.windows]
+        return
     end
 end
 
 --
+
+function Desktop:windowExists(program)
+    for _, window in pairs(self.windows) do
+        if window.program == program then
+            return window
+        end
+    end
+    return false
+end
 
 function Desktop:windowClose(targetWindow)
     for i, window in pairs(self.windows) do
@@ -298,6 +330,7 @@ function Desktop:windowClose(targetWindow)
         end
     end
 end
+
 function Desktop:windowBringToFront(targetWindow)
     local newWindows = {}
     table.insert(newWindows, targetWindow)
