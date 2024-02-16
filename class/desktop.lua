@@ -272,14 +272,14 @@ function Desktop:openFile(file,window)
     if file.type == "image" then
         local windowP = self:windowExists("imageviewer")
         if windowP then
-            windowP.image = file.image
+            windowP.img = file.img
             windowP.filename = file.name..".image"
             self:windowBringToFront(windowP)
             self.focus = windowP
             self.minimized = false
             return
         end
-        table.insert(self.windows, WindowImageViewer:new(self,nil,nil,200,150,file.image,file.name..".image"))
+        table.insert(self.windows, WindowImageViewer:new(self,nil,nil,200,150,file.img,file.name..".image"))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])

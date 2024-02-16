@@ -16,6 +16,11 @@ return {
                 name = "hello",
                 type = "text",
                 content = "hello, world"
+            },
+            {
+                name = "pfp",
+                type = "image",
+                img = love.graphics.newImage(path.."/pfp.png")
             }
         }
     },
