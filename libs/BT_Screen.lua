@@ -90,7 +90,7 @@ end
 
 function screen:runFunction(name, args)
     -- if no function for screen or transiton locks the function
-    if (not self.screens[self.state][name]) or (self.transition and Tablecontains(self.transitionlock, name)) then
+    if (not self.screens[self.state][name]) or (self.transition and TableContains(self.transitionlock, name)) then
         return
     end
     if args then

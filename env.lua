@@ -1,8 +1,8 @@
 return {
-    width = 392,
-    height = 256,
+    width = 600,
+    height = 400,
     vsync = 1,
-    scale = 3,
+    scale = 2,
 
     showfps = true,
     showdrawcalls = false,

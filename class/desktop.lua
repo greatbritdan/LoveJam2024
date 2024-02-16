@@ -11,24 +11,28 @@ function Desktop:initialize()
 
     self.focus = false
     self.windows = {
-        WindowFileManager:new(self,nil,nil,320,160)
+        WindowFileManager:new(self,nil,nil,400,300)
     }
     self.taskbar.buttons = {
-        DesktopButton:new(self, self.windows[1])
+        DesktopButton:new(self, self.windows[1], "filemanager")
     }
 
     self.filesystem = {
-        test = {
+        {
+            name = "test",
             type = "txt",
             content = "Hello, World!"
         },
-        test2 = {
+        {
+            name = "test 2",
             type = "txt",
             content = "Hello, World! But different!"
         },
-        folder = {
+        {
+            name = "folder",
             type = "folder",
-            test3 = {
+            {
+                name = "test 3",
                 type = "txt",
                 content = "Hello, World! But different-er!"
             }
@@ -43,9 +47,10 @@ function Desktop:initialize()
                 text = {0,0,0},
             },
             window = {
-                background = {0.9,0.9,0.9},
+                background = {0.7,0.7,0.7},
+                subbackground = {0.8,0.8,0.8},
                 navbar = {
-                    background = {0.7,0.7,0.7},
+                    background = {0.9,0.9,0.9},
                     text = {0,0,0}
                 }
             }
@@ -57,6 +62,7 @@ function Desktop:initialize()
             },
             window = {
                 background = {0.1,0.1,0.1},
+                subbackground = {0.2,0.2,0.2},
                 navbar = {
                     background = {0.3,0.3,0.3},
                     text = {1,1,1}
@@ -132,23 +138,29 @@ function Desktop:mousereleased(mx, my, b)
     end
 end
 
+function Desktop:textinput(text)
+    if self.focus then
+        self.focus:textinput(text)
+    end
+end
+
 function Desktop:keypressed(key, scancode, isrepeat)
-    if key == "1" then
-        if self.theme == "dark" then
-            self.theme = "light"
-        else
-            self.theme = "dark"
-        end
+    if self.focus then
+        self.focus:keypressed(key, scancode, isrepeat)
     end
 end
 
 --
 
 function Desktop:getFile(path)
+    path = string.gsub(path, "^b:/", "")
     path = Split(path, "/")
     local file = self.filesystem
     for i = 1, #path do
-        file = file[path[i]]
+        file = TableContainsWithin(file, path[i], "name")
+        if not file then
+            return false
+        end
     end
     return file
 end

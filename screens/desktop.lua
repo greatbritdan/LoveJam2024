@@ -19,5 +19,8 @@ end
 function desktop.keypressed(key, scancode, isrepeat)
     desktopclass:keypressed(key, scancode, isrepeat)
 end
+function desktop.textinput(text)
+    desktopclass:textinput(text)
+end
 
 return desktop

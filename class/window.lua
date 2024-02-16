@@ -5,7 +5,7 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
 
     self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.desktop.taskbar.h)/2)-(h/2)
     self.w, self.h = w, h
-    self.minW, self.minH = minW or 100, minH or 100
+    self.minW, self.minH = minW or 150, minH or 150
 
     self.minimized = false
     self.fullscreen = false
@@ -37,6 +37,7 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
                 self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height
                 self.fullscreen = true
             end
+            self:sync()
         end
     }
     self.navbar.buttons[3] = {
@@ -46,6 +47,8 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
             self.desktop:windowClose(self)
         end
     }
+
+    self.elements = {}
 
     self.title = title
 
@@ -69,9 +72,10 @@ function Window:update(dt)
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.moving then
         self.x, self.y = mx-self.mx, my-self.my
+        self:sync()
     end
     if self.resizing then
-        if Tablecontains(self.resizing, "top") then
+        if TableContains(self.resizing, "top") then
             self.y = my
             self.h = self.oh-(my-self.oy)
             if self.h < self.minH then
@@ -79,13 +83,13 @@ function Window:update(dt)
                 self.y = self.oy+self.oh-self.minH
             end
         end
-        if Tablecontains(self.resizing, "bottom") then
+        if TableContains(self.resizing, "bottom") then
             self.h = my-self.y
             if self.h < self.minH then
                 self.h = self.minH
             end
         end
-        if Tablecontains(self.resizing, "left") then
+        if TableContains(self.resizing, "left") then
             self.x = mx
             self.w = self.ow-(mx-self.ox)
             if self.w < self.minW then
@@ -93,17 +97,26 @@ function Window:update(dt)
                 self.x = self.ox+self.ow-self.minW
             end
         end
-        if Tablecontains(self.resizing, "right") then
+        if TableContains(self.resizing, "right") then
             self.w = mx-self.x
             if self.w < self.minW then
                 self.w = self.minW
             end
         end
+        self:sync()
+    end
+    for _, element in pairs(self.elements) do
+        element:update(dt)
     end
 end
 
 function Window:draw()
     if self.minimized then return end
+    self:drawWindow()
+    self:drawUI()
+end
+
+function Window:drawWindow()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local hover = self:hovering(mx, my)
 
@@ -140,6 +153,13 @@ function Window:draw()
     love.graphics.rectangle("fill", self.x, self.y+self.h-self.resizePadding, self.w, self.resizePadding)
 end
 
+function Window:drawUI()
+    -- Draw elements
+    for _, element in pairs(self.elements) do
+        element:draw()
+    end
+end
+
 function Window:mousepressed(mx,my, b)
     if self.minimized then return end
     if b ~= 1 then return end
@@ -153,13 +173,20 @@ function Window:mousepressed(mx,my, b)
             self.mx = self.mx/(Env.width/self.w)
             self.fullscreen = false
         end
+        self:sync()
     end
     if hover[1] == "resize" then
         self.resizing = hover
         self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
+        self:sync()
     end
     if hover[1] == "navbarbutton" then
         self.clicking = hover[2]
+    end
+    if hover[1] == "window" then
+        for _, element in pairs(self.elements) do
+            element:press(mx, my, b)
+        end
     end
     return true
 end
@@ -179,6 +206,23 @@ function Window:mousereleased(mx, my, b)
             self.clicking.func()
         end
         self.clicking = false
+    end
+    for _, element in pairs(self.elements) do
+        element:unpress(mx, my, b)
+    end
+end
+
+function Window:textinput(text)
+    if self.minimized then return end
+    for _, element in pairs(self.elements) do
+        element:textinput(text)
+    end
+end
+
+function Window:keypressed(key, scancode, isrepeat)
+    if self.minimized then return end
+    for _, element in pairs(self.elements) do
+        element:keypress(key, scancode, isrepeat)
     end
 end
 
@@ -219,4 +263,16 @@ function Window:hovering(mx, my)
         return {"window"}
     end
     return false
+end
+
+function Window:sync()
+    for _, element in pairs(self.elements) do
+        if not element.startX then
+            element.startX, element.startY = element.x, element.y
+        end
+        element.x, element.y = self.x+element.startX, self.y+self.navbar.h+element.startY
+        if element.resize then
+            element:resize()
+        end
+    end
 end

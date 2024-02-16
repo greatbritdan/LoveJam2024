@@ -34,7 +34,7 @@ function ui:initialize(t,data)
         if type(self.item) == "number" then
             self.item = math.max(1,math.min(self.item,#self.items))
         elseif type(self.item) == "string" then
-            self.item = Tablecontains(self.items,self.item) or 1
+            self.item = TableContains(self.items,self.item) or 1
         end
     end
 
@@ -110,11 +110,11 @@ function ui:draw()
         if self.t ~= "label" then
             if self.t == "slider" then
                 self:drawFill(self.x,self.y,self.w,self.h,"void")
-                self:drawFill(self.sx,self.sy,self.sw,self.sh,"back")
                 self:drawLine(self.sx,self.sy,self.sw,self.sh,"line")
+                self:drawFill(self.sx,self.sy,self.sw,self.sh,"back")
             else
-                self:drawFill(self.x,self.y,self.w,self.h,"back")
                 self:drawLine(self.x,self.y,self.w,self.h,"line")
+                self:drawFill(self.x,self.y,self.w,self.h,"back")
                 if self.t == "input" and self.inputting then
                     -- draw cursor at end of text
                     local font = love.graphics.getFont()
@@ -170,7 +170,7 @@ end
 
 function ui:scroll(x,y)
     if self.t == "slider" then
-        local mx, my = love.mouse.getPosition()
+        local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
         if self.global or self:highlight(mx,my,true) then
             local oldval = self.value
             self.value = math.max(self.limit[1], math.min(Round(self.value+((-y)*self.limit[4]),self.limit[3]), self.limit[2]))
@@ -212,7 +212,7 @@ function ui:highlight(mx,my,s)
     if self.t == "label" then
         return false
     end
-    mx, my = mx or love.mouse.getX(), my or love.mouse.getY()
+    mx, my = mx or love.mouse.getX()/Env.scale, my or love.mouse.getY()/Env.scale
     if self.scissor and (not AABB(self.scissor.x,self.scissor.y,self.scissor.w,self.scissor.h,mx,my,1,1)) then
         return false
     end
@@ -283,13 +283,13 @@ function ui:debugDraw()
     love.graphics.setLineWidth(lwidth)
 end
 
-function ui:drawRect(t,x,y,w,h)
+function ui:drawRect(x,y,w,h)
     local curve, points = self.style.shape.curve, self.style.shape.points
-    love.graphics.rectangle(t,x,y,w,h,curve,curve,points)
+    love.graphics.rectangle("fill",x,y,w,h,curve,curve,points)
 end
 function ui:drawFill(x,y,w,h,col)
     self:setColor(col)
-    self:drawRect("fill",x,y,w,h)
+    self:drawRect(x+1,y+1,w-2,h-2)
 end
 function ui:drawLine(x,y,w,h,col)
     if not self.style.shape.outline then
@@ -298,7 +298,7 @@ function ui:drawLine(x,y,w,h,col)
     local lwidth = love.graphics.getLineWidth()
     love.graphics.setLineWidth(self.style.shape.outline)
     self:setColor(col)
-    self:drawRect("line",x,y,w,h)
+    self:drawRect(x,y,w,h)
     love.graphics.setLineWidth(lwidth)
 end
 function ui:drawText(x,y,w,h,col,text,texta)

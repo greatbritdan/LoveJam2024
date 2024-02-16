@@ -1,9 +1,9 @@
 DesktopButton = Class("DesktopButton")
 
-function DesktopButton:initialize(desktop, window)
+function DesktopButton:initialize(desktop, window, iconName)
     self.desktop = desktop
     self.window = window
-    self.iconName = "test"
+    self.iconName = iconName or "test"
     self.clicking = false
 end
 
@@ -17,11 +17,11 @@ function DesktopButton:draw(i)
     else
         love.graphics.setColor(1,1,1,0)
     end
-    love.graphics.rectangle("fill", (i-1)*self.desktop.taskbar.h, self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h)
+    love.graphics.rectangle("fill", ((i-1)*self.desktop.taskbar.h), self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h)
     
     -- Draw task bar button icon
     love.graphics.setColor(1,1,1)
-    love.graphics.draw(IconsImg, IconsQuads[self.iconName], (i-1)*self.desktop.taskbar.h, self.desktop.h-self.desktop.taskbar.h, 0, self.desktop.taskbar.h/16, self.desktop.taskbar.h/16)
+    love.graphics.draw(IconsImg, IconsQuads[self.iconName], ((i-1)*self.desktop.taskbar.h)+2, self.desktop.h-self.desktop.taskbar.h+2, 0)
     
     -- Draw task bar button indicator
     love.graphics.setColor(0.5,0.5,1)

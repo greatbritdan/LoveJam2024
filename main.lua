@@ -17,7 +17,7 @@ function love.load()
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"test"}
+    IconsImgNames = {"test","filemanager"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
@@ -101,10 +101,18 @@ function Split(inputstr, sep)
     return t
 end
 
-function Tablecontains(table, name)
+function TableContains(table, name)
     for i = 1, #table do
         if table[i] == name then
             return i
+        end
+    end
+    return false
+end
+function TableContainsWithin(table, name, key)
+    for i = 1, #table do
+        if table[i][key] == name then
+            return table[i]
         end
     end
     return false
