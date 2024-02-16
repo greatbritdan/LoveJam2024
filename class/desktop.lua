@@ -5,7 +5,8 @@ function Desktop:initialize()
     self.background = {t="color", color={0.4,0.7,1}}
 
     self.taskbar = {
-        h = 20
+        h = 20,
+        buttons = {}
     }
 
     self.filesystem = {
@@ -30,11 +31,14 @@ function Desktop:initialize()
         Window:new(self,50,50,200,100,"window 1"),
         Window:new(self,150,100,200,100,"window 2")
     }
+    self.taskbar.buttons[1] = DesktopButton:new(self, self.windows[1])
+    self.taskbar.buttons[2] = DesktopButton:new(self, self.windows[2])
 end
 
 function Desktop:update(dt)
     for _, window in pairs(self.windows) do
         window:update(dt)
+        window.text = "z "..self:getZPos(window).." t "..self:getTaskbarPos(window)
     end
 end
 
@@ -55,27 +59,15 @@ function Desktop:draw()
     love.graphics.setColor(0,0,0,0.75)
     love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
 
-    -- Draw window icons
-    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
-    for i, window in pairs(self.windows) do
-        if AABB(mx, my, 1, 1, (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h) then
-            love.graphics.setColor(0.75,0.75,0.75)
-        else
-            love.graphics.setColor(1,1,1)
-        end
-        love.graphics.rectangle("fill", (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h)
+    -- Draw task bar buttons
+    for i, button in pairs(self.taskbar.buttons) do
+        button:draw(i)
     end
 end
 
 function Desktop:mousepressed(mx, my, b)
-    for i, window in pairs(self.windows) do
-        --[[if b == 1 and AABB(mx, my, 1, 1, (i-1)*self.taskbar.h, self.h-self.taskbar.h, self.taskbar.h, self.taskbar.h) then
-            if window.minimized then
-                window.minimized = false
-            end
-            self:windowBringToFront(window)
-            return
-        end]]
+    for i, button in pairs(self.taskbar.buttons) do
+        button:mousepressed(mx, my, i, b)
     end
     for i, window in pairs(self.windows) do
         if window:mousepressed(mx, my, b) then
@@ -85,6 +77,9 @@ function Desktop:mousepressed(mx, my, b)
     end
 end
 function Desktop:mousereleased(mx, my, b)
+    for i, button in pairs(self.taskbar.buttons) do
+        button:mousereleased(mx, my, i, b)
+    end
     for _, window in pairs(self.windows) do
         window:mousereleased(mx, my, b)
     end
@@ -94,6 +89,7 @@ function Desktop:keypressed(key, scancode, isrepeat)
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if key == "n" then
         table.insert(self.windows, Window:new(self,mx,my,200,100,"window "..(#self.windows+1)))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self:windowBringToFront(self.windows[#self.windows])
     end
 end
@@ -109,10 +105,35 @@ function Desktop:getFile(path)
     return file
 end
 
+function Desktop:getZPos(targetWindow)
+    for i, window in pairs(self.windows) do
+        if window == targetWindow then
+            return i
+        end
+    end
+    return 0
+end
+function Desktop:getTaskbarPos(targetWindow)
+    for i, button in pairs(self.taskbar.buttons) do
+        if button.window == targetWindow then
+            return i
+        end
+    end
+    return 0
+end
+
 function Desktop:windowClose(targetWindow)
     for i, window in pairs(self.windows) do
         if window == targetWindow then
             table.remove(self.windows, i)
+
+            for i, button in pairs(self.taskbar.buttons) do
+                if button.window == targetWindow then
+                    table.remove(self.taskbar.buttons, i)
+                    return
+                end
+            end
+
             return
         end
     end

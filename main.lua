@@ -16,8 +16,9 @@ function love.load()
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789", 1)
     love.graphics.setFont(Font)
 
-    require("class.desktop")
+    require("class.desktopButton")
     require("class.window")
+    require("class.desktop")
 
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
