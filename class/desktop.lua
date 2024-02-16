@@ -4,9 +4,16 @@ function Desktop:initialize()
     self.w, self.h = Env.width, Env.height
     self.background = {t="color", color={0.4,0.7,1}}
 
+    self.startMenu = {
+        w = 200, h = 300,
+        open = false,
+        buttons = {}
+    }
     self.taskbar = {
         h = 20,
-        buttons = {}
+        buttons = {
+            DesktopButton:new(self, false)
+        }
     }
 
     self.focus = false
@@ -96,20 +103,6 @@ function Desktop:initialize()
 
     self.theme = "dark"
     self.themes = {
-        light = {
-            taskbar = {
-                background = {0.8,0.8,0.8,0.9},
-                text = {0,0,0},
-            },
-            window = {
-                background = {0.7,0.7,0.7},
-                subbackground = {0.8,0.8,0.8},
-                navbar = {
-                    background = {0.9,0.9,0.9},
-                    text = {0,0,0}
-                }
-            }
-        },
         dark = {
             taskbar = {
                 background = {0.2,0.2,0.2,0.9},
@@ -187,6 +180,14 @@ function Desktop:draw()
         window:draw()
     end
 
+    -- Draw start menu
+    if self.startMenu.open then
+        love.graphics.setColor(self:getColor("background"))
+        love.graphics.rectangle("fill", 0, self.h-self.taskbar.h-self.startMenu.h, self.startMenu.w, self.startMenu.h)
+        love.graphics.setColor(self:getColor("text"))
+        love.graphics.print("no idea what i'll use this for", 4, self.h-self.taskbar.h-self.startMenu.h+4)
+    end
+
     -- Draw task bar
     love.graphics.setColor(self:getColor("background"))
     love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
@@ -203,6 +204,7 @@ function Desktop:draw()
 end
 
 function Desktop:mousepressed(mx, my, b)
+    self.startMenu.open = false
     if my < self.h-self.taskbar.h then
         self.dontOverwriteFocus = false
         self.focus = false

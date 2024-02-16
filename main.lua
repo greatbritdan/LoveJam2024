@@ -13,11 +13,19 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
+    Pointers = {
+        normal = love.mouse.getSystemCursor("arrow"),
+        sizewe = love.mouse.getSystemCursor("sizewe"),
+        sizens = love.mouse.getSystemCursor("sizens"),
+        sizenwse = love.mouse.getSystemCursor("sizenwse"),
+        sizenesw = love.mouse.getSystemCursor("sizenesw"),
+    }
+
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>", 1)
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"test","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs"}
+    IconsImgNames = {"test","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())

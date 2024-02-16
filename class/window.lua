@@ -73,7 +73,9 @@ function Window:update(dt)
         self.x, self.y = mx-self.mx, my-self.my
         self:sync()
     end
+    love.mouse.setCursor(Pointers.normal)
     if self.resizing then
+        local top, right, bottom, left = false, false, false, false
         if TableContains(self.resizing, "top") then
             self.y = my
             self.h = self.oh-(my-self.oy)
@@ -103,6 +105,32 @@ function Window:update(dt)
             end
         end
         self:sync()
+    else
+        local hover = self:hovering(mx, my)
+        if hover and hover[1] == "resize" then
+            local top, right, bottom, left = false, false, false, false
+            if TableContains(hover, "top") then
+                top = true
+            end
+            if TableContains(hover, "bottom") then
+                bottom = true
+            end
+            if TableContains(hover, "left") then
+                left = true
+            end
+            if TableContains(hover, "right") then
+                right = true
+            end
+            if (top and left) or (bottom and right) then
+                love.mouse.setCursor(Pointers.sizenwse)
+            elseif (top and right) or (bottom and left) then
+                love.mouse.setCursor(Pointers.sizenesw)
+            elseif top or bottom then
+                love.mouse.setCursor(Pointers.sizens)
+            elseif right or left then
+                love.mouse.setCursor(Pointers.sizewe)
+            end
+        end
     end
     for _, element in pairs(self.elements) do
         element:update(dt)
