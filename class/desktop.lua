@@ -63,6 +63,11 @@ function Desktop:draw()
     for i, button in pairs(self.taskbar.buttons) do
         button:draw(i)
     end
+
+    -- Draw time
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf(os.date("%H:%M"), self.w-50, self.h-self.taskbar.h+2, 50, "center")
+    love.graphics.printf(os.date("%x"), self.w-50, self.h-self.taskbar.h+11, 50, "center")
 end
 
 function Desktop:mousepressed(mx, my, b)
