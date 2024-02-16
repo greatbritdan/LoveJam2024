@@ -13,6 +13,9 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789")
+    love.graphics.setFont(Font)
+
     Screen:changeState("test", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
