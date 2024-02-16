@@ -126,6 +126,7 @@ function Desktop:getColor(name,subname)
 end
 
 function Desktop:update(dt)
+    love.mouse.setCursor(Pointers.normal)
     for _, window in pairs(self.windows) do
         window:update(dt)
     end
@@ -322,15 +323,16 @@ function Desktop:openFile(file,window)
             window.elements.path.text = window.elements.path.text..file.name.."/"
             return
         end
+        local path = "b:/desktop/"..file.name.."/"
         local windowP = self:windowExists("filemanager")
         if windowP then
-            windowP.elements.path.text = "b:/desktop/"..file.name.."/"
+            windowP.elements.path.text = path
             self:windowBringToFront(windowP)
             self.focus = windowP
             self.minimized = false
             return
         end
-        table.insert(self.windows, WindowFileManager:new(self,nil,nil,200,150,"b:/desktop/"..file.name.."/"))
+        table.insert(self.windows, WindowFileManager:new(self,nil,nil,200,150,path))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])

@@ -73,9 +73,7 @@ function Window:update(dt)
         self.x, self.y = mx-self.mx, my-self.my
         self:sync()
     end
-    love.mouse.setCursor(Pointers.normal)
     if self.resizing then
-        local top, right, bottom, left = false, false, false, false
         if TableContains(self.resizing, "top") then
             self.y = my
             self.h = self.oh-(my-self.oy)
