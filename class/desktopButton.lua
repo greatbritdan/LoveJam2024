@@ -10,9 +10,9 @@ function DesktopButton:draw(i)
     -- Draw task bar button highlight
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.clicking then
-        love.graphics.setColor(1,1,1,0.5)
-    elseif self:hover(mx,my,i) then
         love.graphics.setColor(1,1,1,0.25)
+    elseif self:hover(mx,my,i) then
+        love.graphics.setColor(1,1,1,0.5)
     else
         love.graphics.setColor(1,1,1,0)
     end

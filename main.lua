@@ -23,6 +23,13 @@ function love.load()
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
     end
 
+    WindowIconsImg = love.graphics.newImage("graphics/windowIcons.png")
+    WindowIconsImgNames = {"minimize","fullscreen","close"}
+    WindowIconsQuads = {}
+    for i = 1, WindowIconsImg:getWidth()/13 do
+        WindowIconsQuads[WindowIconsImgNames[i]] = love.graphics.newQuad((i-1)*13, 0, 13, 13, WindowIconsImg:getWidth(), WindowIconsImg:getHeight())
+    end
+
     require("class.window")
     require("class.windows.fileManager")
     require("class.windows.textViewer")

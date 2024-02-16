@@ -19,7 +19,6 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     }
     self.navbar.buttons[1] = {
         name = "minimize",
-        color = {normal={0,1,0},hover={0.5,1,0},click={0,0.75,0}},
         func = function()
             self.minimized = true
             if self.desktop.focus == self then
@@ -29,7 +28,6 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     }
     self.navbar.buttons[2] = {
         name = "fullscreen",
-        color = {normal={1,1,0},hover={1,1,0.5},click={0.75,0.75,0}},
         func = function()
             if self.fullscreen then
                 self.x, self.y, self.w, self.h = self.ox, self.oy, self.ow, self.oh
@@ -44,7 +42,6 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     }
     self.navbar.buttons[3] = {
         name = "close",
-        color = {normal={1,0,0},hover={1,0.5,0},click={0.75,0,0}},
         func = function()
             self.desktop:windowClose(self)
         end
@@ -137,15 +134,17 @@ function Window:drawWindow()
     -- Draw navbar buttons
     for i, button in pairs(self.navbar.buttons) do
         local x = self.x+self.w-(#self.navbar.buttons*self.navbar.h)+((i-1)*self.navbar.h)
-        love.graphics.setColor(button.color.normal)
+        love.graphics.setColor({1,1,1,0})
         if hover and hover[1] == "navbarbutton" and hover[2] == button then
             if love.mouse.isDown(1) then
-                love.graphics.setColor(button.color.click)
+                love.graphics.setColor({1,1,1,0.25})
             else
-                love.graphics.setColor(button.color.hover)
+                love.graphics.setColor({1,1,1,0.5})
             end
         end
         love.graphics.rectangle("fill", x, self.y, self.navbar.h, self.navbar.h)
+        love.graphics.setColor({1,1,1})
+        love.graphics.draw(WindowIconsImg, WindowIconsQuads[button.name], x, self.y, 0)
     end
 
     if not self.debug then return end
