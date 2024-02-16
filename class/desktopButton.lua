@@ -3,19 +3,33 @@ DesktopButton = Class("DesktopButton")
 function DesktopButton:initialize(desktop, window)
     self.desktop = desktop
     self.window = window
+    self.iconName = "test"
     self.clicking = false
 end
 
 function DesktopButton:draw(i)
+    -- Draw task bar button highlight
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.clicking then
-        love.graphics.setColor(0.5,0.5,0.5,0.75)
+        love.graphics.setColor(1,1,1,0.5)
     elseif self:hover(mx,my,i) then
-        love.graphics.setColor(0.75,0.75,0.75,0.75)
+        love.graphics.setColor(1,1,1,0.25)
     else
-        love.graphics.setColor(0.25,0.25,0.25,0.75)
+        love.graphics.setColor(1,1,1,0)
     end
     love.graphics.rectangle("fill", (i-1)*self.desktop.taskbar.h, self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h)
+    
+    -- Draw task bar button icon
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(IconsImg, IconsQuads[self.iconName], (i-1)*self.desktop.taskbar.h, self.desktop.h-self.desktop.taskbar.h, 0, self.desktop.taskbar.h/16, self.desktop.taskbar.h/16)
+    
+    -- Draw task bar button indicator
+    love.graphics.setColor(0.5,0.5,1)
+    if self.desktop.focus == self.window then
+        love.graphics.rectangle("fill", (i-1)*self.desktop.taskbar.h+4, self.desktop.h-1, self.desktop.taskbar.h-8, 1)
+    else
+        love.graphics.rectangle("fill", (i-1)*self.desktop.taskbar.h+6, self.desktop.h-1, self.desktop.taskbar.h-12, 1)
+    end
 end
 
 function DesktopButton:hover(mx,my,i)
@@ -39,6 +53,10 @@ function DesktopButton:mousereleased(mx,my,i,b)
 end
 
 function DesktopButton:click()
+    if self.desktop.focus ~= self.window then
+        self.desktop.focus = self.window
+        return
+    end
     self.window.minimized = not self.window.minimized
     if not self.window.minimized then
         self.desktop:windowBringToFront(self.window)

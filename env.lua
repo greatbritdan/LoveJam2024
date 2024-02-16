@@ -5,6 +5,6 @@ return {
     scale = 3,
 
     showfps = true,
-    showdrawcalls = true,
+    showdrawcalls = false,
     showcursor = false
 }

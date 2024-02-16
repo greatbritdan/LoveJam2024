@@ -33,12 +33,18 @@ function Desktop:initialize()
     }
     self.taskbar.buttons[1] = DesktopButton:new(self, self.windows[1])
     self.taskbar.buttons[2] = DesktopButton:new(self, self.windows[2])
+
+    self.focus = false
 end
 
 function Desktop:update(dt)
     for _, window in pairs(self.windows) do
         window:update(dt)
-        window.text = "z "..self:getZPos(window).." t "..self:getTaskbarPos(window)
+        --window.text = "z "..self:getZPos(window).." t "..self:getTaskbarPos(window)
+        window.text = ""
+        if self.focus == window then
+            window.text = "focused"
+        end
     end
 end
 
@@ -71,13 +77,18 @@ function Desktop:draw()
 end
 
 function Desktop:mousepressed(mx, my, b)
-    for i, button in pairs(self.taskbar.buttons) do
-        button:mousepressed(mx, my, i, b)
-    end
-    for i, window in pairs(self.windows) do
-        if window:mousepressed(mx, my, b) then
-            self:windowBringToFront(window)
-            return
+    if my < self.h-self.taskbar.h then
+        self.focus = false
+        for i, window in pairs(self.windows) do
+            if window:mousepressed(mx, my, b) then
+                self:windowBringToFront(window)
+                self.focus = window
+                return
+            end
+        end
+    else
+        for i, button in pairs(self.taskbar.buttons) do
+            button:mousepressed(mx, my, i, b)
         end
     end
 end

@@ -13,8 +13,15 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
-    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789", 1)
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\", 1)
     love.graphics.setFont(Font)
+
+    IconsImg = love.graphics.newImage("graphics/icons.png")
+    IconsImgNames = {"test"}
+    IconsQuads = {}
+    for i = 1, IconsImg:getWidth()/16 do
+        IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
+    end
 
     require("class.desktopButton")
     require("class.window")
