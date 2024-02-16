@@ -17,6 +17,7 @@ function love.load()
     love.graphics.setFont(Font)
 
     require("class.desktop")
+    require("class.window")
 
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
@@ -79,6 +80,15 @@ function Round(n, deci)
 end
 function AABB(ax, ay, awidth, aheight, bx, by, bwidth, bheight)
 	return ax+awidth > bx and ax < bx+bwidth and ay+aheight > by and ay < by+bheight
+end
+
+function Split(inputstr, sep)
+    if sep == nil then sep = "%s" end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+    return t
 end
 
 function Tablecontains(table, name)
