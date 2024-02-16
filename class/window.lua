@@ -34,7 +34,7 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
                 self.fullscreen = false
             else
                 self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
-                self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height
+                self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height-self.desktop.taskbar.h
                 self.fullscreen = true
             end
             self:sync()
