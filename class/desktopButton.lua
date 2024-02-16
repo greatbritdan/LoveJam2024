@@ -55,10 +55,14 @@ end
 function DesktopButton:click()
     if self.desktop.focus ~= self.window then
         self.desktop.focus = self.window
+        self.window.minimized = false
+        self.desktop:windowBringToFront(self.window)
         return
     end
     self.window.minimized = not self.window.minimized
-    if not self.window.minimized then
+    if self.window.minimized then
+        self.desktop.focus = false
+    else
         self.desktop:windowBringToFront(self.window)
     end
 end
