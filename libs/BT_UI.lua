@@ -118,8 +118,8 @@ function ui:draw()
                 if self.t == "input" and self.inputting then
                     -- draw cursor at end of text
                     local font = love.graphics.getFont()
-                    y = self:allignY(self.y,self.h,font)-2
-                    x = self:allignX(self.x,self.w,self.text,self.textallign,font)+(font:getWidth(self.text)*self.style.text.scale)+self.style.text.scale
+                    y = self:allignY(self.y,self.h,font)
+                    x = self:allignX(self.x,self.w,self.text,self.textallign,font)+(font:getWidth(self.text)*self.style.text.scale)+self.style.text.scale-1
                     self:setColor("text")
                     love.graphics.print("|", x, y, 0, self.style.text.scale, self.style.text.scale)
                 end
@@ -149,6 +149,10 @@ function ui:press(x,y,b)
             self.inputting = true
         else
             self.pressed = true
+        end
+    else
+        if self.t == "input" and self.inputting then
+            self.inputting = false
         end
     end
 end

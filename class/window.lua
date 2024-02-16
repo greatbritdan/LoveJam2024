@@ -2,6 +2,7 @@ Window = Class("Window")
 
 function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     self.desktop = desktop
+    self.program = false
 
     self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.desktop.taskbar.h)/2)-(h/2)
     self.w, self.h = w, h

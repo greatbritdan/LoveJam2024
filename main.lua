@@ -13,7 +13,7 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
-    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\", 1)
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>", 1)
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")

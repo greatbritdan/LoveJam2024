@@ -5,7 +5,7 @@ function WindowFileManager:initialize(desktop, x, y, w, h)
     self.elements.path = UI.input({x=24, y=4, w=self.w-48, h=16, text="b:/", mc=50, resize=function (element)
         element.w = self.w-48
     end})
-    self.elements.back = UI.button({x=self.w-20, y=4, w=16, h=16, text="(", func=function (element)
+    self.elements.back = UI.button({x=self.w-20, y=4, w=16, h=16, text="<", func=function (element)
         local path = self.elements.path.text
         if path == "b:/" then
             return
@@ -24,6 +24,8 @@ function WindowFileManager:initialize(desktop, x, y, w, h)
         element.x = self.x+self.w-20
     end})
     self:sync()
+
+    self.program = "filemanager"
 end
 
 function WindowFileManager:draw()
@@ -44,12 +46,20 @@ function WindowFileManager:draw()
             if self:hoveringFile() == i then
                 love.graphics.setColor({1,1,1})
             end
+            local file = file
+            if file.type == "shortcut" then
+                file = self.desktop:getFileFromShortcut(file)
+            end
             if file.type ~= "folder" then
                 love.graphics.print(file.name.."."..file.type, self.x+44, y+4)
             else
                 love.graphics.print(file.name, self.x+44, y+4)
             end
-            love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+24, y)
+            if file.icon then
+                love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+24, y)
+            else
+                love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+24, y)
+            end
             y = y + 20
         end
     end
@@ -59,14 +69,18 @@ function WindowFileManager:draw()
 end
 
 function WindowFileManager:mousepressed(mx, my, b)
-    Window.mousepressed(self, mx, my, b)
     local hover = self:hoveringFile()
     if hover then
         local files = self.desktop:getFile(self.elements.path.text)
         if files[hover].type == "folder" then
             self.elements.path.text = self.elements.path.text..files[hover].name.."/"
         end
+        return true
     end
+    if Window.mousepressed(self, mx, my, b) then
+        return true
+    end
+    return false
 end
 
 function WindowFileManager:hoveringFile()
