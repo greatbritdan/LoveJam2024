@@ -12,9 +12,7 @@ function Desktop:initialize()
     }
     self.taskbar = {
         h = 20,
-        buttons = {
-            DesktopButton:new(self, false)
-        }
+        buttons = { DesktopButton:new(self, false) }
     }
 
     self.focus = false
@@ -25,11 +23,6 @@ function Desktop:initialize()
             name = "desktop",
             icon = "desktop",
             type = "folder",
-            {
-                name = "text",
-                type = "text",
-                content = "hello, world!",
-            },
             {
                 name = "junk",
                 type = "folder",
@@ -57,8 +50,12 @@ function Desktop:initialize()
                         content = "i like dogs"
                     }
                 }
+            },
+            {
+                name = "text",
+                type = "text",
+                content = "hello, world!",
             }
-
         },
         {
             name = "bin",
@@ -102,7 +99,7 @@ function Desktop:initialize()
         }
     }
 
-    self.theme = "dark_blue"
+    self.theme = "dark"
     self.themes = {
         dark = {
             taskbar = {
@@ -114,20 +111,6 @@ function Desktop:initialize()
                 subbackground = {0.2,0.2,0.2},
                 navbar = {
                     background = {0.3,0.3,0.3},
-                    text = {1,1,1}
-                }
-            }
-        },
-        dark_blue = {
-            taskbar = {
-                background = {0.2,0.2,0.4,0.9},
-                text = {1,1,1},
-            },
-            window = {
-                background = {0.1,0.1,0.3},
-                subbackground = {0.2,0.2,0.4},
-                navbar = {
-                    background = {0.3,0.3,0.5},
                     text = {1,1,1}
                 }
             }
@@ -197,10 +180,10 @@ function Desktop:draw()
     -- Draw windows below task bar and icons
     for i = #self.windows, 1, -1 do
         local window = self.windows[i]
-        love.graphics.setColor(1,1,1,0.25)
-        love.graphics.rectangle("fill", window.x-1, window.y-1, window.w, window.h)
-        love.graphics.setColor(0,0,0,0.25)
-        love.graphics.rectangle("fill", window.x+4, window.y+4, window.w, window.h)
+        if not window.minimized then
+            love.graphics.setColor(0,0,0,0.25)
+            love.graphics.rectangle("fill", window.x+2, window.y+2, window.w, window.h)
+        end
         window:draw()
     end
 
@@ -326,7 +309,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, file.window:new(self,nil,nil,400,300))
+        table.insert(self.windows, file.window:new(self,nil,nil,200,150))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -347,7 +330,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, WindowFileManager:new(self,nil,nil,400,300,"b:/desktop/"..file.name.."/"))
+        table.insert(self.windows, WindowFileManager:new(self,nil,nil,200,150,"b:/desktop/"..file.name.."/"))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -365,7 +348,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, WindowTextViewer:new(self,nil,nil,250,200,file.content,file.name..".text"))
+        table.insert(self.windows, WindowTextViewer:new(self,nil,nil,200,150,file.content,file.name..".text"))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
