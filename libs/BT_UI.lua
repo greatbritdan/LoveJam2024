@@ -231,6 +231,9 @@ function ui:getValue()
     if self.t == "slider" then
         return self.value
     end
+    if self.t == "input" then
+        return self.text
+    end
     return false
 end
 function ui:getText()
