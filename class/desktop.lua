@@ -138,6 +138,7 @@ function Desktop:draw()
     local files = self:getFile("b:/desktop")
     if files then
         local y = 8
+        local hover = self:hoveringFile()
         for i, file in ipairs(files) do
             local file = file
             if file.type == "shortcut" then
@@ -147,7 +148,7 @@ function Desktop:draw()
                 love.graphics.setColor(0,0,0)
                 love.graphics.printf(file.name, 4, y+34, 40, "center")
                 love.graphics.setColor({1,1,1,0})
-                if self:hoveringFile() == i then
+                if hover == i then
                     love.graphics.setColor({1,1,1,0.5})
                 end
                 love.graphics.rectangle("fill", 8, y, 32, 32)
@@ -192,6 +193,14 @@ function Desktop:mousepressed(mx, my, b)
                 self.focus = window
                 return
             end
+        end
+        local hover = self:hoveringFile()
+        if hover then
+            local file = self:getFile("b:/desktop")[hover]
+            if file.type == "shortcut" then
+                file = self:getFileFromShortcut(file)
+            end
+            self:openFile(file)
         end
     else
         for i, button in pairs(self.taskbar.buttons) do
@@ -258,6 +267,18 @@ function Desktop:hoveringFile()
         end
     end
     return false
+end
+
+function Desktop:openFile(file,window)
+    if file.type == "program" then
+        table.insert(self.windows, file.window:new(self,nil,nil,400,300))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows], file.name))
+    end
+    if window and window.program == "filemanager" then
+        if file.type == "folder" then
+            window.elements.path.text = window.elements.path.text..file.name.."/"
+        end
+    end
 end
 
 --

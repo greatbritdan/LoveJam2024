@@ -13,7 +13,6 @@ function WindowFileManager:initialize(desktop, x, y, w, h)
         path = string.gsub(path, "^b:/", "")
         path = Split(path, "/")
         table.remove(path, #path)
-        print(path)
         if #path > 0 then
             path = table.concat(path, "/").."/"
             self.elements.path.text = "b:/"..path
@@ -71,10 +70,11 @@ end
 function WindowFileManager:mousepressed(mx, my, b)
     local hover = self:hoveringFile()
     if hover then
-        local files = self.desktop:getFile(self.elements.path.text)
-        if files[hover].type == "folder" then
-            self.elements.path.text = self.elements.path.text..files[hover].name.."/"
+        local file = self.desktop:getFile(self.elements.path.text)[hover]
+        if file.type == "shortcut" then
+            file = self.desktop:getFileFromShortcut(file)
         end
+        self.desktop:openFile(file,self)
         return true
     end
     if Window.mousepressed(self, mx, my, b) then
