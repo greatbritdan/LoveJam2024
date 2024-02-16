@@ -1,9 +1,9 @@
 Desktop = Class("Desktop")
 
-function Desktop:initialize()
+function Desktop:initialize(desktop)
+    local config = love.filesystem.load("desktops/"..desktop.."/config.lua")()
     self.w, self.h = Env.width, Env.height
-    self.background = {t="color", color={0.4,0.7,1}}
-    self.background = {t="image", img=love.graphics.newImage("graphics/background.png")}
+    self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
 
     self.startMenu = {
         w = 200, h = 300,
@@ -18,121 +18,10 @@ function Desktop:initialize()
     self.focus = false
     self.windows = {}
 
-    self.filesystem = {
-        {
-            name = "desktop",
-            icon = "desktop",
-            type = "folder",
-            {
-                name = "bin (shortcut)",
-                type = "shortcut",
-                target = "b:/bin/"
-            },
-            {
-                name = "junk",
-                type = "folder",
-                {
-                    name = "1",
-                    type = "text",
-                    content = "i really like dogs"
-                },
-                {
-                    name = "2",
-                    type = "text",
-                    content = "i really like cats"
-                },
-                {
-                    name = "homework :)",
-                    type = "folder",
-                    {
-                        name = "math",
-                        type = "text",
-                        content = "1+1=2"
-                    },
-                    {
-                        name = "english",
-                        type = "text",
-                        content = "i like dogs"
-                    }
-                }
-            },
-            {
-                name = "text",
-                type = "text",
-                content = "hello, world!",
-            },
-            {
-                name = "image",
-                type = "image",
-                image = love.graphics.newImage("graphics/background.png")
-            }
-        },
-        {
-            name = "bin",
-            icon = "bin",
-            type = "folder",
-            {
-                name = "not my password",
-                type = "text",
-                content = "password: britdan1234"
-            }
-        },
-        {
-            name = "programs",
-            icon = "programs",
-            type = "folder",
-            {
-                name = "file manager",
-                type = "program",
-                icon = "filemanager",
-                program = "filemanager",
-                window = WindowFileManager
-            },
-            {
-                name = "text viewer",
-                type = "program",
-                icon = "textviewer",
-                program = "textviewer",
-                window = WindowTextViewer
-            },
-            {
-                name = "image viewer",
-                type = "program",
-                icon = "imageviewer",
-                program = "imageviewer",
-                window = WindowImageViewer
-            }
-        },
-        {
-            name = "debug",
-            icon = "blank",
-            type = "folder",
-            hidden = true,
-            {
-                name = "debug",
-                type = "text",
-                content = "this is a debug file"
-            }
-        }
-    }
+    self.filesystem = config.filesystem or {}
 
-    self.theme = "dark"
-    self.themes = {
-        dark = {
-            taskbar = {
-                background = {0.2,0.2,0.2,0.9},
-                text = {1,1,1},
-            },
-            window = {
-                background = {0.1,0.1,0.1},
-                subbackground = {0.2,0.2,0.2},
-                navbar = {
-                    background = {0.3,0.3,0.3},
-                    text = {1,1,1}
-                }
-            }
-        }
-    }
+    self.theme = config.theme or "dark"
+    self.themes = Var.themes
 end
 
 function Desktop:getColor(name,subname)

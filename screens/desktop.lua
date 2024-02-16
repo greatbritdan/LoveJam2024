@@ -2,7 +2,7 @@ local desktop = {}
 local desktopclass
 
 function desktop.load(last)
-    desktopclass = Desktop:new()
+    desktopclass = Desktop:new("britdan")
 end
 function desktop.update(dt)
     desktopclass:update(dt)
