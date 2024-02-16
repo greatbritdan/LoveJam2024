@@ -173,7 +173,7 @@ function Desktop:draw()
                 isShortcut = true
             end
             if file and file.hidden ~= true then
-                love.graphics.setColor(0,0,0)
+                love.graphics.setColor({1,1,1})
                 love.graphics.printf(file.name, 4, y+34, 40, "center")
                 love.graphics.setColor({1,1,1,0})
                 if hover == i then
