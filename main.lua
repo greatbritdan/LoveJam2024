@@ -8,6 +8,7 @@ function love.load()
     Var = require("variables")
     Class = require("libs.middleclass")
     Screen = require("libs.BT_Screen")
+    UI = require("libs.BT_UI")
 
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
@@ -66,6 +67,11 @@ function love.textinput(text)
 end
 
 --
+
+function Round(n, deci)
+    deci = 10^(deci or 0)
+    return math.floor(n*deci+.5)/deci
+end
 function AABB(ax, ay, awidth, aheight, bx, by, bwidth, bheight)
 	return ax+awidth > bx and ax < bx+bwidth and ay+aheight > by and ay < by+bheight
 end
