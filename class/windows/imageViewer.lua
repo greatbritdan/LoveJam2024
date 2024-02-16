@@ -1,9 +1,9 @@
 WindowImageViewer = Class("WindowImageViewer", Window)
 
-function WindowImageViewer:initialize(desktop, x, y, w, h, img, filename)
+function WindowImageViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, w, h, "image viewer")
-    self.img = img or false
-    self.filename = filename or "unknown.image"
+    self.img = args and args.img or false
+    self.filename = args and args.filename or "unknown.image"
 
     self.program = "imageviewer"
     self.icon = "imageviewer"

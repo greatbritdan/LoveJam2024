@@ -225,61 +225,42 @@ function Desktop:openFile(file,window)
         return
     end
 
-    -- Open folder
+    local path
     if file.type == "folder" then
-        if window and window.program == "filemanager" then
-            local path = window.elements.path.text..file.name.."/"
-            if file.target then path = file.target end
+        path = "b:/desktop/"..file.name.."/"
+        if file.target then
+            path = file.target
+        elseif window and window.program == "filemanager" then
+            path = window.elements.path.text..file.name.."/"
+        end
+    end
+
+    local lookups = {
+        folder = {program="filemanager", window=WindowFileManager, args={path=path}},
+        text = {program="textviewer", window=WindowTextViewer, args={content=file.content,filename=file.name..".text"}},
+        image = {program="imageviewer", window=WindowImageViewer, args={img=file.img,filename=file.name..".image"}}
+    }
+    local lookup = lookups[file.type]
+    if lookup then
+        if file.type == "folder" and window and window.program == "filemanager" then
             window.elements.path.text = path
             return
         end
-        local path = "b:/desktop/"..file.name.."/"
-        if file.target then path = file.target end
-        local windowP = self:windowExists("filemanager")
+        local windowP = self:windowExists(lookup.program)
         if windowP then
-            windowP.elements.path.text = path
-            self:windowBringToFront(windowP)
+            if file.type == "folder" then
+                windowP.elements.path.text = path
+            else
+                for key, val in pairs(lookup.args) do
+                    windowP[key] = val
+                end
+            end
             self.focus = windowP
+            self:windowBringToFront(windowP)
             self.minimized = false
             return
         end
-        table.insert(self.windows, WindowFileManager:new(self,nil,nil,200,150,path))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
-        self.focus = self.windows[#self.windows]
-        self:windowBringToFront(self.windows[#self.windows])
-        return
-    end
-
-    -- Open text
-    if file.type == "text" then
-        local windowP = self:windowExists("textviewer")
-        if windowP then
-            windowP.content = file.content
-            windowP.filename = file.name..".text"
-            self:windowBringToFront(windowP)
-            self.focus = windowP
-            self.minimized = false
-            return
-        end
-        table.insert(self.windows, WindowTextViewer:new(self,nil,nil,200,150,file.content,file.name..".text"))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
-        self.focus = self.windows[#self.windows]
-        self:windowBringToFront(self.windows[#self.windows])
-        return
-    end
-
-    -- Open image
-    if file.type == "image" then
-        local windowP = self:windowExists("imageviewer")
-        if windowP then
-            windowP.img = file.img
-            windowP.filename = file.name..".image"
-            self:windowBringToFront(windowP)
-            self.focus = windowP
-            self.minimized = false
-            return
-        end
-        table.insert(self.windows, WindowImageViewer:new(self,nil,nil,200,150,file.img,file.name..".image"))
+        table.insert(self.windows, lookup.window:new(self,nil,nil,200,150,lookup.args))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -302,9 +283,9 @@ function Desktop:windowClose(targetWindow)
     for i, window in pairs(self.windows) do
         if window == targetWindow then
             table.remove(self.windows, i)
-            for i, button in pairs(self.taskbar.buttons) do
+            for j, button in pairs(self.taskbar.buttons) do
                 if button.window == targetWindow then
-                    table.remove(self.taskbar.buttons, i)
+                    table.remove(self.taskbar.buttons, j)
                     return
                 end
             end
@@ -316,7 +297,7 @@ end
 function Desktop:windowBringToFront(targetWindow)
     local newWindows = {}
     table.insert(newWindows, targetWindow)
-    for i, window in pairs(self.windows) do
+    for _, window in pairs(self.windows) do
         if window ~= targetWindow then
             table.insert(newWindows, window)
         end

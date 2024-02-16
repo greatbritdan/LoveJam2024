@@ -1,12 +1,14 @@
 WindowFileManager = Class("fileManager", Window)
 
-function WindowFileManager:initialize(desktop, x, y, w, h, startPath)
-    startPath = startPath or "b:/"
+function WindowFileManager:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, w, h, "file manager")
-    self.elements.path = UI.input({x=2, y=2, w=self.w-22, h=16, text=startPath, mc=50, desktop=desktop, resize=function (element)
+    local path = args.path or "b:/"
+
+    self.elements.path = UI.input({x=2, y=2, w=self.w-22, h=16, text=path, mc=50, desktop=desktop, resize=function (element)
         element.w = self.w-22
     end})
-    self.elements.back = UI.button({x=self.w-18, y=2, w=16, h=16, text="<", desktop=desktop, func=function (element)
+    
+    self.elements.back = UI.button({x=self.w-18, y=2, w=16, h=16, text="<", desktop=desktop, func=function (_)
         local path = self.elements.path.text
         if path == "b:/" then
             return
@@ -53,11 +55,7 @@ function WindowFileManager:draw()
                 isShortcut = true
             end
             if file and file.hidden ~= true then
-                if file.type ~= "folder" then
-                    love.graphics.print(file.name.."."..file.type, self.x+24, y+4)
-                else
-                    love.graphics.print(file.name, self.x+24, y+4)
-                end
+                love.graphics.print(file.name, self.x+24, y+4)
                 if file.icon then
                     love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+4, y)
                 else

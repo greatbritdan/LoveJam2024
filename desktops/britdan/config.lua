@@ -21,6 +21,15 @@ return {
                 name = "pfp",
                 type = "image",
                 img = love.graphics.newImage(path.."/pfp.png")
+            },
+            {
+                name = "folder",
+                type = "folder",
+                {
+                    name = "file",
+                    type = "text",
+                    content = "this is a file"
+                }
             }
         }
     },

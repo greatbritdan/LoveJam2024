@@ -1,9 +1,9 @@
 WindowTextViewer = Class("WindowTextViewer", Window)
 
-function WindowTextViewer:initialize(desktop, x, y, w, h, content, filename)
+function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, w, h, "text viewer")
-    self.content = content
-    self.filename = filename or "unknown.text"
+    self.content = args and args.content
+    self.filename = args and args.filename or "unknown.text"
 
     self.program = "textviewer"
     self.icon = "textviewer"
