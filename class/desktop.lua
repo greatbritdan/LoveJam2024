@@ -2,7 +2,7 @@ Desktop = Class("Desktop")
 
 function Desktop:initialize()
     self.w, self.h = Env.width, Env.height
-    --self.background = {t="color", color={0.4,0.7,1}}
+    self.background = {t="color", color={0.4,0.7,1}}
     self.background = {t="image", img=love.graphics.newImage("graphics/background.png")}
 
     self.startMenu = {
@@ -60,6 +60,11 @@ function Desktop:initialize()
                 name = "text",
                 type = "text",
                 content = "hello, world!",
+            },
+            {
+                name = "image",
+                type = "image",
+                image = love.graphics.newImage("graphics/background.png")
             }
         },
         {
@@ -89,6 +94,13 @@ function Desktop:initialize()
                 icon = "textviewer",
                 program = "textviewer",
                 window = WindowTextViewer
+            },
+            {
+                name = "image viewer",
+                type = "program",
+                icon = "imageviewer",
+                program = "imageviewer",
+                window = WindowImageViewer
             }
         },
         {
@@ -361,6 +373,24 @@ function Desktop:openFile(file,window)
             return
         end
         table.insert(self.windows, WindowTextViewer:new(self,nil,nil,200,150,file.content,file.name..".text"))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        self.focus = self.windows[#self.windows]
+        self:windowBringToFront(self.windows[#self.windows])
+        return
+    end
+
+    -- Open image
+    if file.type == "image" then
+        local windowP = self:windowExists("imageviewer")
+        if windowP then
+            windowP.image = file.image
+            windowP.filename = file.name..".image"
+            self:windowBringToFront(windowP)
+            self.focus = windowP
+            self.minimized = false
+            return
+        end
+        table.insert(self.windows, WindowImageViewer:new(self,nil,nil,200,150,file.image,file.name..".image"))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
