@@ -2,8 +2,12 @@ Desktop = Class("Desktop")
 
 function Desktop:initialize()
     self.w, self.h = Env.width, Env.height
-
     self.background = {t="color", color={0.4,0.7,1}}
+
+    self.taskbar = {
+        h = 20,
+        icons = {"test","test2","folder","folder/test3"}
+    }
 
     self.filesystem = {
         test = {
@@ -23,14 +27,15 @@ function Desktop:initialize()
         }
     }
 
-    self.taskbar = {
-        height = 20,
-        icons = {"test","test2","folder","folder/test3"}
-    }
-
     self.windows = {
-        test = Window:new(200,100)
+        welcome = Window:new(self,200,100)
     }
+end
+
+function Desktop:update(dt)
+    for _, window in pairs(self.windows) do
+        window:update(dt)
+    end
 end
 
 function Desktop:draw()
@@ -42,7 +47,7 @@ function Desktop:draw()
 
     -- Draw task bar
     love.graphics.setColor(0,0,0,0.75)
-    love.graphics.rectangle("fill", 0, self.h-self.taskbar.height, self.w, self.taskbar.height)
+    love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
 
     -- Draw icons
     for i, icon in ipairs(self.taskbar.icons) do
@@ -52,9 +57,27 @@ function Desktop:draw()
         else
             love.graphics.setColor(1,1,1)
         end
-        love.graphics.rectangle("fill", 2+((i-1)*18), self.h-self.taskbar.height+2, 16, 16)
+        love.graphics.rectangle("fill", 2+((i-1)*(self.taskbar.h-2)), self.h-self.taskbar.h+2, (self.taskbar.h-4), (self.taskbar.h-4))
+    end
+
+    -- Draw windows
+    for _, window in pairs(self.windows) do
+        window:draw()
     end
 end
+
+function Desktop:mousepressed(mx, my, b)
+    for _, window in pairs(self.windows) do
+        window:mousepressed(mx, my, b)
+    end
+end
+function Desktop:mousereleased(mx, my, b)
+    for _, window in pairs(self.windows) do
+        window:mousereleased(mx, my, b)
+    end
+end
+
+--
 
 function Desktop:getFile(path)
     path = Split(path, "/")
