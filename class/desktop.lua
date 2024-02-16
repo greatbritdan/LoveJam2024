@@ -10,12 +10,7 @@ function Desktop:initialize()
     }
 
     self.focus = false
-    self.windows = {
-        WindowFileManager:new(self,nil,nil,400,300)
-    }
-    self.taskbar.buttons = {
-        DesktopButton:new(self, self.windows[1], "filemanager")
-    }
+    self.windows = {}
 
     self.filesystem = {
         {
@@ -270,13 +265,19 @@ function Desktop:hoveringFile()
 end
 
 function Desktop:openFile(file,window)
+    -- Open program
     if file.type == "program" then
         table.insert(self.windows, file.window:new(self,nil,nil,400,300))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows], file.name))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
     end
-    if window and window.program == "filemanager" then
-        if file.type == "folder" then
+
+    -- Open folder
+    if file.type == "folder" then
+        if window and window.program == "filemanager" then
             window.elements.path.text = window.elements.path.text..file.name.."/"
+        else
+            table.insert(self.windows, WindowFileManager:new(self,nil,nil,400,300,"b:/desktop/"..file.name.."/"))
+            table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         end
     end
 end

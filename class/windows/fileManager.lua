@@ -1,8 +1,9 @@
 WindowFileManager = Class("fileManager", Window)
 
-function WindowFileManager:initialize(desktop, x, y, w, h)
+function WindowFileManager:initialize(desktop, x, y, w, h, startPath)
+    startPath = startPath or "b:/"
     Window.initialize(self, desktop, x, y, w, h, "file manager")
-    self.elements.path = UI.input({x=24, y=4, w=self.w-48, h=16, text="b:/", mc=50, resize=function (element)
+    self.elements.path = UI.input({x=24, y=4, w=self.w-48, h=16, text=startPath, mc=50, resize=function (element)
         element.w = self.w-48
     end})
     self.elements.back = UI.button({x=self.w-20, y=4, w=16, h=16, text="<", func=function (element)
@@ -25,6 +26,7 @@ function WindowFileManager:initialize(desktop, x, y, w, h)
     self:sync()
 
     self.program = "filemanager"
+    self.icon = "filemanager"
 end
 
 function WindowFileManager:draw()
