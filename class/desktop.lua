@@ -19,22 +19,44 @@ function Desktop:initialize()
 
     self.filesystem = {
         {
-            name = "test",
-            type = "txt",
-            content = "Hello, World!"
-        },
-        {
-            name = "test 2",
-            type = "txt",
-            content = "Hello, World! But different!"
-        },
-        {
-            name = "folder",
+            name = "desktop",
             type = "folder",
             {
-                name = "test 3",
-                type = "txt",
-                content = "Hello, World! But different-er!"
+                name = "text",
+                type = "text",
+                content = "Hello, world!",
+            },
+            {
+                name = "junk",
+                type = "folder",
+                {
+                    name = "1",
+                    type = "text",
+                    content = "i really like dogs"
+                },
+                {
+                    name = "2",
+                    type = "text",
+                    content = "i really like cats"
+                }
+            }
+        },
+        {
+            name = "bin",
+            type = "folder",
+            {
+                name = "not my password",
+                type = "text",
+                content = "password: britdan1234"
+            }
+        },
+        {
+            name = "programs",
+            type = "folder",
+            {
+                name = "filemanager",
+                type = "program",
+                window = WindowFileManager
             }
         }
     }
