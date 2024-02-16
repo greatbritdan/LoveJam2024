@@ -9,6 +9,16 @@ function Desktop:initialize()
         buttons = {}
     }
 
+    self.focus = false
+    self.windows = {
+        Window:new(self,50,50,200,100,"window 1"),
+        Window:new(self,150,100,200,100,"window 2")
+    }
+    self.taskbar.buttons = {
+        DesktopButton:new(self, self.windows[1]),
+        DesktopButton:new(self, self.windows[2])
+    }
+
     self.filesystem = {
         test = {
             type = "txt",
@@ -26,15 +36,6 @@ function Desktop:initialize()
             }
         }
     }
-
-    self.windows = {
-        Window:new(self,50,50,200,100,"window 1"),
-        Window:new(self,150,100,200,100,"window 2")
-    }
-    self.taskbar.buttons[1] = DesktopButton:new(self, self.windows[1])
-    self.taskbar.buttons[2] = DesktopButton:new(self, self.windows[2])
-
-    self.focus = false
 end
 
 function Desktop:update(dt)
