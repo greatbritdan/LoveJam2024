@@ -3,8 +3,8 @@ WindowFileManager = Class("fileManager", Window)
 function WindowFileManager:initialize(desktop, x, y, w, h, startPath)
     startPath = startPath or "b:/"
     Window.initialize(self, desktop, x, y, w, h, "file manager")
-    self.elements.path = UI.input({x=24, y=4, w=self.w-48, h=16, text=startPath, mc=50, resize=function (element)
-        element.w = self.w-48
+    self.elements.path = UI.input({x=4, y=4, w=self.w-28, h=16, text=startPath, mc=50, resize=function (element)
+        element.w = self.w-28
     end})
     self.elements.back = UI.button({x=self.w-20, y=4, w=16, h=16, text="<", func=function (element)
         local path = self.elements.path.text
@@ -35,8 +35,7 @@ function WindowFileManager:draw()
     -- Draw window
     Window.draw(self)
     love.graphics.setColor(self:getColor("subbackground"))
-    love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, 20, self.h-self.navbar.h)
-    love.graphics.rectangle("fill", self.x+20, self.y+self.navbar.h, self.w-20, 24)
+    love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 24)
 
     -- Print out all files in path
     local files = self.desktop:getFile(self.elements.path.text)
@@ -53,19 +52,19 @@ function WindowFileManager:draw()
                 file = self.desktop:getFileFromShortcut(file)
                 isShortcut = true
             end
-            if file then
+            if file and file.hidden ~= true then
                 if file.type ~= "folder" then
-                    love.graphics.print(file.name.."."..file.type, self.x+44, y+4)
+                    love.graphics.print(file.name.."."..file.type, self.x+24, y+4)
                 else
-                    love.graphics.print(file.name, self.x+44, y+4)
+                    love.graphics.print(file.name, self.x+24, y+4)
                 end
                 if file.icon then
-                    love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+24, y)
+                    love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+4, y)
                 else
-                    love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+24, y)
+                    love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+4, y)
                 end
                 if isShortcut then
-                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.x+24, y)
+                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.x+4, y)
                 end
                 y = y + 20
             end
@@ -84,6 +83,7 @@ function WindowFileManager:mousepressed(mx, my, b)
             file = self.desktop:getFileFromShortcut(file)
         end
         self.desktop:openFile(file,self)
+        self.desktop.dontOverwriteFocus = true
         return true
     end
     if Window.mousepressed(self, mx, my, b) then
@@ -98,7 +98,7 @@ function WindowFileManager:hoveringFile()
     if files then
         local y = self.y+self.navbar.h+28
         for i, file in ipairs(files) do
-            if AABB(mx, my, 1, 1, self.x+24, y, self.w-28, 20) then
+            if AABB(mx, my, 1, 1, self.x+4, y, self.w-28, 20) then
                 return i
             end
             y = y + 20

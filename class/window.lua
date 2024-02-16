@@ -7,7 +7,7 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
 
     self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.desktop.taskbar.h)/2)-(h/2)
     self.w, self.h = w, h
-    self.minW, self.minH = minW or 150, minH or 150
+    self.minW, self.minH = minW or 200, minH or 150
 
     self.minimized = false
     self.fullscreen = false

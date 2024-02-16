@@ -15,11 +15,12 @@ function Desktop:initialize()
     self.filesystem = {
         {
             name = "desktop",
+            icon = "desktop",
             type = "folder",
             {
                 name = "text",
                 type = "text",
-                content = "Hello, world!",
+                content = "hello, world!",
             },
             {
                 name = "junk",
@@ -48,15 +49,12 @@ function Desktop:initialize()
                         content = "i like dogs"
                     }
                 }
-            },
-            {
-                name = "filemanager (shortcut)",
-                type = "shortcut",
-                target = "b:/programs/filemanager"
             }
+
         },
         {
             name = "bin",
+            icon = "bin",
             type = "folder",
             {
                 name = "not my password",
@@ -66,13 +64,32 @@ function Desktop:initialize()
         },
         {
             name = "programs",
+            icon = "programs",
             type = "folder",
             {
-                name = "filemanager",
+                name = "file manager",
                 type = "program",
                 icon = "filemanager",
                 program = "filemanager",
                 window = WindowFileManager
+            },
+            {
+                name = "text viewer",
+                type = "program",
+                icon = "textviewer",
+                program = "textviewer",
+                window = WindowTextViewer
+            }
+        },
+        {
+            name = "debug",
+            icon = "blank",
+            type = "folder",
+            hidden = true,
+            {
+                name = "debug",
+                type = "text",
+                content = "this is a debug file"
             }
         }
     }
@@ -142,7 +159,7 @@ function Desktop:draw()
                 file = self:getFileFromShortcut(file)
                 isShortcut = true
             end
-            if file then
+            if file and file.hidden ~= true then
                 love.graphics.setColor(0,0,0)
                 love.graphics.printf(file.name, 4, y+34, 40, "center")
                 love.graphics.setColor({1,1,1,0})
@@ -187,11 +204,14 @@ end
 
 function Desktop:mousepressed(mx, my, b)
     if my < self.h-self.taskbar.h then
+        self.dontOverwriteFocus = false
         self.focus = false
         for i, window in pairs(self.windows) do
             if window:mousepressed(mx, my, b) then
-                self:windowBringToFront(window)
-                self.focus = window
+                if not self.dontOverwriteFocus then
+                    self:windowBringToFront(window)
+                    self.focus = window
+                end
                 return
             end
         end
@@ -277,11 +297,13 @@ function Desktop:openFile(file,window)
         if windowP then
             self:windowBringToFront(windowP)
             self.focus = windowP
+            self.minimized = false
             return
         end
         table.insert(self.windows, file.window:new(self,nil,nil,400,300))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
+        self:windowBringToFront(self.windows[#self.windows])
         return
     end
 
@@ -296,11 +318,31 @@ function Desktop:openFile(file,window)
             windowP.elements.path.text = "b:/desktop/"..file.name.."/"
             self:windowBringToFront(windowP)
             self.focus = windowP
+            self.minimized = false
             return
         end
         table.insert(self.windows, WindowFileManager:new(self,nil,nil,400,300,"b:/desktop/"..file.name.."/"))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
+        self:windowBringToFront(self.windows[#self.windows])
+        return
+    end
+
+    -- Open text
+    if file.type == "text" then
+        local windowP = self:windowExists("textviewer")
+        if windowP then
+            windowP.content = file.content
+            windowP.filename = file.name..".text"
+            self:windowBringToFront(windowP)
+            self.focus = windowP
+            self.minimized = false
+            return
+        end
+        table.insert(self.windows, WindowTextViewer:new(self,nil,nil,250,200,file.content,file.name..".text"))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        self.focus = self.windows[#self.windows]
+        self:windowBringToFront(self.windows[#self.windows])
         return
     end
 end
