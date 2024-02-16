@@ -11,12 +11,10 @@ function Desktop:initialize()
 
     self.focus = false
     self.windows = {
-        Window:new(self,50,50,200,100,"window 1"),
-        Window:new(self,150,100,200,100,"window 2")
+        WindowFileManager:new(self,nil,nil,320,160)
     }
     self.taskbar.buttons = {
-        DesktopButton:new(self, self.windows[1]),
-        DesktopButton:new(self, self.windows[2])
+        DesktopButton:new(self, self.windows[1])
     }
 
     self.filesystem = {
@@ -41,11 +39,6 @@ end
 function Desktop:update(dt)
     for _, window in pairs(self.windows) do
         window:update(dt)
-        --window.text = "z "..self:getZPos(window).." t "..self:getTaskbarPos(window)
-        window.text = ""
-        if self.focus == window then
-            window.text = "focused"
-        end
     end
 end
 
@@ -103,12 +96,6 @@ function Desktop:mousereleased(mx, my, b)
 end
 
 function Desktop:keypressed(key, scancode, isrepeat)
-    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
-    if key == "n" then
-        table.insert(self.windows, Window:new(self,mx,my,200,100,"window "..(#self.windows+1)))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
-        self:windowBringToFront(self.windows[#self.windows])
-    end
 end
 
 --
@@ -143,14 +130,12 @@ function Desktop:windowClose(targetWindow)
     for i, window in pairs(self.windows) do
         if window == targetWindow then
             table.remove(self.windows, i)
-
             for i, button in pairs(self.taskbar.buttons) do
                 if button.window == targetWindow then
                     table.remove(self.taskbar.buttons, i)
                     return
                 end
             end
-
             return
         end
     end

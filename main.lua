@@ -23,8 +23,10 @@ function love.load()
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
     end
 
-    require("class.desktopButton")
     require("class.window")
+    require("class.windows.fileManager")
+
+    require("class.desktopButton")
     require("class.desktop")
 
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})

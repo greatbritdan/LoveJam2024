@@ -1,31 +1,53 @@
 Window = Class("Window")
 
-function Window:initialize(desktop, x, y, w, h, text, minW, minH)
+function Window:initialize(desktop, x, y, w, h, title, minW, minH)
     self.desktop = desktop
-    self.taskbar = desktop.taskbar
 
-    self.minimized = false
-
-    self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.taskbar.h)/2)-(h/2)
+    self.x, self.y = x or (Env.width/2)-(w/2), y or ((Env.height-self.desktop.taskbar.h)/2)-(h/2)
     self.w, self.h = w, h
     self.minW, self.minH = minW or 100, minH or 100
 
+    self.minimized = false
+    self.fullscreen = false
+    self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
+
     self.navbar = {
-        h = 12,
+        h = 13,
         buttons = {}
     }
     self.navbar.buttons[1] = {
         name = "minimize",
-        color = {normal={1,1,0},hover={1,1,0.5},click={0.75,0.75,0}},
-        func = function() self.minimized = true end
+        color = {normal={0,1,0},hover={0.5,1,0},click={0,0.75,0}},
+        func = function()
+            self.minimized = true
+            if self.desktop.focus == self then
+                self.desktop.focus = false
+            end
+        end
     }
     self.navbar.buttons[2] = {
+        name = "fullscreen",
+        color = {normal={1,1,0},hover={1,1,0.5},click={0.75,0.75,0}},
+        func = function()
+            if self.fullscreen then
+                self.x, self.y, self.w, self.h = self.ox, self.oy, self.ow, self.oh
+                self.fullscreen = false
+            else
+                self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
+                self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height
+                self.fullscreen = true
+            end
+        end
+    }
+    self.navbar.buttons[3] = {
         name = "close",
         color = {normal={1,0,0},hover={1,0.5,0},click={0.75,0,0}},
-        func = function() self.desktop:windowClose(self) end
+        func = function()
+            self.desktop:windowClose(self)
+        end
     }
 
-    self.text = text
+    self.title = title
 
     self.moving = false
     self.resizing = false
@@ -81,10 +103,11 @@ function Window:draw()
     -- Draw window
     love.graphics.setColor(1,1,1,0.75)
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+
     love.graphics.setColor(0,0,0,0.75)
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.navbar.h)
-    love.graphics.setColor(0,0,0)
-    love.graphics.printf(self.text, self.x, self.y+self.navbar.h+4, self.w, "center")
+    love.graphics.setColor(1,1,1)
+    love.graphics.print(self.title, self.x+3, self.y+3)
 
     -- Draw navbar buttons
     for i, button in pairs(self.navbar.buttons) do
@@ -118,6 +141,11 @@ function Window:mousepressed(mx,my, b)
     if hover[1] == "navbar" then
         self.moving = true
         self.mx, self.my = mx-self.x, my-self.y
+        if self.fullscreen then
+            self.w, self.h = self.ow, self.oh
+            self.mx = self.mx/(Env.width/self.w)
+            self.fullscreen = false
+        end
     end
     if hover[1] == "resize" then
         self.resizing = hover
