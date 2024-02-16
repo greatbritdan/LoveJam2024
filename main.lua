@@ -13,10 +13,12 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
-    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789")
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789", 1)
     love.graphics.setFont(Font)
 
-    Screen:changeState("test", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
+    require("class.desktop")
+
+    Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
 function love.update(dt)
