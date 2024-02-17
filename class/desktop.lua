@@ -187,6 +187,10 @@ function Desktop:openFile(file,window)
 
     -- Open program
     if file.type == "program" then
+        if file.name == "remotedesktop" then
+            self:complete()
+            return
+        end
         local windowP = self:windowExists(file.program)
         if windowP then
             self:windowBringToFront(windowP)
@@ -334,12 +338,12 @@ function Desktop:populateFilesystem(desktop,bin)
     self.filesystem[4] = {
         name = "debug",
         type = "folder",
-        icon = "blank",
         hidden = true,
         {
-            name = "debug",
-            type = "text",
-            content = "this is a debug file"
+            name = "remotedesktop",
+            type = "program",
+            program = "remotedesktop",
+            icon = "remotedesktop"
         }
     }
 end
@@ -386,4 +390,10 @@ function Desktop:deleteFile(path)
         file.hidden = true
         self:createDesktopIcons()
     end
+end
+
+function Desktop:complete()
+    local idx = TableContains(Desktops, DesktopName)
+    DesktopName = Desktops[idx+1]
+    Screen:changeState("desktop", {"fade", 0.25, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end

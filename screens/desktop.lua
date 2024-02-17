@@ -1,10 +1,10 @@
 local desktop = {}
-local desktopClass, desktopConfig
-local desktopLoaded, desktopTimer = false, 0
+local desktopClass, desktopConfig, desktopLoaded, desktopTimer
 
 function desktop.load(last)
     desktopConfig = love.filesystem.load("desktops/"..DesktopName.."/config.lua")()
     desktopClass = Desktop:new(desktopConfig)
+    desktopLoaded, desktopTimer = false, 0
 end
 function desktop.update(dt)
     if desktopLoaded then
@@ -24,8 +24,9 @@ function desktop.draw()
 
     -- Draw darkened desktop background
     if desktopConfig.background.t == "color" then
-        local color = desktopConfig.background.color
-        love.graphics.setColor(color[1]/2, color[2]/2, color[3]/2)
+        love.graphics.setColor(desktopConfig.background.color)
+        love.graphics.rectangle("fill", 0, 0, Env.width, Env.height)
+        love.graphics.setColor(0,0,0,0.5)
         love.graphics.rectangle("fill", 0, 0, Env.width, Env.height)
     elseif desktopConfig.background.t == "image" then
         love.graphics.setColor(0.5,0.5,0.5)

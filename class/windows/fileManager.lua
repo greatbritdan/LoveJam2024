@@ -22,9 +22,11 @@ function WindowFileManager:createIcons()
     self.icons = {}
     local files = self.desktop:getFile(self.elements.path.text)
     if files then
-        for i, file in ipairs(files) do
+        local i = 1
+        for _, file in ipairs(files) do
             if file.hidden ~= true then
                 table.insert(self.icons, FileButton:new(self.desktop, self, i, file))
+                i = i + 1
             end
         end
     end

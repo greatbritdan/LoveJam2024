@@ -4,7 +4,6 @@ function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 200, 150, "text viewer")
     self.content = args and args.content
     self.filename = args and args.filename or "unknown.text"
-
     self.program = "textviewer"
     self.icon = "textviewer"
 end

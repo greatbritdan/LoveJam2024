@@ -39,8 +39,13 @@ return {
             content = "you're a real snooper aren't you, fine i'll spill the beans.\n\nif you're reading this you've been accepted into our hacker group (if you like it or not).\n\nwe have a few tasks for you to do, and lets just say you don't want to know what happens if you don't.\n\nopen the remote desktop app in the programs file to begin.\n\n- ann0nymous112",
             onOpen = function(desktop,window,file)
                 desktop:updateFile("b:/desktop/welcome", {content = "welcome to <game name here>!\n\nits too late.\n\n- ann0nymous112"})
-                desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
                 desktop:updateFile("b:/desktop/goal", {hidden = false})
+                desktop:createFile("b:/programs", { name = "readme", type = "text",
+                    content = "when your goal is complete i'll allow you access to the remote desktop.\n\nbut until you do there is no way to leave, enter when you're ready.\n\n- ann0nymous112",
+                    onOpen = function(desktop,window,file)
+                        desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
+                    end
+                })
             end
         }
     },

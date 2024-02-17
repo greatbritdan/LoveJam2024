@@ -4,7 +4,6 @@ function WindowImageViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 200, 150, "image viewer")
     self.img = args and args.img or false
     self.filename = args and args.filename or "unknown.image"
-
     self.program = "imageviewer"
     self.icon = "imageviewer"
 end
