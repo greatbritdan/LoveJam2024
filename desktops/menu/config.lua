@@ -1,4 +1,4 @@
-local path = "desktops/britdan"
+local path = "desktops/menu"
 
 return {
     path = path,
