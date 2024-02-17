@@ -1,7 +1,7 @@
 WindowFileManager = Class("fileManager", Window)
 
 function WindowFileManager:initialize(desktop, x, y, w, h, args)
-    Window.initialize(self, desktop, x, y, 300, 200, "file manager")
+    Window.initialize(self, desktop, x, y, 300, 200, "file manager", 300, 200)
     local path = args and args.path or "b:/"
 
     self.elements.path = UI.input({x=2, y=2, w=self.w-22, h=16, text=path, mc=50, desktop=desktop, func=function() self:search() end, resize=function (element)

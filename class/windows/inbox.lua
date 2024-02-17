@@ -6,7 +6,7 @@ WindowInboxData = {
 }
 
 function WindowInbox:initialize(desktop, x, y, w, h)
-    Window.initialize(self, desktop, x, y, 200, 150, "inbox")
+    Window.initialize(self, desktop, x, y, 300, 200, "inbox", 300, 200)
     self.program = "inbox"
     self.icon = "inbox"
     
@@ -47,6 +47,7 @@ function WindowInbox:draw()
         love.graphics.setColor(0.5,0.5,0.5)
         love.graphics.printf(self.email, self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
 
+        -- I'm sorry...
         local hover = self:hover()
         local y = self.y+self.navbar.h+22
         for i, email in ipairs(self.emails) do
@@ -54,6 +55,7 @@ function WindowInbox:draw()
             love.graphics.rectangle("fill", self.x+2, y, self.w-20, 32)
             love.graphics.setColor(1,1,1)
             love.graphics.print(email.subject, self.x+6, y+4)
+            love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
             love.graphics.setColor(0.5,0.5,0.5)
             local content = ""
             local splitn = Split(email.content,"\n")
@@ -75,6 +77,17 @@ function WindowInbox:draw()
             end
             y = y + 34
         end
+    elseif self.screen == "email" then
+        -- Print out email
+        local email = self.emails[self.subscreen]
+        love.graphics.setColor(self:getColor("subbackground"))
+        love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
+        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.print(email.subject, self.x+24, self.y+self.navbar.h+6)
+        love.graphics.print("from: "..email.from, self.x+3, self.y+self.navbar.h+24)
+        love.graphics.print("to: "..email.to, self.x+3, self.y+self.navbar.h+36)
+        love.graphics.setColor(1,1,1)
+        love.graphics.printf(email.content, self.x+3, self.y+self.navbar.h+52, self.w-24, "left")
     end
 
     -- Draw UI
@@ -100,8 +113,7 @@ function WindowInbox:mousereleased(mx, my, b)
     if self.screen == "inbox" then
         local hover = self:hover()
         if hover and hover == self.clickingEmail then
-            local email = self.emails[hover]
-            self:changeScreen("email", email)
+            self:changeScreen("email", hover)
             self.clickingEmail = false
             return true
         end
@@ -177,6 +189,12 @@ function WindowInbox:changeScreen(screen,subscreen)
             element.h = self.h-self.navbar.h-20
             element.sh = element.h*element.fill
             element.sy = element:posFromValue(element.value)
+        end})
+    elseif self.screen == "email" then
+        self.elements.back = UI.button({x=2, y=2, w=16, h=16, text="<", desktop=self.desktop, resize=function (element)
+            element.x = self.x+2
+        end, func=function()
+            self:changeScreen("inbox")
         end})
     end
     self:sync()

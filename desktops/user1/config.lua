@@ -96,7 +96,7 @@ return {
                     from = "noreply@inbox.com",
                     to = "user1@inbox.com",
                     subject = "welcome to inbox.com",
-                    content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.",
+                    content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
                 }
             }
         }
