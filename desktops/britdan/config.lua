@@ -40,7 +40,7 @@ return {
             onOpen = function(desktop,window,file)
                 desktop:updateFile("b:/desktop/welcome", {content = "welcome to <game name here>!\n\nits too late.\n\n- ann0nymous112"})
                 desktop:updateFile("b:/desktop/goal", {hidden = false})
-                desktop:createFile("b:/programs", { name = "readme", type = "text",
+                desktop:createFile("b:/programs", {name = "readme", type = "text",
                     content = "when your goal is complete i'll allow you access to the remote desktop.\n\nbut until you do there is no way to leave, enter when you're ready.\n\n- ann0nymous112",
                     onOpen = function(desktop,window,file)
                         desktop:updateFile("b:/programs/remotedesktop", {hidden = false})

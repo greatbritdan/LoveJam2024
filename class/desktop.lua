@@ -43,7 +43,6 @@ function Desktop:getColor(name,subname)
 end
 
 function Desktop:update(dt)
-    love.mouse.setCursor(Pointers.normal)
     for _, window in pairs(self.windows) do
         window:update(dt)
     end
@@ -217,8 +216,8 @@ function Desktop:openFile(file,window)
 
     local lookups = {
         folder = {program="filemanager", window=WindowFileManager, args={path=path}},
-        text = {program="textviewer", window=WindowTextViewer, args={content=file.content,filename=file.name..".text"}},
-        image = {program="imageviewer", window=WindowImageViewer, args={img=file.img,filename=file.name..".image"}}
+        text = {program="textviewer", window=WindowTextViewer, args={file=file,content=file.content,filename=file.name..".text"}},
+        image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -380,6 +379,15 @@ function Desktop:updateFile(path, args)
             file[key] = val
             if key == "hidden" then
                 self:createDesktopIcons()
+            end
+        end
+        for _,window in pairs(self.windows) do
+            if window.file == file then
+                for key, val in pairs(args) do
+                    if window[key] then
+                        window[key] = val
+                    end
+                end
             end
         end
     end

@@ -19,14 +19,6 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
-    Pointers = {
-        normal = love.mouse.getSystemCursor("arrow"),
-        sizewe = love.mouse.getSystemCursor("sizewe"),
-        sizens = love.mouse.getSystemCursor("sizens"),
-        sizenwse = love.mouse.getSystemCursor("sizenwse"),
-        sizenesw = love.mouse.getSystemCursor("sizenesw"),
-    }
-
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'", 1)
     love.graphics.setFont(Font)
 
