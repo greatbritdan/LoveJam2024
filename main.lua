@@ -1,3 +1,9 @@
+-- Game name ideas
+--[[
+    Bit-Breach
+    Smashed Windows
+]]
+
 function love.load()
     local lversion = string.format("%02d.%02d.%02d", love._version_major, love._version_minor, love._version_revision)
 	if lversion < "00.11.40" then

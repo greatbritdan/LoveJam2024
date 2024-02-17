@@ -183,6 +183,7 @@ end
 function Desktop:openFile(file,window)
     if file.onOpen then
         file.onOpen(self,window,file)
+        file.onOpen = nil
     end
 
     -- Open program
