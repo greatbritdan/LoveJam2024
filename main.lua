@@ -38,7 +38,7 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
-    DesktopName = "user1" --"britdan"
+    DesktopName = "user1" -- "britdan"
     Desktops = {"britdan","user1"}
 
     require("class.window")
@@ -138,6 +138,30 @@ function RemoveEmpty(list)
         end
     end
     return newlist
+end
+
+function TextHeight(text, w)
+    local split = Split(text, "\n")
+    local lines = 0
+    for _, line in pairs(split) do
+        local width = Font:getWidth(line)
+        if width > w then
+            local split = Split(line, " ")
+            local line = ""
+            for i, word in pairs(split) do
+                if Font:getWidth(line.." "..word) > w then
+                    lines = lines + 1
+                    line = word
+                else
+                    line = line.." "..word
+                end
+            end
+            lines = lines + 1
+        else
+            lines = lines + 1
+        end
+    end
+    return lines*Font:getHeight()
 end
 
 function TableContains(table, name)

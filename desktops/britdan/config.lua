@@ -7,6 +7,7 @@ return {
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
     },
+    avalablePrograms = {"remotedesktop"},
     desktop = {
         {
             name = "welcome",

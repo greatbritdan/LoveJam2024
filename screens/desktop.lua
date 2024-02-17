@@ -4,7 +4,7 @@ local desktopClass, desktopConfig, desktopLoaded, desktopTimer
 function desktop.load(last)
     desktopConfig = love.filesystem.load("desktops/"..DesktopName.."/config.lua")()
     desktopClass = Desktop:new(desktopConfig)
-    desktopLoaded, desktopTimer = false, 2.4
+    desktopLoaded, desktopTimer = false, 2
 end
 function desktop.update(dt)
     if desktopLoaded then

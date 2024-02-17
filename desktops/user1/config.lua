@@ -7,6 +7,7 @@ return {
     background = {
         t = "color", color = {0.25,0.35,0.65}
     },
+    avalablePrograms = {"remotedesktop","inbox"},
     desktop = {
         {
             name = "to delete",
@@ -14,11 +15,7 @@ return {
             {
                 name = "bank details (user1)",
                 type = "text",
-                content = {
-                    {"hi mate, reminder to switch all the bank details to the new account, the old one is compromised.\n\nif they ask for the current details here they are."},
-                    {"- 16 digit code: 6329 1124 2646 2211\n- expiration date: March 2027\n- cvc code: 289","left"},
-                    {"cheers,\n\n- boss"}
-                }
+                content = "hi mate, reminder to switch all the bank details to the new account, the old one is compromised.\n\ncheers,\n\n- boss"
             },
             {
                 name = "bank details (savings)",
@@ -61,7 +58,7 @@ return {
             pos = {13,1},
             name = "goal",
             type = "text",
-            content = "generic name but trust me, this guy is loaded.\n\nget access to his back details and send everything to me:\n\nmy account number: 12345678\nmy sort code: 39-27-11\n\n- ann0nymous112",
+            content = "generic name but trust me, this guy is loaded.\n\nget access to his bank details and send everything to me:\n\nmy account number: 12345678\nmy sort code: 39-27-11\n\n- ann0nymous112",
         }
     },
     bin = {
@@ -85,7 +82,7 @@ return {
                     to = "user1@inbox.com",
                     subject = "re: bank details - savings",
                     content = "the account is no longer in use, i'll be transfering the funds to the new account shortly.\n\n- boss",
-                    {
+                    reference = {
                         from = "user1@inbox.com",
                         to = "boss23@inbox.com",
                         subject = "bank details - savings",

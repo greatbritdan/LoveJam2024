@@ -22,6 +22,16 @@ function Desktop:initialize(config)
         buttons = { TaskbarButton:new(self, false) }
     }
     self.windows = {}
+    self.emails = config.emails or {}
+
+    self.avalablePrograms = {
+        filemanager = true,
+        textviewer = true,
+        imageviewer = true
+    }
+    for _,program in pairs(config.avalablePrograms) do
+        self.avalablePrograms[program] = true
+    end
 
     self:populateFilesystem(config.desktop, config.bin)
 
@@ -29,8 +39,6 @@ function Desktop:initialize(config)
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
-
-    self.emails = config.emails or {}
 
     if config.openByDefault then
         local file = self:getFile(config.openByDefault)
@@ -150,6 +158,10 @@ function Desktop:textinput(text)
 end
 
 function Desktop:keypressed(key, scancode, isrepeat)
+    if key == "f1" then
+        self:complete()
+        return
+    end
     if self.focus then
         self.focus:keypressed(key, scancode, isrepeat)
     end
@@ -329,13 +341,15 @@ function Desktop:populateFilesystem(desktop,bin)
         icon = "programs",
     }
     for _, program in pairs(programs) do
-        table.insert(self.filesystem[3], {
-            name = program.name,
-            type = "program",
-            program = program.program,
-            icon = program.name,
-            hidden = program.hidden
-        })
+        if self.avalablePrograms[program.name] then
+            table.insert(self.filesystem[3], {
+                name = program.name,
+                type = "program",
+                program = program.program,
+                icon = program.name,
+                hidden = program.hidden
+            })
+        end
     end
 
     -- Add debug folder to filesystem

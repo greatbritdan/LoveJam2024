@@ -2,7 +2,7 @@ WindowInbox = Class("WindowInbox", Window)
 
 WindowInboxData = {
     emailinput = "user1@inbox.com",
-    passwordinput = "iloveboss22"
+    passwordinput = "iloveboss22",
 }
 
 function WindowInbox:initialize(desktop, x, y, w, h)
@@ -84,10 +84,25 @@ function WindowInbox:draw()
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
         love.graphics.setColor(0.5,0.5,0.5)
         love.graphics.print(email.subject, self.x+24, self.y+self.navbar.h+6)
-        love.graphics.print("from: "..email.from, self.x+3, self.y+self.navbar.h+24)
-        love.graphics.print("to: "..email.to, self.x+3, self.y+self.navbar.h+36)
+
+        -- Print out email content
         love.graphics.setColor(1,1,1)
-        love.graphics.printf(email.content, self.x+3, self.y+self.navbar.h+52, self.w-24, "left")
+        love.graphics.print("from: "..email.from, self.x+3, self.y+self.navbar.h+24)
+        love.graphics.print("to: "..email.to, self.x+3, self.y+self.navbar.h+34)
+        love.graphics.printf(email.content, self.x+3, self.y+self.navbar.h+50, self.w-24, "left")
+        local height = TextHeight(email.content, self.w-24)
+
+        -- Print out reference to email
+        local refemail = email.reference
+        if refemail then
+            love.graphics.setColor(self:getColor("subbackground"))
+            love.graphics.rectangle("fill", self.x+2, self.y+self.navbar.h+height+58, self.w-20, 2)
+            love.graphics.setColor(0.5,0.5,0.5)
+            love.graphics.print(refemail.subject, self.x+3, self.y+self.navbar.h+height+62)
+            love.graphics.print("from: "..refemail.from, self.x+3, self.y+self.navbar.h+height+78)
+            love.graphics.printf("to: "..refemail.to, self.x+3, self.y+self.navbar.h+height+88, self.w-24, "left")
+            love.graphics.printf(refemail.content, self.x+3, self.y+self.navbar.h+height+104, self.w-24, "left")
+        end
     end
 
     -- Draw UI
@@ -174,15 +189,7 @@ function WindowInbox:changeScreen(screen,subscreen)
                 self.errorMessage = "invalid email or password"
             end
         end})
-    elseif self.screen == "inbox" then
-        self.elements.logout = UI.button({x=(self.w/2)+2, y=2, w=(self.w/2)-4, h=16, text="logout", desktop=self.desktop, resize=function (element)
-            element.x = self.x+(self.w/2)+2
-            element.w = (self.w/2)-4
-        end, func=function()
-            WindowInboxData.authenticated = false
-            self:changeScreen("login")
-        end})
-
+    else
         self.elements.slider = UI.slider({x=self.w-16, y=20, w=16, h=self.h-self.navbar.h-20, dir="ver", fl=0.25, l={0,1,2}, desktop=self.desktop, resize=function (element)
             element.x = self.x+self.w-16
             element.sx = element.x
@@ -190,12 +197,22 @@ function WindowInbox:changeScreen(screen,subscreen)
             element.sh = element.h*element.fill
             element.sy = element:posFromValue(element.value)
         end})
-    elseif self.screen == "email" then
-        self.elements.back = UI.button({x=2, y=2, w=16, h=16, text="<", desktop=self.desktop, resize=function (element)
-            element.x = self.x+2
-        end, func=function()
-            self:changeScreen("inbox")
-        end})
+
+        if self.screen == "inbox" then
+            self.elements.logout = UI.button({x=(self.w/2)+2, y=2, w=(self.w/2)-4, h=16, text="logout", desktop=self.desktop, resize=function (element)
+                element.x = self.x+(self.w/2)+2
+                element.w = (self.w/2)-4
+            end, func=function()
+                WindowInboxData.authenticated = false
+                self:changeScreen("login")
+            end})
+        elseif self.screen == "email" then
+            self.elements.back = UI.button({x=2, y=2, w=16, h=16, text="<", desktop=self.desktop, resize=function (element)
+                element.x = self.x+2
+            end, func=function()
+                self:changeScreen("inbox")
+            end})
+        end
     end
     self:sync()
 end

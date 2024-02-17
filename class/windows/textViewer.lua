@@ -34,7 +34,7 @@ function WindowTextViewer:draw()
             local split = Split(text,"\n")
             for j,line in pairs(split) do
                 love.graphics.printf(line, self.x+4, y, self.w-8, allign)
-                y = y + self:textHeight(line)
+                y = y + TextHeight(line, self.w-8)
             end
             y = y + 4
         end
@@ -45,28 +45,4 @@ function WindowTextViewer:draw()
 
     -- Draw UI
     Window.drawUI(self)
-end
-
-function WindowTextViewer:textHeight(text)
-    local split = Split(text, "\n")
-    local lines = 0
-    for _, line in pairs(split) do
-        local width = Font:getWidth(line)
-        if width > self.w-8 then
-            local split = Split(line, " ")
-            local line = ""
-            for i, word in pairs(split) do
-                if Font:getWidth(line.." "..word) > self.w-8 then
-                    lines = lines + 1
-                    line = word
-                else
-                    line = line.." "..word
-                end
-            end
-            lines = lines + 1
-        else
-            lines = lines + 1
-        end
-    end
-    return lines*Font:getHeight()
 end

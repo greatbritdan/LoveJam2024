@@ -79,9 +79,9 @@ function FileButton:mousereleased(mx,my,b)
     if b ~= 1 then return end
     if self.clicking and self:hover(mx,my) then
         self:click()
+        self.clicking = false
         return true
     end
-    self.clicking = false
     return false
 end
 
