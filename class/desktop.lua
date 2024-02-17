@@ -22,6 +22,7 @@ function Desktop:initialize(desktop)
         buttons = { TaskbarButton:new(self, false) }
     }
     self.windows = {}
+    self.desktopIcons = {}
 
     if config.openByDefault then
         table.insert(self.windows, config.openByDefault:new(self,nil,nil,nil,nil))
@@ -29,6 +30,15 @@ function Desktop:initialize(desktop)
     end
 
     self:populateFilesystem(config.desktop, config.bin)
+
+    local files = self:getFile("b:/desktop")
+    if files then
+        for i, file in ipairs(files) do
+            if file.hidden ~= true then
+                table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
+            end
+        end
+    end
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
@@ -61,47 +71,8 @@ function Desktop:draw()
     end
 
     -- Draw desktop icons
-    local files = self:getFile("b:/desktop")
-    if files then
-        local x, y = 1, 1
-        local hover = self:hoveringFile()
-        for i, file in ipairs(files) do
-            local file = file
-            local isShortcut = false
-            if file.type == "shortcut" then
-                file = self:getFileFromShortcut(file)
-                isShortcut = true
-            end
-            if file and file.hidden ~= true then
-                local px, py = x, y
-                if file.pos then
-                    px, py = file.pos[1], file.pos[2]
-                end
-                love.graphics.setColor({1,1,1})
-                love.graphics.printf(file.name, 2+((px-1)*40), 38+((py-1)*48), 36, "center")
-                love.graphics.setColor({1,1,1,0})
-                if hover == i then
-                    love.graphics.setColor({1,1,1,0.25})
-                end
-                love.graphics.rectangle("fill", 4+((px-1)*40), 4+((py-1)*48), 32, 32)
-                love.graphics.setColor({1,1,1})
-                if file.icon then
-                    love.graphics.draw(IconsImg, IconsQuads[file.icon], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
-                else
-                    love.graphics.draw(IconsImg, IconsQuads[file.type], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
-                end
-                if isShortcut then
-                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
-                end
-                if not file.pos then
-                    y = y + 1
-                    if y == 8 then
-                        y = 1
-                        x = x + 1
-                    end
-                end
-            end
-        end
+    for _, icon in pairs(self.desktopIcons) do
+        icon:draw()
     end
 
     -- Draw windows below task bar and icons
@@ -151,26 +122,31 @@ function Desktop:mousepressed(mx, my, b)
                 return
             end
         end
-        local hover = self:hoveringFile()
-        if hover then
-            local file = self:getFile("b:/desktop")[hover]
-            if file.type == "shortcut" then
-                file = self:getFileFromShortcut(file)
+        for _, icon in pairs(self.desktopIcons) do
+            if icon:mousepressed(mx, my, b) then
+                return
             end
-            self:openFile(file)
         end
     else
         for i, button in pairs(self.taskbar.buttons) do
-            button:mousepressed(mx, my, i, b)
+            if button:mousepressed(mx, my, i, b) then
+                return
+            end
         end
     end
 end
 function Desktop:mousereleased(mx, my, b)
-    for i, button in pairs(self.taskbar.buttons) do
-        button:mousereleased(mx, my, i, b)
-    end
-    for _, window in pairs(self.windows) do
-        window:mousereleased(mx, my, b)
+    if my < self.h-self.taskbar.h then
+        for _, window in pairs(self.windows) do
+            window:mousereleased(mx, my, b)
+        end
+        for _, icon in pairs(self.desktopIcons) do
+            icon:mousereleased(mx, my, b)
+        end
+    else
+        for i, button in pairs(self.taskbar.buttons) do
+            button:mousereleased(mx, my, i, b)
+        end
     end
 end
 
@@ -208,33 +184,6 @@ function Desktop:getFileFromShortcut(file)
         target.target = file.target
         target.pos = file.pos
         return target
-    end
-    return false
-end
-
-function Desktop:hoveringFile()
-    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
-    local files = self:getFile("b:/desktop")
-    if files then
-        local x, y = 1, 1
-        for i, file in ipairs(files) do
-            if file and file.hidden ~= true then
-                local px, py = x, y
-                if file.pos then
-                    px, py = file.pos[1], file.pos[2]
-                end
-                if AABB(mx, my, 1, 1, 4+((px-1)*40), 4+((py-1)*48), 32, 32) then
-                    return i
-                end
-                if not file.pos then
-                    y = y + 1
-                    if y == 8 then
-                        y = 1
-                        x = x + 1
-                    end
-                end
-            end
-        end
     end
     return false
 end

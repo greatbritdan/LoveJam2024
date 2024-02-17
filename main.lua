@@ -47,6 +47,7 @@ function love.load()
     require("class.windows.textViewer")
     require("class.windows.imageViewer")
 
+    require("class.fileButton")
     require("class.taskbarButton")
     require("class.desktop")
 
