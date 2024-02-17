@@ -3,6 +3,9 @@ WindowTextViewer = Class("WindowTextViewer", Window)
 function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 200, 150, "text viewer")
     self.content = args and args.content
+    if type(self.content) ~= "table" then
+        self.content = {self.content}
+    end
     self.filename = args and args.filename or "unknown.text"
     self.program = "textviewer"
     self.icon = "textviewer"
@@ -21,7 +24,20 @@ function WindowTextViewer:draw()
     love.graphics.printf(self.filename, self.x+4, self.y+self.navbar.h+3, self.w-8, "left")
     if self.content then
         love.graphics.setColor({1,1,1})
-        love.graphics.printf(self.content, self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
+        local y = self.y+self.navbar.h+17
+        for _,section in pairs(self.content) do
+            local text, allign = Deepcopy(section), "center"
+            if type(section) == "table" then
+                text = section[1]
+                allign = section[2] or "center"
+            end
+            local split = Split(text,"\n")
+            for j,line in pairs(split) do
+                love.graphics.printf(line, self.x+4, y, self.w-8, allign)
+                y = y + self:textHeight(line)
+            end
+            y = y + 4
+        end
     else
         love.graphics.setColor({1,0.5,0.5})
         love.graphics.printf("error: no content provided, please open a valid text file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
@@ -29,4 +45,28 @@ function WindowTextViewer:draw()
 
     -- Draw UI
     Window.drawUI(self)
+end
+
+function WindowTextViewer:textHeight(text)
+    local split = Split(text, "\n")
+    local lines = 0
+    for _, line in pairs(split) do
+        local width = Font:getWidth(line)
+        if width > self.w-8 then
+            local split = Split(line, " ")
+            local line = ""
+            for i, word in pairs(split) do
+                if Font:getWidth(line.." "..word) > self.w-8 then
+                    lines = lines + 1
+                    line = word
+                else
+                    line = line.." "..word
+                end
+            end
+            lines = lines + 1
+        else
+            lines = lines + 1
+        end
+    end
+    return lines*Font:getHeight()
 end

@@ -14,6 +14,16 @@ return {
             target = "b:/programs/filemanager",
         },
         {
+            pos = {1,7},
+            name = "balance",
+            type = "text",
+            content = {
+                {"hey mate, as requested here is the balance of all the accounts in our name,\n\nremember that the ann0nymous has an eye on our 2nd account, i've transfered it to a new account:"},
+                {"- savings: £22.54\n- user1: £1.23 (comprimised)\n- user1_newaccount: £9,640.50","left"},
+                {"cheers,\n\n- user1"}
+            },
+        },
+        {
             pos = {13,1},
             name = "goal",
             type = "text",

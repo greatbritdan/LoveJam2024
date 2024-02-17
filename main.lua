@@ -38,7 +38,7 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
-    DesktopName = "britdan"
+    DesktopName = "user1" --"britdan"
     Desktops = {"britdan","user1"}
 
     require("class.window")
@@ -118,13 +118,16 @@ function AABB(ax, ay, awidth, aheight, bx, by, bwidth, bheight)
 	return ax+awidth > bx and ax < bx+bwidth and ay+aheight > by and ay < by+bheight
 end
 
-function Split(inputstr, sep)
-    if sep == nil then sep = "%s" end
-    local t = {}
-    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-        table.insert(t, str)
-    end
-    return t
+function Split(str, d)
+	local data = {}
+	local from, to = 1, string.find(str, d)
+	while to do
+		table.insert(data, string.sub(str, from, to-1))
+		from = to+d:len()
+		to = string.find(str, d, from)
+	end
+	table.insert(data, string.sub(str, from))
+	return data
 end
 
 function TableContains(table, name)
