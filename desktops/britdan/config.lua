@@ -27,5 +27,12 @@ return {
                 content = "this is a file"
             }
         }
+    },
+    bin = {
+        {
+            name = "trash",
+            type = "text",
+            content = "this is the trash"
+        },
     }
 }

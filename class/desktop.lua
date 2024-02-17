@@ -22,7 +22,7 @@ function Desktop:initialize(desktop)
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
     end
 
-    self:populateFilesystem(config.desktop)
+    self:populateFilesystem(config.desktop, config.bin)
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
@@ -309,7 +309,7 @@ function Desktop:windowBringToFront(targetWindow)
     self.windows = newWindows
 end
 
-function Desktop:populateFilesystem(desktop)
+function Desktop:populateFilesystem(desktop,bin)
     self.filesystem = {}
 
     -- Add desktop to filesystem
@@ -318,13 +318,27 @@ function Desktop:populateFilesystem(desktop)
         type = "folder",
         icon = "desktop",
     }
-    for _, file in pairs(desktop) do
-        table.insert(self.filesystem[1], file)
+    if desktop then
+        for _, file in pairs(desktop) do
+            table.insert(self.filesystem[1], file)
+        end
     end
 
     -- Only add desktop icons to administator (menu)
     if DesktopName == "administator" then
         return
+    end
+
+    -- Add bin to filesystem
+    self.filesystem[2] = {
+        name = "bin",
+        type = "folder",
+        icon = "bin",
+    }
+    if bin then
+        for _, file in pairs(bin) do
+            table.insert(self.filesystem[2], file)
+        end
     end
 
     -- Add programs to filesystem
@@ -333,13 +347,13 @@ function Desktop:populateFilesystem(desktop)
         {name="textviewer",program="textviewer",window=WindowTextViewer},
         {name="imageviewer",program="imageviewer",window=WindowImageViewer}
     }
-    self.filesystem[2] = {
+    self.filesystem[3] = {
         name = "programs",
         type = "folder",
         icon = "programs",
     }
     for _, program in pairs(programs) do
-        table.insert(self.filesystem[2], {
+        table.insert(self.filesystem[3], {
             name = program.name,
             type = "program",
             program = program.program,
@@ -349,10 +363,11 @@ function Desktop:populateFilesystem(desktop)
     end
 
     -- Add debug folder to filesystem
-    self.filesystem[3] = {
+    self.filesystem[4] = {
         name = "debug",
         type = "folder",
         icon = "blank",
+        hidden = true,
         {
             name = "menu",
             type = "program",
