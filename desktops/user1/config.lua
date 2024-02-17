@@ -41,7 +41,7 @@ return {
             }
         },
         {
-            pos = {1,7},
+            pos = {1,6},
             name = "balance",
             type = "text",
             content = {
@@ -49,6 +49,13 @@ return {
                 {"- savings: £22.54\n- user1: £1.23 (comprimised)\n- user1_newaccount: £9,640.50","left"},
                 {"cheers,\n\n- boss"}
             },
+        },
+        {
+            pos = {2,3},
+            name = "inbox",
+            type = "program",
+            program = "inbox",
+            icon = "inbox",
         },
         {
             pos = {13,1},

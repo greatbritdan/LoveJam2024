@@ -4,7 +4,8 @@ function Desktop:initialize(config)
     self.programWindows = {
         filemanager = WindowFileManager,
         textviewer = WindowTextViewer,
-        imageviewer = WindowImageViewer
+        imageviewer = WindowImageViewer,
+        inbox = WindowInbox
     }
 
     self.w, self.h = Env.width, Env.height
@@ -217,7 +218,8 @@ function Desktop:openFile(file,window)
     local lookups = {
         folder = {program="filemanager", window=WindowFileManager, args={path=path}},
         text = {program="textviewer", window=WindowTextViewer, args={file=file,content=file.content,filename=file.name..".text"}},
-        image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}}
+        image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}},
+        inbox = {program="inbox", window=WindowInbox, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -316,6 +318,7 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="filemanager",program="filemanager",window=WindowFileManager},
         {name="textviewer",program="textviewer",window=WindowTextViewer},
         {name="imageviewer",program="imageviewer",window=WindowImageViewer},
+        {name="inbox",program="inbox",window=WindowInbox},
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
     }
     self.filesystem[3] = {
@@ -401,6 +404,8 @@ function Desktop:deleteFile(path)
 end
 
 function Desktop:complete()
+    WindowInboxData = {}
+    
     local idx = TableContains(Desktops, DesktopName)
     DesktopName = Desktops[idx+1]
     Screen:changeState("desktop", {"fade", 0.25, {0,0,0}}, {"fade", 0.25, {0,0,0}})

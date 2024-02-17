@@ -23,7 +23,7 @@ function love.load()
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer","remotedesktop"}
+    IconsImgNames = {"exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer","remotedesktop","inbox"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
@@ -45,6 +45,7 @@ function love.load()
     require("class.windows.fileManager")
     require("class.windows.textViewer")
     require("class.windows.imageViewer")
+    require("class.windows.inbox")
 
     require("class.fileButton")
     require("class.taskbarButton")
