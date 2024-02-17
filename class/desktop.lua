@@ -5,6 +5,7 @@ function Desktop:initialize(desktop)
     self.w, self.h = Env.width, Env.height
     self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
 
+    self.focus = false
     self.startMenu = {
         w = 200, h = 300,
         open = false,
@@ -14,11 +15,14 @@ function Desktop:initialize(desktop)
         h = 20,
         buttons = { DesktopButton:new(self, false) }
     }
-
-    self.focus = false
     self.windows = {}
 
-    self.filesystem = config.filesystem or {}
+    if config.openByDefault then
+        table.insert(self.windows, config.openByDefault:new(self,nil,nil,nil,nil))
+        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+    end
+
+    self:populateFilesystem(config.desktop)
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
@@ -218,7 +222,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, file.window:new(self,nil,nil,200,150))
+        table.insert(self.windows, file.window:new(self,nil,nil,nil,nil))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -260,7 +264,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, lookup.window:new(self,nil,nil,200,150,lookup.args))
+        table.insert(self.windows, lookup.window:new(self,nil,nil,nil,nil,lookup.args))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -303,4 +307,58 @@ function Desktop:windowBringToFront(targetWindow)
         end
     end
     self.windows = newWindows
+end
+
+function Desktop:populateFilesystem(desktop)
+    self.filesystem = {}
+
+    -- Add desktop to filesystem
+    self.filesystem[1] = {
+        name = "desktop",
+        type = "folder",
+        icon = "desktop",
+    }
+    for _, file in pairs(desktop) do
+        table.insert(self.filesystem[1], file)
+    end
+
+    -- Only add desktop icons to administator (menu)
+    if DesktopName == "administator" then
+        return
+    end
+
+    -- Add programs to filesystem
+    local programs = {
+        {name="filemanager",program="filemanager",window=WindowFileManager},
+        {name="textviewer",program="textviewer",window=WindowTextViewer},
+        {name="imageviewer",program="imageviewer",window=WindowImageViewer}
+    }
+    self.filesystem[2] = {
+        name = "programs",
+        type = "folder",
+        icon = "programs",
+    }
+    for _, program in pairs(programs) do
+        table.insert(self.filesystem[2], {
+            name = program.name,
+            type = "program",
+            program = program.program,
+            icon = program.name,
+            window = program.window
+        })
+    end
+
+    -- Add debug folder to filesystem
+    self.filesystem[3] = {
+        name = "debug",
+        type = "folder",
+        icon = "blank",
+        {
+            name = "menu",
+            type = "program",
+            program = "menu",
+            icon = "britfile",
+            window = WindowMenu
+        }
+    }
 end

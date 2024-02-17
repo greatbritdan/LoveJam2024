@@ -25,7 +25,7 @@ function love.load()
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"test","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer"}
+    IconsImgNames = {"test","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer","britfile"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
@@ -38,7 +38,12 @@ function love.load()
         WindowIconsQuads[WindowIconsImgNames[i]] = love.graphics.newQuad((i-1)*13, 0, 13, 13, WindowIconsImg:getWidth(), WindowIconsImg:getHeight())
     end
 
+    TitleImg = love.graphics.newImage("graphics/title.png")
+
+    DesktopName = "menu"
+
     require("class.window")
+    require("class.windows.menu")
     require("class.windows.fileManager")
     require("class.windows.textViewer")
     require("class.windows.imageViewer")

@@ -1,6 +1,6 @@
 Window = Class("Window")
 
-function Window:initialize(desktop, x, y, w, h, title, minW, minH)
+function Window:initialize(desktop, x, y, w, h, title, minW, minH, resizable, moveable, navbarButtons)
     self.desktop = desktop
     self.program = false
     self.icon = "test"
@@ -17,46 +17,58 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH)
         h = 13,
         buttons = {}
     }
-    self.navbar.buttons[1] = {
-        name = "minimize",
-        func = function()
-            self.minimized = true
-            if self.desktop.focus == self then
-                self.desktop.focus = false
+    if (not navbarButtons) or (navbarButtons and navbarButtons.minimize ~= false) then
+        table.insert(self.navbar.buttons, {
+            name = "minimize",
+            func = function()
+                self.minimized = true
+                if self.desktop.focus == self then
+                    self.desktop.focus = false
+                end
             end
-        end
-    }
-    self.navbar.buttons[2] = {
-        name = "fullscreen",
-        func = function()
-            if self.fullscreen then
-                self.x, self.y, self.w, self.h = self.ox, self.oy, self.ow, self.oh
-                self.fullscreen = false
-            else
-                self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
-                self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height-self.desktop.taskbar.h
-                self.fullscreen = true
+        })
+    end
+    if (not navbarButtons) or (navbarButtons and navbarButtons.fullscreen ~= false) then
+        table.insert(self.navbar.buttons, {
+            name = "fullscreen",
+            func = function()
+                if self.fullscreen then
+                    self.x, self.y, self.w, self.h = self.ox, self.oy, self.ow, self.oh
+                    self.fullscreen = false
+                else
+                    self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
+                    self.x, self.y, self.w, self.h = 0, 0, Env.width, Env.height-self.desktop.taskbar.h
+                    self.fullscreen = true
+                end
+                self:sync()
             end
-            self:sync()
-        end
-    }
-    self.navbar.buttons[3] = {
-        name = "close",
-        func = function()
-            self.desktop:windowClose(self)
-        end
-    }
+        })
+    end
+    if (not navbarButtons) or (navbarButtons and navbarButtons.close ~= false) then
+        table.insert(self.navbar.buttons, {
+            name = "close",
+            func = function()
+                self.desktop:windowClose(self)
+            end
+        })
+    end
 
     self.elements = {}
 
     self.title = title
 
     self.moving = false
+    self.moveable = true
+    if moveable == false then
+        self.moveable = false
+    end
     self.resizing = false
     self.resizePadding = 2
+    self.resizeable = true
+    if resizable == false then
+        self.resizeable = false
+    end
     self.clicking = false
-
-    self.debug = false
 end
 
 function Window:getColor(name,subname)
@@ -105,7 +117,7 @@ function Window:update(dt)
         self:sync()
     else
         local hover = self:hovering(mx, my)
-        if hover and hover[1] == "resize" then
+        if hover and hover[1] == "resize" and self.resizeable then
             local top, right, bottom, left = false, false, false, false
             if TableContains(hover, "top") then
                 top = true
@@ -172,15 +184,6 @@ function Window:drawWindow()
         love.graphics.setColor({1,1,1})
         love.graphics.draw(WindowIconsImg, WindowIconsQuads[button.name], x, self.y, 0)
     end
-
-    if not self.debug then return end
-    -- visualise padding
-    love.graphics.setColor(1,0,0)
-    love.graphics.rectangle("fill", self.x+self.w-self.resizePadding, self.y, self.resizePadding, self.h)
-    love.graphics.rectangle("fill", self.x, self.y, self.resizePadding, self.h)
-    love.graphics.setColor(0,1,0)
-    love.graphics.rectangle("fill", self.x, self.y, self.w, self.resizePadding)
-    love.graphics.rectangle("fill", self.x, self.y+self.h-self.resizePadding, self.w, self.resizePadding)
 end
 
 function Window:drawUI()
@@ -195,7 +198,7 @@ function Window:mousepressed(mx,my, b)
     if b ~= 1 then return end
     local hover = self:hovering(mx, my)
     if not hover then return false end
-    if hover[1] == "navbar" then
+    if hover[1] == "navbar" and self.moveable then
         self.moving = true
         self.mx, self.my = mx-self.x, my-self.y
         if self.fullscreen then
@@ -205,7 +208,7 @@ function Window:mousepressed(mx,my, b)
         end
         self:sync()
     end
-    if hover[1] == "resize" then
+    if hover[1] == "resize" and self.resizeable then
         self.resizing = hover
         self.ox, self.oy, self.ow, self.oh = self.x, self.y, self.w, self.h
         self:sync()

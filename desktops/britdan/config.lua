@@ -5,32 +5,27 @@ return {
     name = "britdan",
     theme = "dark",
     background = {
-        t = "image",
-        img = love.graphics.newImage(path.."/background.png")
+        t = "image", img = love.graphics.newImage(path.."/background.png")
     },
-    filesystem = {
+    desktop = {
         {
-            name = "desktop",
+            name = "hello",
+            type = "text",
+            content = "hello, world"
+        },
+        {
+            name = "pfp",
+            type = "image",
+            img = love.graphics.newImage(path.."/pfp.png")
+        },
+        {
+            name = "folder",
             type = "folder",
             {
-                name = "hello",
+                name = "file",
                 type = "text",
-                content = "hello, world"
-            },
-            {
-                name = "pfp",
-                type = "image",
-                img = love.graphics.newImage(path.."/pfp.png")
-            },
-            {
-                name = "folder",
-                type = "folder",
-                {
-                    name = "file",
-                    type = "text",
-                    content = "this is a file"
-                }
+                content = "this is a file"
             }
         }
-    },
+    }
 }
