@@ -22,10 +22,10 @@ function WindowTextViewer:draw()
     love.graphics.printf(self.filename, self.x+4, self.y+self.navbar.h+3, self.w-8, "left")
     if self.content then
         love.graphics.setColor({1,1,1})
-        love.graphics.printf(self.content, self.x+4, self.y+self.navbar.h+17, self.w-8, "left")
+        love.graphics.printf(self.content, self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
     else
         love.graphics.setColor({1,0.5,0.5})
-        love.graphics.printf("error: no content provided, please open a valid text file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "left")
+        love.graphics.printf("error: no content provided, please open a valid text file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
     end
 
     -- Draw UI

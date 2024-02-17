@@ -22,7 +22,6 @@ function Desktop:initialize(desktop)
         buttons = { TaskbarButton:new(self, false) }
     }
     self.windows = {}
-    self.desktopIcons = {}
 
     if config.openByDefault then
         table.insert(self.windows, config.openByDefault:new(self,nil,nil,nil,nil))
@@ -31,20 +30,7 @@ function Desktop:initialize(desktop)
 
     self:populateFilesystem(config.desktop, config.bin)
 
-    local files = self:getFile("b:/desktop")
-    if files then
-        local i = 1
-        for _, file in ipairs(files) do
-            if file.hidden ~= true then
-                if file.pos then
-                    table.insert(self.desktopIcons, FileButton:new(self, false, file.pos, file))
-                else
-                    table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
-                    i = i + 1
-                end
-            end
-        end
-    end
+    self:createDesktopIcons()
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
@@ -195,6 +181,10 @@ function Desktop:getFileFromShortcut(file)
 end
 
 function Desktop:openFile(file,window)
+    if file.onOpen then
+        file.onOpen(self,window,file)
+    end
+
     -- Open program
     if file.type == "program" then
         local windowP = self:windowExists(file.program)
@@ -322,7 +312,8 @@ function Desktop:populateFilesystem(desktop,bin)
     local programs = {
         {name="filemanager",program="filemanager",window=WindowFileManager},
         {name="textviewer",program="textviewer",window=WindowTextViewer},
-        {name="imageviewer",program="imageviewer",window=WindowImageViewer}
+        {name="imageviewer",program="imageviewer",window=WindowImageViewer},
+        {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
     }
     self.filesystem[3] = {
         name = "programs",
@@ -334,7 +325,8 @@ function Desktop:populateFilesystem(desktop,bin)
             name = program.name,
             type = "program",
             program = program.program,
-            icon = program.name
+            icon = program.name,
+            hidden = program.hidden
         })
     end
 
@@ -350,4 +342,38 @@ function Desktop:populateFilesystem(desktop,bin)
             content = "this is a debug file"
         }
     }
+end
+
+function Desktop:createDesktopIcons()
+    self.desktopIcons = {}
+    local files = self:getFile("b:/desktop")
+    if files then
+        local i = 1
+        for _, file in ipairs(files) do
+            if file.hidden ~= true then
+                if file.pos then
+                    table.insert(self.desktopIcons, FileButton:new(self, false, file.pos, file))
+                else
+                    table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
+                    i = i + 1
+                end
+            end
+        end
+    end
+end
+
+function Desktop:updateFile(path, args)
+    local file = self:getFile(path)
+    if file then
+        for key, val in pairs(args) do
+            file[key] = val
+        end
+    end
+end
+function Desktop:deleteFile(path)
+    local file = self:getFile(path)
+    if file then
+        file.hidden = true
+        self:createDesktopIcons()
+    end
 end

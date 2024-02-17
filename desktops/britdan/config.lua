@@ -9,36 +9,25 @@ return {
     },
     desktop = {
         {
-            name = "hello",
+            name = "welcome",
             type = "text",
-            content = "hello, world"
+            content = "welcome to <game name here>!\n\nclick the icon below this file to open the file manager.\n\nhave fun, oh and do not open the bin, nothing is there.\n\n- britdan"
         },
         {
-            name = "pfp",
-            type = "image",
-            img = love.graphics.newImage(path.."/pfp.png")
-        },
-        {
-            name = "folder",
-            type = "folder",
-            {
-                name = "file",
-                type = "text",
-                content = "this is a file"
-            }
-        },
-        {
-            pos = {3,1},
-            name = "bin (shortcut)",
+            name = "filemanager",
             type = "shortcut",
-            target = "b:/bin/"
+            target = "b:/programs/filemanager",
         }
     },
     bin = {
         {
-            name = "trash",
+            name = "delete me",
             type = "text",
-            content = "this is the trash"
-        },
+            content = "youre a real snooper arent you, fine ill spill the beans.\n\nif your reading this youve been accepted into our hacker group (weather you like it or not).\n\nwe have a few tasks for you to do, and lets just say you dont want to know what happens if you dont.\n\nopen the remote desktop app in the programs file to begin.\n\n- ann0nymous112",
+            onOpen = function(desktop,window,file)
+                desktop:updateFile("b:/desktop/welcome", {content = "welcome to <game name here>!\n\nits too late.\n\n- ann0nymous112"})
+                desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
+            end
+        }
     }
 }

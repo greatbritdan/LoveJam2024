@@ -27,7 +27,7 @@ function WindowImageViewer:draw()
         love.graphics.draw(self.img, x, y, 0, smallestScale, smallestScale)
     else
         love.graphics.setColor({1,0.5,0.5})
-        love.graphics.printf("error: no image provided, please open a valid image file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "left")
+        love.graphics.printf("error: no image provided, please open a valid image file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
     end
 
     -- Draw UI
