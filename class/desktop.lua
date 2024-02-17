@@ -4,8 +4,7 @@ function Desktop:initialize(desktop)
     self.programWindows = {
         filemanager = WindowFileManager,
         textviewer = WindowTextViewer,
-        imageviewer = WindowImageViewer,
-        menu = WindowMenu
+        imageviewer = WindowImageViewer
     }
 
     local config = love.filesystem.load("desktops/"..desktop.."/config.lua")()
@@ -344,11 +343,6 @@ function Desktop:populateFilesystem(desktop,bin)
         end
     end
 
-    -- Only add desktop icons to administator (menu)
-    if DesktopName == "administator" then
-        return
-    end
-
     -- Add bin to filesystem
     self.filesystem[2] = {
         name = "bin",
@@ -388,10 +382,9 @@ function Desktop:populateFilesystem(desktop,bin)
         icon = "blank",
         hidden = true,
         {
-            name = "menu",
-            type = "program",
-            program = "menu",
-            icon = "britfile"
+            name = "debug",
+            type = "text",
+            content = "this is a debug file"
         }
     }
 end
