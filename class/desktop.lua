@@ -7,7 +7,7 @@ function Desktop:initialize(desktop)
         imageviewer = WindowImageViewer,
         menu = WindowMenu
     }
-    
+
     local config = love.filesystem.load("desktops/"..desktop.."/config.lua")()
     self.w, self.h = Env.width, Env.height
     self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
@@ -64,7 +64,7 @@ function Desktop:draw()
     -- Draw desktop icons
     local files = self:getFile("b:/desktop")
     if files then
-        local y = 8
+        local y = 1
         local hover = self:hoveringFile()
         for i, file in ipairs(files) do
             local file = file
@@ -74,23 +74,27 @@ function Desktop:draw()
                 isShortcut = true
             end
             if file and file.hidden ~= true then
+                local px, py = 1, y
+                if file.pos then
+                    px, py = file.pos[1], file.pos[2]
+                end
                 love.graphics.setColor({1,1,1})
-                love.graphics.printf(file.name, 4, y+34, 40, "center")
+                love.graphics.printf(file.name, 2+((px-1)*40), 38+((py-1)*48), 36, "center")
                 love.graphics.setColor({1,1,1,0})
                 if hover == i then
-                    love.graphics.setColor({1,1,1,0.5})
+                    love.graphics.setColor({1,1,1,0.25})
                 end
-                love.graphics.rectangle("fill", 8, y, 32, 32)
+                love.graphics.rectangle("fill", 4+((px-1)*40), 4+((py-1)*48), 32, 32)
                 love.graphics.setColor({1,1,1})
                 if file.icon then
-                    love.graphics.draw(IconsImg, IconsQuads[file.icon], 8, y, 0, 2, 2)
+                    love.graphics.draw(IconsImg, IconsQuads[file.icon], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
                 else
-                    love.graphics.draw(IconsImg, IconsQuads[file.type], 8, y, 0, 2, 2)
+                    love.graphics.draw(IconsImg, IconsQuads[file.type], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
                 end
                 if isShortcut then
-                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], 8, y, 0, 2, 2)
+                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
                 end
-                y = y + 44
+                y = y + 1
             end
         end
     end
@@ -197,6 +201,7 @@ function Desktop:getFileFromShortcut(file)
     if target then
         -- this is ugly, but it's a jam game
         target.target = file.target
+        target.pos = file.pos
         return target
     end
     return false
@@ -206,13 +211,17 @@ function Desktop:hoveringFile()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local files = self:getFile("b:/desktop")
     if files then
-        local y = 8
+        local y = 1
         for i, file in ipairs(files) do
-            if file then
-                if AABB(mx, my, 1, 1, 8, y, 32, 32) then
+            if file and file.hidden ~= true then
+                local px, py = 1, y
+                if file.pos then
+                    px, py = file.pos[1], file.pos[2]
+                end
+                if AABB(mx, my, 1, 1, 4+((px-1)*40), 4+((py-1)*48), 32, 32) then
                     return i
                 end
-                y = y + 44
+                y = y + 1
             end
         end
     end

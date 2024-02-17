@@ -26,6 +26,12 @@ return {
                 type = "text",
                 content = "this is a file"
             }
+        },
+        {
+            pos = {4,4},
+            name = "bin (shortcut)",
+            type = "shortcut",
+            target = "b:/bin/"
         }
     },
     bin = {

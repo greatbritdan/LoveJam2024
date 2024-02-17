@@ -44,10 +44,7 @@ function WindowFileManager:draw()
     if files then
         local y = self.y+self.navbar.h+24
         for i, file in ipairs(files) do
-            love.graphics.setColor({1,1,1,0.5})
-            if self:hoveringFile() == i then
-                love.graphics.setColor({1,1,1})
-            end
+            love.graphics.setColor({1,1,1})
             local file = file
             local isShortcut = false
             if file.type == "shortcut" then
@@ -55,15 +52,20 @@ function WindowFileManager:draw()
                 isShortcut = true
             end
             if file and file.hidden ~= true then
-                love.graphics.print(file.name, self.x+24, y+4)
+                love.graphics.print(file.name, self.x+24, y+6)
                 if file.icon then
-                    love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+4, y)
+                    love.graphics.draw(IconsImg, IconsQuads[file.icon], self.x+4, y+2)
                 else
-                    love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+4, y)
+                    love.graphics.draw(IconsImg, IconsQuads[file.type], self.x+4, y+2)
                 end
                 if isShortcut then
-                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.x+4, y)
+                    love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.x+4, y+2)
                 end
+                love.graphics.setColor({1,1,1,0})
+                if self:hoveringFile() == i then
+                    love.graphics.setColor({1,1,1,0.25})
+                end
+                love.graphics.rectangle("fill", self.x+4, y, self.w-8, 20)
                 y = y + 20
             end
         end
@@ -96,7 +98,7 @@ function WindowFileManager:hoveringFile()
     if files then
         local y = self.y+self.navbar.h+28
         for i, file in ipairs(files) do
-            if AABB(mx, my, 1, 1, self.x+4, y, self.w-28, 20) then
+            if AABB(mx, my, 1, 1, self.x+4, y, self.w-8, 20) then
                 return i
             end
             y = y + 20

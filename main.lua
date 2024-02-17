@@ -104,6 +104,11 @@ function love.textinput(text)
     Screen:textinput(text)
 end
 
+function love.resize(w, h)
+    Env.width, Env.height = w/Env.scale, h/Env.scale
+    Screen:resize()
+end
+
 --
 
 function Round(n, deci)
