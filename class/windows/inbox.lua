@@ -24,6 +24,8 @@ function WindowInbox:initialize(desktop, x, y, w, h)
         self.emails = self.desktop:getEmails(self.email)
         self:changeScreen("inbox")
     end
+
+    self.clickingEmail = false
 end
 
 function WindowInbox:draw()
@@ -35,23 +37,91 @@ function WindowInbox:draw()
     if self.screen == "login" then
         -- Print out error message
         if self.errorMessage then
-            love.graphics.setColor({1,0.5,0.5})
+            love.graphics.setColor(1,0.5,0.5)
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
     elseif self.screen == "inbox" then
         love.graphics.setColor(self:getColor("subbackground"))
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
-        love.graphics.setColor({0.5,0.5,0.5})
+        love.graphics.setColor(0.5,0.5,0.5)
         love.graphics.printf(self.email, self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
-        love.graphics.printf(#self.emails, self.x+3, self.y+self.navbar.h+26, (self.w/2)-6, "center")
+
+        local hover = self:hover()
+        local y = self.y+self.navbar.h+22
+        for i, email in ipairs(self.emails) do
+            love.graphics.setColor(0,0,0)
+            love.graphics.rectangle("fill", self.x+2, y, self.w-20, 32)
+            love.graphics.setColor(1,1,1)
+            love.graphics.print(email.subject, self.x+6, y+4)
+            love.graphics.setColor(0.5,0.5,0.5)
+            local content = ""
+            local splitn = Split(email.content,"\n")
+            local split = Split(splitn[1]," ")
+            for _,word in ipairs(split) do
+                if love.graphics.getFont():getWidth(content.." "..word) > self.w-32 then
+                    content = content.."..."
+                    break
+                end
+                content = content.." "..word
+            end
+            love.graphics.print(content, self.x+6, y+16)
+            if hover == i or self.clickingEmail == i then
+                love.graphics.setColor(0.5,0.5,0.5,0.5)
+                if self.clickingEmail == i then
+                    love.graphics.setColor(0.5,0.5,0.5,0.25)
+                end
+                love.graphics.rectangle("fill", self.x+2, y, self.w-20, 32)
+            end
+            y = y + 34
+        end
     end
 
     -- Draw UI
     Window.drawUI(self)
 end
 
-function WindowInbox:changeScreen(screen)
+function WindowInbox:mousepressed(mx, my, b)
+    if self.minimized then return end
+    if b ~= 1 then return end
+    if self.screen == "inbox" then
+        local hover = self:hover()
+        if hover then
+            self.clickingEmail = hover
+            return true
+        end
+    end
+    return Window.mousepressed(self, mx, my, b)
+end
+
+function WindowInbox:mousereleased(mx, my, b)
+    if self.minimized then return end
+    if b ~= 1 then return end
+    if self.screen == "inbox" then
+        local hover = self:hover()
+        if hover and hover == self.clickingEmail then
+            local email = self.emails[hover]
+            self:changeScreen("email", email)
+            self.clickingEmail = false
+            return true
+        end
+    end
+    return Window.mousereleased(self, mx, my, b)
+end
+
+function WindowInbox:hover()
+    local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
+    local y = self.y+self.navbar.h+22
+    for i,_ in ipairs(self.emails) do
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+2, y, self.w-20, 32) then
+            return i
+        end
+        y = y + 34
+    end
+    return false
+end
+
+function WindowInbox:changeScreen(screen,subscreen)
     local function resizeElement(element, offsetY)
         local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
         element.y = self.y+sy+offsetY
@@ -60,6 +130,7 @@ function WindowInbox:changeScreen(screen)
 
     self.elements = {}
     self.screen = screen
+    self.subscreen = subscreen or false
 
     if self.screen == "login" then
         local emailinput = WindowInboxData.emailinput or ""
@@ -100,9 +171,12 @@ function WindowInbox:changeScreen(screen)
             self:changeScreen("login")
         end})
 
-        self.elements.slider = UI.slider({x=self.w-16, y=20, w=16, h=self.h-self.navbar.h-20, dir="ver", fl=0.25, desktop=self.desktop, resize=function (element)
+        self.elements.slider = UI.slider({x=self.w-16, y=20, w=16, h=self.h-self.navbar.h-20, dir="ver", fl=0.25, l={0,1,2}, desktop=self.desktop, resize=function (element)
             element.x = self.x+self.w-16
-            element.sx = self.x+self.w-16
+            element.sx = element.x
+            element.h = self.h-self.navbar.h-20
+            element.sh = element.h*element.fill
+            element.sy = element:posFromValue(element.value)
         end})
     end
     self:sync()

@@ -91,6 +91,12 @@ return {
                         subject = "bank details - savings",
                         content = "hey, just quickly, what are the details for this account, i can not remember.\n\n- user1",
                     }
+                },
+                {
+                    from = "noreply@inbox.com",
+                    to = "user1@inbox.com",
+                    subject = "welcome to inbox.com",
+                    content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.",
                 }
             }
         }
