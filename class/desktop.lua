@@ -1,13 +1,12 @@
 Desktop = Class("Desktop")
 
-function Desktop:initialize(desktop)
+function Desktop:initialize(config)
     self.programWindows = {
         filemanager = WindowFileManager,
         textviewer = WindowTextViewer,
         imageviewer = WindowImageViewer
     }
 
-    local config = love.filesystem.load("desktops/"..desktop.."/config.lua")()
     self.w, self.h = Env.width, Env.height
     self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
 
@@ -363,11 +362,21 @@ function Desktop:createDesktopIcons()
     end
 end
 
+function Desktop:createFile(path, args)
+    local file = self:getFile(path)
+    if file then
+        table.insert(file, args)
+        self:createDesktopIcons()
+    end
+end
 function Desktop:updateFile(path, args)
     local file = self:getFile(path)
     if file then
         for key, val in pairs(args) do
             file[key] = val
+            if key == "hidden" then
+                self:createDesktopIcons()
+            end
         end
     end
 end

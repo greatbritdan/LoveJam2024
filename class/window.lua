@@ -263,15 +263,15 @@ function Window:hovering(mx, my)
     -- Check if hovering over navbar buttons (closing, minimizing, etc)
     for i, button in pairs(self.navbar.buttons) do
         local x = self.x+self.w-(#self.navbar.buttons*self.navbar.h)+((i-1)*self.navbar.h)
-        if AABB(mx, my, 1, 1, x, self.y, self.navbar.h, self.navbar.h) then
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, x, self.y, self.navbar.h, self.navbar.h) then
             return {"navbarbutton", button}
         end
     end
     -- Check if hovering over edges (resizing window)
-    local top = AABB(mx, my, 1, 1, self.x, self.y, self.w, self.resizePadding)
-    local right = AABB(mx, my, 1, 1, self.x+self.w-self.resizePadding, self.y, self.resizePadding, self.h)
-    local bottom = AABB(mx, my, 1, 1, self.x, self.y+self.h-self.resizePadding, self.w, self.resizePadding)
-    local left = AABB(mx, my, 1, 1, self.x, self.y, self.resizePadding, self.h)
+    local top = AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x, self.y, self.w, self.resizePadding)
+    local right = AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+self.w-self.resizePadding, self.y, self.resizePadding, self.h)
+    local bottom = AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x, self.y+self.h-self.resizePadding, self.w, self.resizePadding)
+    local left = AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x, self.y, self.resizePadding, self.h)
     if top or right or bottom or left then
         local result = {"resize"}
         if top then
@@ -289,10 +289,10 @@ function Window:hovering(mx, my)
         return result
     end
     -- Check if hovering over navbar (moving window)
-    if AABB(mx, my, 1, 1, self.x, self.y, self.w, self.navbar.h) then
+    if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x, self.y, self.w, self.navbar.h) then
         return {"navbar"}
     end
-    if AABB(mx, my, 1, 1, self.x, self.y, self.w, self.h) then
+    if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x, self.y, self.w, self.h) then
         return {"window"}
     end
     return false

@@ -88,12 +88,12 @@ end
 function FileButton:hover(mx,my)
     if self.window then
         local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)
-        if AABB(mx, my, 1, 1, self.window.x+4, y, self.window.w-8, 20) then
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.window.x+4, y, self.window.w-8, 20) then
             return true
         end
     else
         local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
-        if AABB(mx, my, 1, 1, x, y, 32, 32) then
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, x, y, 32, 32) then
             return true
         end
     end

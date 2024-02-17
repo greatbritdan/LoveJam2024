@@ -27,7 +27,7 @@ function love.load()
         sizenesw = love.mouse.getSystemCursor("sizenesw"),
     }
 
-    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>", 1)
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'", 1)
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")

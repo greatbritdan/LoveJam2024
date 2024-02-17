@@ -1,5 +1,5 @@
 return {
-    width = 600,
+    width = 624,
     height = 400,
     vsync = 1,
     scale = 2,

@@ -60,7 +60,7 @@ function TaskbarButton:mousereleased(mx,my,i,b)
 end
 
 function TaskbarButton:hover(mx,my,i)
-    if AABB(mx, my, 1, 1, ((i-1)*self.desktop.taskbar.h), self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h) then
+    if AABB(mx, my, 1/Env.scale, 1/Env.scale, ((i-1)*self.desktop.taskbar.h), self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h) then
         return true
     end
 end

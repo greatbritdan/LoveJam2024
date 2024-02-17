@@ -1,9 +1,10 @@
 local desktop = {}
-local desktopClass
+local desktopClass, desktopConfig
 local desktopLoaded, desktopTimer = false, 0
 
 function desktop.load(last)
-    desktopClass = Desktop:new(DesktopName)
+    desktopConfig = love.filesystem.load("desktops/"..DesktopName.."/config.lua")()
+    desktopClass = Desktop:new(desktopConfig)
 end
 function desktop.update(dt)
     if desktopLoaded then
@@ -21,13 +22,25 @@ function desktop.draw()
         return
     end
 
+    -- Draw darkened desktop background
+    if desktopConfig.background.t == "color" then
+        local color = desktopConfig.background.color
+        love.graphics.setColor(color[1]/2, color[2]/2, color[3]/2)
+        love.graphics.rectangle("fill", 0, 0, Env.width, Env.height)
+    elseif desktopConfig.background.t == "image" then
+        love.graphics.setColor(0.5,0.5,0.5)
+        local scaleX = Env.width/desktopConfig.background.img:getWidth()
+        local scaleY = Env.height/desktopConfig.background.img:getHeight()
+        love.graphics.draw(desktopConfig.background.img, 0, 0, 0, scaleX, scaleY)
+    end
+
     -- Draw desktop loading text
     love.graphics.setColor(1,1,1)
     if desktopTimer < 1.5 then
         love.graphics.printf("please wait...", 0, (Env.height/2)-(Font:getHeight()/2)-16, Env.width/2, "center", 0, 2, 2)
         love.graphics.printf("do not power off the computer...", 0, (Env.height/2)-(Font:getHeight()/2)+16, Env.width/2, "center", 0, 2, 2)
     else
-        love.graphics.printf("welcome back "..DesktopName, 0, (Env.height/2)-(Font:getHeight()/2), Env.width/2, "center", 0, 2, 2)
+        love.graphics.printf("welcome back "..desktopConfig.name, 0, (Env.height/2)-(Font:getHeight()/2), Env.width/2, "center", 0, 2, 2)
     end
 end
 function desktop.mousepressed(mx, my, b)
