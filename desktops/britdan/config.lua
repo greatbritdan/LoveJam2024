@@ -35,5 +35,6 @@ return {
                 desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
             end
         }
-    }
+    },
+    openByDefault = "b:/desktop/welcome"
 }

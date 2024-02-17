@@ -23,17 +23,17 @@ function Desktop:initialize(desktop)
     }
     self.windows = {}
 
-    if config.openByDefault then
-        table.insert(self.windows, config.openByDefault:new(self,nil,nil,nil,nil))
-        table.insert(self.taskbar.buttons, TaskbarButton:new(self, self.windows[#self.windows]))
-    end
-
     self:populateFilesystem(config.desktop, config.bin)
 
     self:createDesktopIcons()
 
     self.theme = config.theme or "dark"
     self.themes = Var.themes
+
+    if config.openByDefault then
+        local file = self:getFile(config.openByDefault)
+        self:openFile(file)
+    end
 end
 
 function Desktop:getColor(name,subname)
