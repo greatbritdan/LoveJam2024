@@ -10,15 +10,18 @@ function WindowInbox:initialize(desktop, x, y, w, h)
     self.program = "inbox"
     self.icon = "inbox"
     
+    self.email = false
+    self.emails = {}
     if not WindowInboxData.first then
         WindowInboxData.first = true
         self.errorMessage = "session expired, please re-login."
     end
-    self.email = false
+
     if not WindowInboxData.authenticated then
         self:changeScreen("login")
     else
         self.email = WindowInboxData.authenticated
+        self.emails = self.desktop:getEmails(self.email)
         self:changeScreen("inbox")
     end
 end
@@ -37,10 +40,11 @@ function WindowInbox:draw()
         end
     elseif self.screen == "inbox" then
         love.graphics.setColor(self:getColor("subbackground"))
-        love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 13)
+        love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
         love.graphics.setColor({0.5,0.5,0.5})
-        love.graphics.print("inbox - "..self.email, self.x+3, self.y+self.navbar.h+3)
+        love.graphics.printf(self.email, self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
+        love.graphics.printf(#self.emails, self.x+3, self.y+self.navbar.h+26, (self.w/2)-6, "center")
     end
 
     -- Draw UI
@@ -48,40 +52,57 @@ function WindowInbox:draw()
 end
 
 function WindowInbox:changeScreen(screen)
+    local function resizeElement(element, offsetY)
+        local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
+        element.y = self.y+sy+offsetY
+        element.w = self.w-16
+    end
+
     self.elements = {}
     self.screen = screen
+
     if self.screen == "login" then
-        local function resizeElement(element, offsetY)
-            local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
-            element.y = self.y+sy+offsetY
-            element.w = self.w-16
-        end
         local emailinput = WindowInboxData.emailinput or ""
         local passwordinput = WindowInboxData.passwordinput or ""
 
-        self.elements.emaillabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="email:", mc=50, desktop=self.desktop, resize=function (element)
+        self.elements.emaillabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="email:", desktop=self.desktop, resize=function (element)
             resizeElement(element, 0)
         end})
         self.elements.email = UI.input({x=8, y=0, w=self.w-16, h=16, text=emailinput, mc=50, desktop=self.desktop, resize=function (element)
             resizeElement(element, 20)
         end, func=function() WindowInboxData.emailinput = self.elements.email.text end})
-        self.elements.passwordlabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="password:", mc=50, desktop=self.desktop, resize=function (element)
+        self.elements.passwordlabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="password:", desktop=self.desktop, resize=function (element)
             resizeElement(element, 40)
         end})
         self.elements.password = UI.input({x=8, y=0, w=self.w-16, h=16, text=passwordinput, mc=50, desktop=self.desktop, resize=function (element)
             resizeElement(element, 60)
         end, func=function() WindowInboxData.passwordinput = self.elements.password.text end})
-        self.elements.login = UI.button({x=8, y=0, w=self.w-16, h=16, text="login", mc=50, desktop=self.desktop, resize=function (element)
+        self.elements.login = UI.button({x=8, y=0, w=self.w-16, h=16, text="login", desktop=self.desktop, resize=function (element)
             resizeElement(element, 80)
         end, func=function()
-            if self.elements.email.text == "user1@inbox.com" and self.elements.password.text == "iloveboss22" then
+            local validemail = self.desktop:validateEmail(self.elements.email.text, self.elements.password.text)
+            if validemail then
                 self.email = self.elements.email.text
+                self.emails = self.desktop:getEmails(self.email)
                 WindowInboxData.authenticated = self.email
                 self.errorMessage = false
                 self:changeScreen("inbox")
             else
                 self.errorMessage = "invalid email or password"
             end
+        end})
+    elseif self.screen == "inbox" then
+        self.elements.logout = UI.button({x=(self.w/2)+2, y=2, w=(self.w/2)-4, h=16, text="logout", desktop=self.desktop, resize=function (element)
+            element.x = self.x+(self.w/2)+2
+            element.w = (self.w/2)-4
+        end, func=function()
+            WindowInboxData.authenticated = false
+            self:changeScreen("login")
+        end})
+
+        self.elements.slider = UI.slider({x=self.w-16, y=20, w=16, h=self.h-self.navbar.h-20, dir="ver", fl=0.25, desktop=self.desktop, resize=function (element)
+            element.x = self.x+self.w-16
+            element.sx = self.x+self.w-16
         end})
     end
     self:sync()

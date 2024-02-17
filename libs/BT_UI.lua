@@ -39,16 +39,29 @@ function ui:initialize(t,data)
     end
 
     if self.t == "slider" then
+        self.dir = data.dir or "hor"
+
         self.fill = data.fl or data.fill or 0.5
         if self.fill > 1 then
-            self.fill = 1/(self.w/self.fill)
+            if self.dir == "hor" then
+                self.fill = 1/(self.h/self.fill)
+            elseif self.dir == "ver" then
+                self.fill = 1/(self.w/self.fill)
+            end
         end
         self.limit = data.l or data.limit or {0,10,0,1}
         self.value = data.v or data.value or self.limit[1]
 
-        self.sx, self.sy, self.sw, self.sh = self.x, self.y, self.w*self.fill, self.h
-        if self.value ~= self.limit[1] then
-            self.sx = self:posFromValue()
+        if self.dir == "hor" then
+            self.sx, self.sy, self.sw, self.sh = self.x, self.y, self.w*self.fill, self.h
+            if self.value ~= self.limit[1] then
+                self.sx = self:posFromValue()
+            end
+        elseif self.dir == "ver" then
+            self.sx, self.sy, self.sw, self.sh = self.x, self.y, self.w, self.h*self.fill
+            if self.value ~= self.limit[1] then
+                self.sy = self:posFromValue()
+            end
         end
     end
 
@@ -68,7 +81,7 @@ function ui:initialize(t,data)
         shape = { curve=0, point=1 },
         text = { scale=1 },
         color = {
-            void = {normal={0,0,0,.5}, hover={0,0,0,.5}, pressed={0,0,0,.5}, inactive={0,0,0,.5}},
+            void = {normal={0.2,0.2,0.2}, hover={0.2,0.2,0.2}, pressed={0.2,0.2,0.2}, inactive={0.2,0.2,0.2}},
             back = {normal={0,0,0},    hover={.2,.2,.2}, pressed={.4,.4,.4}, inactive={0,0,0}},
             line = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},
             text = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},
@@ -90,8 +103,12 @@ function ui:update(dt)
             end
         end
         if self.t == "slider" then
-            local mx, my = love.mouse.getPosition()
-            self.sx = math.max(self.x,math.min(mx-(self.sw/2), self.x+self.w-self.sw))
+            local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
+            if self.dir == "hor" then
+                self.sx = math.max(self.x,math.min(mx-(self.sw/2), self.x+self.w-self.sw))
+            elseif self.dir == "ver" then
+                self.sy = math.max(self.y,math.min(my-(self.sh/2), self.y+self.h-self.sh))
+            end
             local oldval = self.value
             self.value = self:valueFromPos()
             if self.value ~= oldval then
@@ -179,7 +196,11 @@ function ui:scroll(x,y)
         if self.global or self:highlight(mx,my,true) then
             local oldval = self.value
             self.value = math.max(self.limit[1], math.min(Round(self.value+((-y)*self.limit[4]),self.limit[3]), self.limit[2]))
-            self.sx = self:posFromValue()
+            if self.dir == "hor" then
+                self.sx = self:posFromValue()
+            elseif self.dir == "ver" then
+                self.sy = self:posFromValue()
+            end
             if self.value ~= oldval then
                 self:func()
             end
@@ -253,14 +274,26 @@ function ui:getText()
 end
 
 function ui:valueFromPos()
-    local fw = self.w-self.sw
-    local diff = math.abs(self.limit[1]-self.limit[2])
-    return Round(((self.sx-self.x)/fw)*diff,self.limit[3])
+    if self.dir == "hor" then
+        local fw = self.w-self.sw
+        local diff = math.abs(self.limit[1]-self.limit[2])
+        return Round(((self.sx-self.x)/fw)*diff,self.limit[3])
+    else
+        local fh = self.h-self.sh
+        local diff = math.abs(self.limit[1]-self.limit[2])
+        return Round(((self.sy-self.y)/fh)*diff,self.limit[3])
+    end
 end
 function ui:posFromValue()
-    local fw = self.w-self.sw
-    local diff = math.abs(self.limit[1]-self.limit[2])
-    return self.x+(fw*(self.value/diff))
+    if self.dir == "hor" then
+        local fw = self.w-self.sw
+        local diff = math.abs(self.limit[1]-self.limit[2])
+        return self.x+(fw*(self.value/diff))
+    else
+        local fh = self.h-self.sh
+        local diff = math.abs(self.limit[1]-self.limit[2])
+        return self.y+(fh*(self.value/diff))
+    end
 end
 
 --

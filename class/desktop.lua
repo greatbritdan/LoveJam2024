@@ -30,6 +30,8 @@ function Desktop:initialize(config)
     self.theme = config.theme or "dark"
     self.themes = Var.themes
 
+    self.emails = config.emails or {}
+
     if config.openByDefault then
         local file = self:getFile(config.openByDefault)
         self:openFile(file)
@@ -401,6 +403,23 @@ function Desktop:deleteFile(path)
         file.hidden = true
         self:createDesktopIcons()
     end
+end
+
+function Desktop:validateEmail(vemail,vpass)
+    for _,email in pairs(self.emails) do
+        if email.email == vemail and email.password == vpass then
+            return true
+        end
+    end
+    return false
+end
+function Desktop:getEmails(vemail)
+    for _,email in pairs(self.emails) do
+        if email.email == vemail then
+            return email.emails
+        end
+    end
+    return {}
 end
 
 function Desktop:complete()

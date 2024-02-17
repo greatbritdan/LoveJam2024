@@ -74,5 +74,25 @@ return {
             type = "text",
             content = {{"(incase of memory loss)"},{"- email: user1@inbox.com\n- password: iloveboss22","left"}}
         }
+    },
+    emails = {
+        {
+            email = "user1@inbox.com",
+            password = "iloveboss22",
+            emails = {
+                {
+                    from = "boss23@inbox.com",
+                    to = "user1@inbox.com",
+                    subject = "re: bank details - savings",
+                    content = "the account is no longer in use, i'll be transfering the funds to the new account shortly.\n\n- boss",
+                    {
+                        from = "user1@inbox.com",
+                        to = "boss23@inbox.com",
+                        subject = "bank details - savings",
+                        content = "hey, just quickly, what are the details for this account, i can not remember.\n\n- user1",
+                    }
+                }
+            }
+        }
     }
 }
