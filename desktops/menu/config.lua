@@ -12,8 +12,7 @@ return {
             name = "menu",
             type = "program",
             program = "menu",
-            icon = "britfile",
-            window = WindowMenu
+            icon = "britfile"
         }
     },
     openByDefault = WindowMenu

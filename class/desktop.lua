@@ -1,6 +1,13 @@
 Desktop = Class("Desktop")
 
 function Desktop:initialize(desktop)
+    self.programWindows = {
+        filemanager = WindowFileManager,
+        textviewer = WindowTextViewer,
+        imageviewer = WindowImageViewer,
+        menu = WindowMenu
+    }
+    
     local config = love.filesystem.load("desktops/"..desktop.."/config.lua")()
     self.w, self.h = Env.width, Env.height
     self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
@@ -222,7 +229,7 @@ function Desktop:openFile(file,window)
             self.minimized = false
             return
         end
-        table.insert(self.windows, file.window:new(self,nil,nil,nil,nil))
+        table.insert(self.windows, self.programWindows[file.program]:new(self,nil,nil,nil,nil))
         table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
@@ -357,8 +364,7 @@ function Desktop:populateFilesystem(desktop,bin)
             name = program.name,
             type = "program",
             program = program.program,
-            icon = program.name,
-            window = program.window
+            icon = program.name
         })
     end
 
@@ -372,8 +378,7 @@ function Desktop:populateFilesystem(desktop,bin)
             name = "menu",
             type = "program",
             program = "menu",
-            icon = "britfile",
-            window = WindowMenu
+            icon = "britfile"
         }
     }
 end
