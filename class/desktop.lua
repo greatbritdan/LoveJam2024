@@ -94,7 +94,9 @@ function Desktop:draw()
                 if isShortcut then
                     love.graphics.draw(IconsImg, IconsQuads["shortcut"], 4+((px-1)*40), 4+((py-1)*48), 0, 2, 2)
                 end
-                y = y + 1
+                if not file.pos then
+                    y = y + 1
+                end
             end
         end
     end
@@ -221,7 +223,9 @@ function Desktop:hoveringFile()
                 if AABB(mx, my, 1, 1, 4+((px-1)*40), 4+((py-1)*48), 32, 32) then
                     return i
                 end
-                y = y + 1
+                if not file.pos then
+                    y = y + 1
+                end
             end
         end
     end
@@ -235,7 +239,7 @@ function Desktop:openFile(file,window)
         if windowP then
             self:windowBringToFront(windowP)
             self.focus = windowP
-            self.minimized = false
+            windowP.minimized = false
             return
         end
         table.insert(self.windows, self.programWindows[file.program]:new(self,nil,nil,nil,nil))
@@ -277,7 +281,7 @@ function Desktop:openFile(file,window)
             end
             self.focus = windowP
             self:windowBringToFront(windowP)
-            self.minimized = false
+            windowP.minimized = false
             return
         end
         table.insert(self.windows, lookup.window:new(self,nil,nil,nil,nil,lookup.args))

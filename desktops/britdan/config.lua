@@ -32,6 +32,11 @@ return {
             name = "bin (shortcut)",
             type = "shortcut",
             target = "b:/bin/"
+        },
+        {
+            name = "bin (shortcut)",
+            type = "shortcut",
+            target = "b:/bin/"
         }
     },
     bin = {

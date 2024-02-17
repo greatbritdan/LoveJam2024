@@ -38,7 +38,7 @@ function WindowFileManager:draw()
     Window.draw(self)
     love.graphics.setColor(self:getColor("subbackground"))
     love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
-
+    
     -- Print out all files in path
     local files = self.desktop:getFile(self.elements.path.text)
     if files then
