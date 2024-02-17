@@ -19,13 +19,13 @@ function Desktop:initialize(desktop)
     }
     self.taskbar = {
         h = 20,
-        buttons = { DesktopButton:new(self, false) }
+        buttons = { TaskbarButton:new(self, false) }
     }
     self.windows = {}
 
     if config.openByDefault then
         table.insert(self.windows, config.openByDefault:new(self,nil,nil,nil,nil))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        table.insert(self.taskbar.buttons, TaskbarButton:new(self, self.windows[#self.windows]))
     end
 
     self:populateFilesystem(config.desktop, config.bin)
@@ -63,7 +63,7 @@ function Desktop:draw()
     -- Draw desktop icons
     local files = self:getFile("b:/desktop")
     if files then
-        local y = 1
+        local x, y = 1, 1
         local hover = self:hoveringFile()
         for i, file in ipairs(files) do
             local file = file
@@ -73,7 +73,7 @@ function Desktop:draw()
                 isShortcut = true
             end
             if file and file.hidden ~= true then
-                local px, py = 1, y
+                local px, py = x, y
                 if file.pos then
                     px, py = file.pos[1], file.pos[2]
                 end
@@ -95,6 +95,10 @@ function Desktop:draw()
                 end
                 if not file.pos then
                     y = y + 1
+                    if y == 8 then
+                        y = 1
+                        x = x + 1
+                    end
                 end
             end
         end
@@ -212,10 +216,10 @@ function Desktop:hoveringFile()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local files = self:getFile("b:/desktop")
     if files then
-        local y = 1
+        local x, y = 1, 1
         for i, file in ipairs(files) do
             if file and file.hidden ~= true then
-                local px, py = 1, y
+                local px, py = x, y
                 if file.pos then
                     px, py = file.pos[1], file.pos[2]
                 end
@@ -224,6 +228,10 @@ function Desktop:hoveringFile()
                 end
                 if not file.pos then
                     y = y + 1
+                    if y == 8 then
+                        y = 1
+                        x = x + 1
+                    end
                 end
             end
         end
@@ -242,7 +250,7 @@ function Desktop:openFile(file,window)
             return
         end
         table.insert(self.windows, self.programWindows[file.program]:new(self,nil,nil,nil,nil))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        table.insert(self.taskbar.buttons, TaskbarButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
         return
@@ -284,7 +292,7 @@ function Desktop:openFile(file,window)
             return
         end
         table.insert(self.windows, lookup.window:new(self,nil,nil,nil,nil,lookup.args))
-        table.insert(self.taskbar.buttons, DesktopButton:new(self, self.windows[#self.windows]))
+        table.insert(self.taskbar.buttons, TaskbarButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])
         return

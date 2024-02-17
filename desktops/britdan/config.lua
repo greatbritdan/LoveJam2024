@@ -32,6 +32,41 @@ return {
             name = "bin (shortcut)",
             type = "shortcut",
             target = "b:/bin/"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware 2",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
+        },
+        {
+            name = "bloatware",
+            type = "text",
+            content = "this is bloatware"
         }
     },
     bin = {

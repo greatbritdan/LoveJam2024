@@ -38,7 +38,7 @@ function WindowFileManager:draw()
     Window.draw(self)
     love.graphics.setColor(self:getColor("subbackground"))
     love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
-    
+
     -- Print out all files in path
     local files = self.desktop:getFile(self.elements.path.text)
     if files then
@@ -96,7 +96,7 @@ function WindowFileManager:hoveringFile()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local files = self.desktop:getFile(self.elements.path.text)
     if files then
-        local y = self.y+self.navbar.h+28
+        local y = self.y+self.navbar.h+24
         for i, file in ipairs(files) do
             if AABB(mx, my, 1, 1, self.x+4, y, self.w-8, 20) then
                 return i

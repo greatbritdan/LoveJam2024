@@ -181,7 +181,7 @@ function Window:drawWindow()
             end
         end
         love.graphics.rectangle("fill", x, self.y, self.navbar.h, self.navbar.h)
-        love.graphics.setColor({1,1,1})
+        love.graphics.setColor(self:getColor("navbar","buttons"))
         love.graphics.draw(WindowIconsImg, WindowIconsQuads[button.name], x, self.y, 0)
     end
 end

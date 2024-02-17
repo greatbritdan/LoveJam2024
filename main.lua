@@ -47,7 +47,7 @@ function love.load()
     require("class.windows.textViewer")
     require("class.windows.imageViewer")
 
-    require("class.desktopButton")
+    require("class.taskbarButton")
     require("class.desktop")
 
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})

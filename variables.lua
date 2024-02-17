@@ -10,7 +10,8 @@ return {
                 subbackground = {0.2,0.2,0.2},
                 navbar = {
                     background = {0.3,0.3,0.3},
-                    text = {1,1,1}
+                    text = {1,1,1},
+                    buttons = {1,1,1}
                 }
             }
         }

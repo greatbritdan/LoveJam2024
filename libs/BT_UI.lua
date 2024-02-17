@@ -294,7 +294,11 @@ function ui:drawRect(x,y,w,h)
 end
 function ui:drawFill(x,y,w,h,col)
     self:setColor(col)
-    self:drawRect(x+1,y+1,w-2,h-2)
+    if not self.style.shape.outline then
+        self:drawRect(x,y,w,h)
+    else
+        self:drawRect(x+1,y+1,w-2,h-2)
+    end
 end
 function ui:drawLine(x,y,w,h,col)
     if not self.style.shape.outline then
