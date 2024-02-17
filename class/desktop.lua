@@ -33,9 +33,15 @@ function Desktop:initialize(desktop)
 
     local files = self:getFile("b:/desktop")
     if files then
-        for i, file in ipairs(files) do
+        local i = 1
+        for _, file in ipairs(files) do
             if file.hidden ~= true then
-                table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
+                if file.pos then
+                    table.insert(self.desktopIcons, FileButton:new(self, false, file.pos, file))
+                else
+                    table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
+                    i = i + 1
+                end
             end
         end
     end

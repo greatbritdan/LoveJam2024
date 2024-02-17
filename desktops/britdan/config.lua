@@ -28,49 +28,10 @@ return {
             }
         },
         {
+            pos = {3,1},
             name = "bin (shortcut)",
             type = "shortcut",
             target = "b:/bin/"
-        },
-        {
-            name = "bloat1",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat2",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat3",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat4",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat5",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat6",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat7",
-            type = "text",
-            content = "this is bloatware"
-        },
-        {
-            name = "bloat8",
-            type = "text",
-            content = "this is bloatware"
         }
     },
     bin = {

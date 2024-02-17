@@ -6,7 +6,11 @@ function FileButton:initialize(desktop, window, i, file)
 
     self.i = i
     if not self.window then
-        self.x, self.y = math.floor((self.i-1)/7)+1, ((self.i-1)%7)+1
+        if type(self.i) == "table" then
+            self.x, self.y = self.i[1], self.i[2]
+        else
+            self.x, self.y = math.floor((self.i-1)/7)+1, ((self.i-1)%7)+1
+        end
     end
 
     self.isShortcut = false
