@@ -78,7 +78,7 @@ function WindowFileManager:goBack()
         return
     end
     path = string.gsub(path, "^b:/", "")
-    path = Split(path, "/")
+    path = RemoveEmpty(Split(path, "/"))
     table.remove(path, #path)
     if #path > 0 then
         path = table.concat(path, "/").."/"

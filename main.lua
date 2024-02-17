@@ -19,7 +19,7 @@ function love.load()
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
 
-    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'", 1)
+    Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@", 1)
     love.graphics.setFont(Font)
 
     IconsImg = love.graphics.newImage("graphics/icons.png")
@@ -128,6 +128,15 @@ function Split(str, d)
 	end
 	table.insert(data, string.sub(str, from))
 	return data
+end
+function RemoveEmpty(list)
+    local newlist = {}
+    for i = 1, #list do
+        if list[i] ~= "" then
+            table.insert(newlist, list[i])
+        end
+    end
+    return newlist
 end
 
 function TableContains(table, name)

@@ -156,7 +156,7 @@ end
 
 function Desktop:getFile(path)
     path = string.gsub(path, "^b:/", "")
-    path = Split(path, "/")
+    path = RemoveEmpty(Split(path, "/"))
     local file = self.filesystem
     for i = 1, #path do
         file = TableContainsWithin(file, path[i], "name")
