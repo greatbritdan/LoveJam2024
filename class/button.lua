@@ -14,11 +14,26 @@ function Button:initialize(shape, x, y)
         self.polygon = CreateRectangle(x, y, 64, 32)
     end
 
+    self.velocity = {0, -128}
+    self.gravity = 128
+
     self.hovering = false
     self.clicking = false
 end
 
 function Button:update(dt)
+    -- Move the Button
+    self.x = self.x + (self.velocity[1] * dt)
+    self.y = self.y + (self.velocity[2] * dt)
+    self.velocity[2] = self.velocity[2] + self.gravity * dt
+    MovePolygon(self.polygon, self.x, self.y)
+
+    local cent = PolygonCenter(self.polygon)[2]
+    if cent > Env.height then
+        self.y = 0
+        MovePolygon(self.polygon, self.x, self.y)
+    end
+
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     self.hovering = HoveringPolygon(self.polygon, mx, my)
     if (not self.hovering) and self.clicking then

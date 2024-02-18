@@ -22,6 +22,8 @@ function love.load()
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@", 1)
     love.graphics.setFont(Font)
 
+    PointerImg = love.graphics.newImage("graphics/pointer.png")
+
     ButtonImg = love.graphics.newImage("graphics/button.png")
     ButtonShapes = {"circle","rectangle","thinrectangle"}
     ButtonQuad = {}
@@ -37,6 +39,9 @@ end
 
 function love.update(dt)
     dt = math.min(0.01666667, dt)
+    if love.mouse.isDown(2) then
+        dt = dt / 10
+    end
     Screen:update(dt)
 end
 
@@ -88,6 +93,75 @@ end
 function love.resize(w, h)
     Env.width, Env.height = w/Env.scale, h/Env.scale
     Screen:resize()
+end
+
+-- POLYGON --
+
+function CreateRectangle(x, y, w, h)
+    return {x-w/2, y-h/2, x-w/2, y+h/2, x+w/2, y+h/2, x+w/2, y-h/2}
+end
+
+function CreateCircle(x, y, r, segments)
+    local polygon = {}
+    for i=1,segments do
+        local a = math.rad((i-1)/segments*360)
+        local x = x + r * math.cos(a)
+        local y = y + r * math.sin(a)
+        table.insert(polygon, x)
+        table.insert(polygon, y)
+    end
+    return polygon
+end
+
+function RotatePolygon(polygon, angle)
+    local center = {0,0}
+    for i=1,#polygon,2 do
+        center[1] = center[1] + polygon[i]
+        center[2] = center[2] + polygon[i+1]
+    end
+    center[1] = center[1] / (#polygon/2)
+    center[2] = center[2] / (#polygon/2)
+    for i=1,#polygon,2 do
+        local x, y = polygon[i], polygon[i+1]
+        local dx, dy = x-center[1], y-center[2]
+        local r = math.sqrt(dx*dx + dy*dy)
+        local a = math.atan2(dy, dx) + math.rad(angle)
+        polygon[i] = center[1] + r * math.cos(a)
+        polygon[i+1] = center[2] + r * math.sin(a)
+    end
+end
+
+function PolygonCenter(polygon)
+    local center = {0,0}
+    for i=1,#polygon,2 do
+        center[1] = center[1] + polygon[i]
+        center[2] = center[2] + polygon[i+1]
+    end
+    center[1] = center[1] / (#polygon/2)
+    center[2] = center[2] / (#polygon/2)
+    return center
+end
+
+function MovePolygon(polygon, x, y)
+    local center = PolygonCenter(polygon)
+    local dx, dy = x-center[1], y-center[2]
+    for i=1,#polygon,2 do
+        polygon[i] = polygon[i] + dx
+        polygon[i+1] = polygon[i+1] + dy
+    end
+    return polygon
+end
+
+function HoveringPolygon(polygon, mx, my)
+    local inside = false
+    for i=1,#polygon,2 do
+        local x1, y1 = polygon[i], polygon[i+1]
+        local x2, y2 = polygon[i+2] or polygon[1], polygon[i+3] or polygon[2]
+        if ((y1 > my) ~= (y2 > my)) and (mx < (x2 - x1) * (my - y1) / (y2 - y1) + x1) then
+            inside = not inside
+        end
+    end
+    return inside
 end
 
 --
