@@ -3,21 +3,15 @@ GameScreen = Class("GameScreen")
 function GameScreen:initialize()
     love.graphics.setBackgroundColor(0.4,0.5,0.9)
 
-    self.options = {
+    self.optionsKey = {
         br = {"button", "rectangle"}, bc = {"button", "circle"}, btr = {"button", "thinrectangle"}, bmr = {"button", "minirectangle"},
         sr = {"switch", "rectangle"}, sc = {"switch", "circle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
     }
 
     self.foregroundHeight = 100
 
-    self.round = 1
-    self.rounds = {
-        {count=99, wait=5, options={"br","bc","btr","bmr","sr","sc","str","smr"}},
-    }
-    self.roundcount, self.roundtimer = 0, -2
-
-    self.roundtext = "round "..self.round
-    self.roundtextopacity = 2
+    self.time, self.timer = 2, 0
+    self.options = {"br","bc","btr","bmr","sr","sc","str","smr"}
 
     self.elements = {}
 
@@ -43,32 +37,16 @@ function GameScreen:update(dt)
         end
     end
 
-    -- Update the round
-    self.roundtimer = self.roundtimer + dt
-    if self.roundtimer >= self.rounds[self.round].wait then
-        if self.rounds[self.round].count > self.roundcount then
-            local options = self.rounds[self.round].options
-            local option = self.options[options[math.random(1,#options)]]
-            if option[1] == "button" then
-                self:addButton(option[2])
-            end
-            if option[1] == "switch" then
-                self:addSwitch(option[2])
-            end
-            self.roundcount = self.roundcount + 1
-            self.roundtimer = 0
+    -- Add a new element
+    self.timer = self.timer + dt
+    if self.timer >= self.time then
+        self.timer = self.timer - self.time
+        local option = self.options[math.random(1, #self.options)]
+        local shape = self.optionsKey[option][2]
+        if self.optionsKey[option][1] == "button" then
+            self:addButton(shape)
         else
-            self.round = self.round + 1
-            self.roundcount, self.roundtimer = 0, -2
-            self.roundtext = "round "..self.round
-            self.roundtextopacity = 2
-        end
-    end
-
-    if self.roundtextopacity > 0 then
-        self.roundtextopacity = self.roundtextopacity - dt
-        if self.roundtextopacity <= 0 then
-            self.roundtext = false
+            self:addSwitch(shape)
         end
     end
 end
@@ -94,10 +72,6 @@ function GameScreen:draw()
     -- Draw the Score
     love.graphics.setColor(1,1,1)
     love.graphics.printf("score: "..self.score, 0, 4, Env.width/2, "center", 0, 2, 2)
-    if self.roundtext then
-        love.graphics.setColor(1,1,1,self.roundtextopacity)
-        love.graphics.printf(self.roundtext, 0, (Env.height/2)-16, Env.width/4, "center", 0, 4, 4)
-    end
 end
 function GameScreen:mousepressed(mx, my, b)
     if my >= Env.height-self.foregroundHeight then
