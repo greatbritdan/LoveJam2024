@@ -22,37 +22,7 @@ function love.load()
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@", 1)
     love.graphics.setFont(Font)
 
-    IconsImg = love.graphics.newImage("graphics/icons.png")
-    IconsImgNames = {"exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer","remotedesktop","inbox","bank"}
-    IconsQuads = {}
-    for i = 1, IconsImg:getWidth()/16 do
-        IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
-    end
-
-    WindowIconsImg = love.graphics.newImage("graphics/windowIcons.png")
-    WindowIconsImgNames = {"minimize","fullscreen","close"}
-    WindowIconsQuads = {}
-    for i = 1, WindowIconsImg:getWidth()/13 do
-        WindowIconsQuads[WindowIconsImgNames[i]] = love.graphics.newQuad((i-1)*13, 0, 13, 13, WindowIconsImg:getWidth(), WindowIconsImg:getHeight())
-    end
-
-    TitleImg = love.graphics.newImage("graphics/title.png")
-
-    DesktopName = "user1" -- "britdan"
-    Desktops = {"britdan","user1"}
-
-    require("class.window")
-    require("class.windows.fileManager")
-    require("class.windows.textViewer")
-    require("class.windows.imageViewer")
-    require("class.windows.inbox")
-    require("class.windows.bank")
-
-    require("class.fileButton")
-    require("class.taskbarButton")
-    require("class.desktop")
-
-    Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
+    Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
 function love.update(dt)
