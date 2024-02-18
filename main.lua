@@ -46,8 +46,8 @@ end
 
 function love.update(dt)
     dt = math.min(0.01666667, dt)
-    if love.mouse.isDown(2) then
-        dt = dt / 10
+    if love.mouse.isDown(3) then
+        dt = 0
     end
     Screen:update(dt)
 end

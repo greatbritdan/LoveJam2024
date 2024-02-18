@@ -35,8 +35,7 @@ function Button:update(dt)
 
     -- Check if the button is out of bounds
     if self.polygon:center()[2] > Env.height then
-        self.scene:removeButton(self)
-        self.scene:spawnButton()
+        self.DELETEME = true
     end
     if self.polygon:center()[1] < 0 then
         self.velocity[1] = -self.velocity[1]
@@ -91,13 +90,7 @@ function Button:release(mx, my, b)
             if self.combo < 5 then
                 self.combo = self.combo + 1
             end
-            local score
-            if self.combo == 1 then
-                score = ScoreText:new(self, "+"..self.combo)
-            else
-                score = ScoreText:new(self, "combo\n+"..self.combo)
-            end
-            table.insert(self.scoretext, score)
+            self.scene:addScore(self.combo, self)
         end
         self.clicking = false
     end
