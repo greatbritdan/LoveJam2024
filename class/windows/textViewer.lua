@@ -3,7 +3,7 @@ WindowTextViewer = Class("WindowTextViewer", Window)
 function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 200, 150, "text viewer")
     self.content = args and args.content
-    if type(self.content) ~= "table" then
+    if self.content and type(self.content) ~= "table" then
         self.content = {self.content}
     end
     self.filename = args and args.filename or "unknown.text"

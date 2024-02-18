@@ -7,7 +7,7 @@ return {
     background = {
         t = "color", color = {0.25,0.35,0.65}
     },
-    avalablePrograms = {"remotedesktop","inbox"},
+    avalablePrograms = {"remotedesktop","inbox","bank"},
     desktop = {
         {
             name = "to delete",
@@ -55,6 +55,13 @@ return {
             icon = "inbox",
         },
         {
+            pos = {3,4},
+            name = "bank",
+            type = "program",
+            program = "bank",
+            icon = "bank",
+        },
+        {
             pos = {13,1},
             name = "goal",
             type = "text",
@@ -81,7 +88,7 @@ return {
                     from = "boss23@inbox.com",
                     to = "user1@inbox.com",
                     subject = "re: bank details - savings",
-                    content = "the account is no longer in use, i'll be transfering the funds to the new account shortly.\n\n- boss",
+                    content = "the password was 123456, but the account is no longer in use and the funds have been moved to the new account.\n\n- boss",
                     reference = {
                         from = "user1@inbox.com",
                         to = "boss23@inbox.com",
@@ -96,6 +103,26 @@ return {
                     content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
                 }
             }
+        }
+    },
+    banks = {
+        {
+            name = "savings",
+            password = "123456",
+            email = "boss23@inbox.com",
+            closed = true,
+        },
+        {
+            name = "user1",
+            password = "d839j39vjn30jk40k330", -- no one can guess this
+            email = "boss23@inbox.com",
+            closed = true
+        },
+        {
+            name = "user1_newaccount",
+            password = "284733",
+            email = "user1@inbox.com",
+            closed = false,
         }
     }
 }

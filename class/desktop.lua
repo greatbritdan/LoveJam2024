@@ -5,7 +5,8 @@ function Desktop:initialize(config)
         filemanager = WindowFileManager,
         textviewer = WindowTextViewer,
         imageviewer = WindowImageViewer,
-        inbox = WindowInbox
+        inbox = WindowInbox,
+        bank = WindowBank
     }
 
     self.w, self.h = Env.width, Env.height
@@ -23,6 +24,7 @@ function Desktop:initialize(config)
     }
     self.windows = {}
     self.emails = config.emails or {}
+    self.banks = config.banks or {}
 
     self.avalablePrograms = {
         filemanager = true,
@@ -233,7 +235,8 @@ function Desktop:openFile(file,window)
         folder = {program="filemanager", window=WindowFileManager, args={path=path}},
         text = {program="textviewer", window=WindowTextViewer, args={file=file,content=file.content,filename=file.name..".text"}},
         image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}},
-        inbox = {program="inbox", window=WindowInbox, args={file=file}}
+        inbox = {program="inbox", window=WindowInbox, args={file=file}},
+        bank = {program="bank", window=WindowBank, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -333,6 +336,7 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="textviewer",program="textviewer",window=WindowTextViewer},
         {name="imageviewer",program="imageviewer",window=WindowImageViewer},
         {name="inbox",program="inbox",window=WindowInbox},
+        {name="bank",program="bank",window=WindowBank},
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
     }
     self.filesystem[3] = {
@@ -419,6 +423,15 @@ function Desktop:deleteFile(path)
     end
 end
 
+function Desktop:sendEmail(to, from, subject, content)
+    for _,email in pairs(self.emails) do
+        if email.email == to then
+            table.insert(email.emails, 1, {to=to,from=from,subject=subject,content=content})
+            return
+        end
+    end
+end
+
 function Desktop:validateEmail(vemail,vpass)
     for _,email in pairs(self.emails) do
         if email.email == vemail and email.password == vpass then
@@ -431,6 +444,31 @@ function Desktop:getEmails(vemail)
     for _,email in pairs(self.emails) do
         if email.email == vemail then
             return email.emails
+        end
+    end
+    return {}
+end
+
+function Desktop:validateBankReset(vname)
+    for _,bank in pairs(self.banks) do
+        if bank.name == vname then
+            return true
+        end
+    end
+    return false
+end
+function Desktop:validateBank(vname,vpass)
+    for _,bank in pairs(self.banks) do
+        if bank.name == vname and bank.password == vpass then
+            return true
+        end
+    end
+    return false
+end
+function Desktop:getBank(vname)
+    for _,bank in pairs(self.banks) do
+        if bank.name == vname then
+            return bank
         end
     end
     return {}
