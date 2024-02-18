@@ -47,7 +47,7 @@ return {
             type = "text",
             content = {
                 {"hey mate, as requested here is the balance of all the accounts in our name,\n\nremember that the ann0nymous has an eye on our 2nd account, i've transfered it to a new account:"},
-                {"- savings: £22.54\n- user1: £1.23 (comprimised)\n- user1_newaccount: £9,640.50","left"},
+                {"- savings: £23\n- user1: £0 (comprimised)\n- user1_newaccount: £9,640","left"},
                 {"cheers,\n\n- boss"}
             },
         },
@@ -69,7 +69,7 @@ return {
             pos = {13,1},
             name = "goal",
             type = "text",
-            content = "generic name but trust me, this guy is loaded.\n\nget access to his bank details and send everything to me:\n\nmy account number: 12345678\nmy sort code: 39-27-11\n\n- ann0nymous112",
+            content = "generic name but trust me, this guy is loaded.\n\nget access to his bank details and send everything to me:\n\naccount: ann0n7\n\n- ann0nymous112",
         }
     },
     bin = {
@@ -119,23 +119,35 @@ return {
     },
     banks = {
         {
+            closed = true,
             name = "savings",
             password = "123456",
-            email = "boss23@inbox.com",
-            closed = true,
+            email = "boss23@inbox.com"
         },
         {
+            closed = true,
             name = "user1",
             password = "d839j39vjn30jk40k330", -- no one can guess this
-            email = "boss23@inbox.com",
-            closed = true
+            email = "boss23@inbox.com"
         },
         {
+            identifier = "user1_newaccount_1",
+            closed = false,
             name = "user1_newaccount",
             password = "284733",
             email = "user1@inbox.com",
+            balance = 9640,
+            onSend = function (desktop,from,to,account)
+                if to.name == "ann0n7" and to.balance == 9640 then
+                    desktop:createFile("b:/desktop", {pos = {13,2}, name = "funds recieved", type = "text", content = "the funds have been recieved, lets move on.\n\n- ann0nymous112"})
+                    desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
+                end
+            end
+        },
+        {
             closed = false,
-            identifier = "user1_newaccount_1"
+            name = "ann0n7",
+            balance = 0
         }
     }
 }

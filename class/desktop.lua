@@ -475,7 +475,7 @@ function Desktop:getBank(vname)
             return bank
         end
     end
-    return {}
+    return false
 end
 
 function Desktop:complete()

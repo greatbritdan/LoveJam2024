@@ -3,9 +3,6 @@ WindowTextViewer = Class("WindowTextViewer", Window)
 function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 200, 150, "text viewer")
     self.content = args and args.content
-    if self.content and type(self.content) ~= "table" then
-        self.content = {self.content}
-    end
     self.filename = args and args.filename or "unknown.text"
     self.program = "textviewer"
     self.icon = "textviewer"
@@ -25,7 +22,11 @@ function WindowTextViewer:draw()
     if self.content then
         love.graphics.setColor({1,1,1})
         local y = self.y+self.navbar.h+17
-        for _,section in pairs(self.content) do
+        local content = Deepcopy(self.content)
+        if type(content) ~= "table" then
+            content = {content}
+        end
+        for _,section in pairs(content) do
             local text, allign = Deepcopy(section), "center"
             if type(section) == "table" then
                 text = section[1]

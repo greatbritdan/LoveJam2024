@@ -68,6 +68,7 @@ function ui:initialize(t,data)
     if self.t == "input" then
         self.inputting = false
         self.maxcharacters = data.mc or data.maxcharacters or 10
+        self.validcharacters = data.vc or data.validcharacters or "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@"
         if not self.text then
             self.text = ""
         end
@@ -213,7 +214,9 @@ end
 function ui:textinput(t)
     if self.t == "input" and self.inputting then
         if #self.text < self.maxcharacters then
-            self.text = self.text .. t
+            if string.find(self.validcharacters,t) then
+                self.text = self.text .. t
+            end
         end
     end
 end
