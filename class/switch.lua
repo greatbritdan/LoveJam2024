@@ -1,6 +1,6 @@
-Button = Class("Button")
+Switch = Class("Button")
 
-function Button:initialize(scene, shape, x, y)
+function Switch:initialize(scene, shape, x, y)
     self.scene = scene
     self.shape = shape
     self.angle = 0
@@ -21,15 +21,15 @@ function Button:initialize(scene, shape, x, y)
     self.velocity = {0, 0, 0} -- x, y, spin
     self.gravity = 384
 
-    self.combo = 0
-    self.scoretext = {}
+    self.state = false
+    self.timer = 1.8
 
     self.hovering = false
     self.clicking = false
     self.disabled = false
 end
 
-function Button:update(dt)
+function Switch:update(dt)
     -- Move the Button
     self.x = self.x + (self.velocity[1] * dt)
     self.y = self.y + (self.velocity[2] * dt)
@@ -54,9 +54,20 @@ function Button:update(dt)
     if (not self.hovering) and self.clicking then
         self.clicking = false
     end
+
+    -- Update the timer
+    if not self.disabled then
+        self.timer = self.timer - dt
+        if self.timer <= 0 then
+            if self.state then
+                self.scene:addScore(10,self)
+            end
+            self.disabled = true
+        end
+    end
 end
 
-function Button:getQuad()
+function Switch:getQuad()
     if self.disabled then return 4
     elseif self.clicking then return 3
     elseif self.hovering then return 2
@@ -64,32 +75,32 @@ function Button:getQuad()
     return 1
 end
 
-function Button:draw()
+function Switch:draw()
+    local sx = 2
+    if self.state then
+        sx = -2
+    end
     -- Draw the Button
     local rot = math.rad(self.angle)
-    love.graphics.draw(ButtonImg, ButtonQuad[self.shape][self:getQuad()], self.x, self.y, rot, 2, 2, 16, 16)
+    love.graphics.draw(SwitchImg, SwitchQuad[self.shape][self:getQuad()], self.x, self.y, rot, sx, 2, 16, 16)
 end
 
-function Button:click(mx, my, b)
+function Switch:click(mx, my, b)
     if b == 1 and not self.disabled then
         self.clicking = self.hovering
     end
 end
 
-function Button:release(mx, my, b)
+function Switch:release(mx, my, b)
     if b == 1 and not self.disabled then
         if self.clicking and self.hovering then
-            self.combo = self.combo + 1
-            self.scene:addScore(self.combo, self)
-            if self.combo == 4 then
-                self.disabled = true
-            end
+            self.state = not self.state
         end
         self.clicking = false
     end
 end
 
-function Button:rotate(angle, dt)
+function Switch:rotate(angle, dt)
     self.angle = (self.angle + angle * dt) % 360
     self.polygon:rotate(angle * dt)
 end

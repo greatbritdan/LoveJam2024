@@ -4,16 +4,15 @@ function GameScreen:initialize()
     love.graphics.setBackgroundColor(0.4,0.5,0.9)
 
     self.options = {
-        br = {"button", "rectangle"}, bc = {"button", "circle"}, btr = {"button", "thinrectangle"}, bmr = {"button", "minirectangle"}
+        br = {"button", "rectangle"}, bc = {"button", "circle"}, btr = {"button", "thinrectangle"}, bmr = {"button", "minirectangle"},
+        sr = {"switch", "rectangle"}, sc = {"switch", "circle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
     }
 
     self.foregroundHeight = 100
 
     self.round = 1
     self.rounds = {
-        {count=1, wait=1, options={"bmr"}},
-        {count=3, wait=5, options={"br","bc"}},
-        {count=5, wait=3, options={"br","bc","btr"}},
+        {count=99, wait=5, options={"br,","bc","btr","bmr","sr","sc","str","smr"}},
     }
     self.roundcount, self.roundtimer = 0, -2
 
@@ -52,6 +51,9 @@ function GameScreen:update(dt)
             local option = self.options[options[math.random(1,#options)]]
             if option[1] == "button" then
                 self:addButton(option[2])
+            end
+            if option[1] == "switch" then
+                self:addSwitch(option[2])
             end
             self.roundcount = self.roundcount + 1
             self.roundtimer = 0
@@ -116,23 +118,20 @@ end
 
 function GameScreen:addButton(shape)
     local x, y = math.random(32, Env.width-32), Env.height-50
-
     local button = Button:new(self, shape, x, y)
     button.velocity[1] = math.random(-128,128)
     button.velocity[2] = math.random(-384,-512)
     button.velocity[3] = math.random(-45,45)
-
     table.insert(self.elements, button)
 end
-function GameScreen:removeButton(button)
-    for i, v in ipairs(self.elements) do
-        if v == button then
-            table.remove(self.elements, i)
-            break
-        end
-    end
+function GameScreen:addSwitch(shape)
+    local x, y = math.random(32, Env.width-32), Env.height-50
+    local switch = Switch:new(self, shape, x, y)
+    switch.velocity[1] = math.random(-128,128)
+    switch.velocity[2] = math.random(-384,-512)
+    switch.velocity[3] = math.random(-45,45)
+    table.insert(self.elements, switch)
 end
-
 function GameScreen:addScore(score, button)
     self.score = self.score + score
     local text = "+"..score

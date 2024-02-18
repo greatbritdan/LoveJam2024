@@ -22,6 +22,7 @@ function love.load()
     require("class.scoreText")
     require("class.polygon")
     require("class.button")
+    require("class.switch")
 
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
@@ -40,6 +41,17 @@ function love.load()
         ButtonQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,128,128)
         ButtonQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,128,128)
         ButtonQuad[shape][4] = love.graphics.newQuad(96,(i-1)*32,32,32,128,128)
+    end
+
+    SwitchImg = love.graphics.newImage("graphics/switch.png")
+    SwitchShapes = {"circle","rectangle","thinrectangle","minirectangle"}
+    SwitchQuad = {}
+    for i,shape in pairs(SwitchShapes) do
+        SwitchQuad[shape] = {}
+        SwitchQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,128,128)
+        SwitchQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,128,128)
+        SwitchQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,128,128)
+        SwitchQuad[shape][4] = love.graphics.newQuad(96,(i-1)*32,32,32,128,128)
     end
 
     Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
