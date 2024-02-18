@@ -1,6 +1,7 @@
 Button = Class("Button")
 
-function Button:initialize(shape, x, y)
+function Button:initialize(scene, shape, x, y)
+    self.scene = scene
     self.shape = shape
     self.angle = 0
     if shape == "circle" then
@@ -14,8 +15,11 @@ function Button:initialize(shape, x, y)
         self.polygon = Polygon:new(self.shape, self.x, self.y, 64, 32)
     end
 
-    self.velocity = {0, -128, 49} -- x, y, spin
-    self.gravity = 128
+    self.velocity = {0, 0, 0} -- x, y, spin
+    self.gravity = 384
+
+    self.combo = 0
+    self.scoretext = {}
 
     self.hovering = false
     self.clicking = false
@@ -29,15 +33,31 @@ function Button:update(dt)
     self:rotate(self.velocity[3], dt)
     self.polygon:move(self.x,self.y)
 
+    -- Check if the button is out of bounds
     if self.polygon:center()[2] > Env.height then
-        self.y = 0
-        self.polygon:move(self.x,self.y)
+        self.scene:removeButton(self)
+        self.scene:spawnButton()
+    end
+    if self.polygon:center()[1] < 0 then
+        self.velocity[1] = -self.velocity[1]
+    end
+    if self.polygon:center()[1] > Env.width then
+        self.velocity[1] = -self.velocity[1]
     end
 
+    -- Check if the mouse is hovering the button
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     self.hovering = self.polygon:hover(mx, my)
     if (not self.hovering) and self.clicking then
         self.clicking = false
+    end
+
+    -- Update the scoretext
+    for i, v in ipairs(self.scoretext) do
+        v:update(dt)
+        if v.opacity <= 0 then
+            table.remove(self.scoretext, i)
+        end
     end
 end
 
@@ -49,9 +69,14 @@ function Button:getQuad()
 end
 
 function Button:draw()
-    love.graphics.polygon("fill", unpack(self.polygon.points))
+    -- Draw the Button
     local rot = math.rad(self.angle)
     love.graphics.draw(ButtonImg, ButtonQuad[self.shape][self:getQuad()], self.x, self.y, rot, 2, 2, 16, 16)
+
+    -- Draw the scoretext
+    for i, v in ipairs(self.scoretext) do
+        v:draw()
+    end
 end
 
 function Button:click(mx, my, b)
@@ -63,7 +88,16 @@ end
 function Button:release(mx, my, b)
     if b == 1 then
         if self.clicking and self.hovering then
-            print("clicked!")
+            if self.combo < 5 then
+                self.combo = self.combo + 1
+            end
+            local score
+            if self.combo == 1 then
+                score = ScoreText:new(self, "+"..self.combo)
+            else
+                score = ScoreText:new(self, "combo\n+"..self.combo)
+            end
+            table.insert(self.scoretext, score)
         end
         self.clicking = false
     end

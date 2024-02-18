@@ -20,7 +20,7 @@ function Polygon:center()
 end
 
 function Polygon:move(newx, newy)
-    local center = PolygonCenter(self.points)
+    local center = self:center()
     local dx, dy = newx-center[1], newy-center[2]
     for i=1,#self.points,2 do
         self.points[i] = self.points[i] + dx
@@ -29,7 +29,7 @@ function Polygon:move(newx, newy)
 end
 
 function Polygon:rotate(angle)
-    local center = PolygonCenter(self.points)
+    local center = self:center()
     for i=1,#self.points,2 do
         local x, y = self.points[i], self.points[i+1]
         local dx, dy = x-center[1], y-center[2]

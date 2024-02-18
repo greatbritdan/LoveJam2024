@@ -4,7 +4,7 @@ return {
     vsync = 1,
     scale = 1,
 
-    showfps = true,
+    showfps = false,
     showdrawcalls = false,
     showcursor = false
 }
