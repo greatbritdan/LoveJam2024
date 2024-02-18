@@ -12,15 +12,13 @@ function GameScreen:initialize()
 
     self.paused = false
     self.time, self.timer = 1, 0
-    self.count, self.counter = 10, 0
+    self.count, self.counter = 100, 0
     self.options = {"br","bc","btr","bmr","sr","str","smr"}
 
     self.elements = {}
 
     self.score = 0
     self.scoretext = {}
-
-    self.laststat = false
 
     self.spriteBatchWidth = 0
     self.backgroundSpriteBatch = love.graphics.newSpriteBatch(BackgroundImg, 100)
@@ -82,10 +80,11 @@ function GameScreen:draw()
     x = (Env.width/2)-(BackgroundScreenImg:getWidth())
     love.graphics.draw(BackgroundScreenImg, x, 64, 0, 2, 2)
     love.graphics.setColor(0,0.75,0)
-    love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 72, Env.width/2, "center", 0, 2, 2)
-    love.graphics.rectangle("fill", x+8, 88, (BackgroundScreenImg:getWidth()*2)-16, 2)
+    love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 76, Env.width/2, "center", 0, 2, 2)
+    love.graphics.printf(self.count-self.counter.." remaining", 0, 96, Env.width/2, "center", 0, 2, 2)
+    --love.graphics.rectangle("fill", x+8, 88, (BackgroundScreenImg:getWidth()*2)-16, 2)
 
-    love.graphics.setColor(0.3,0.3,0.3)
+    love.graphics.setColor(0.21,0.21,0.21)
     love.graphics.print("fail line", 2, Env.height-self.foregroundHeight-48, 0, 2, 2)
     love.graphics.rectangle("fill", 0, Env.height-self.foregroundHeight-32, Env.width, 2)
 
@@ -116,10 +115,6 @@ function GameScreen:draw()
     love.graphics.setColor(1,1,1,0.5)
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     love.graphics.draw(PointerImg, mx, my, 0, 1, 1, 16, 16)
-
-    --[[for i, v in ipairs(self.elements) do
-        v:drawDebug()
-    end]]
 end
 function GameScreen:mousepressed(mx, my, b)
     if my >= Env.height-self.foregroundHeight then
@@ -138,6 +133,14 @@ function GameScreen:mousereleased(mx, my, b)
     end
 end
 function GameScreen:keypressed(key)
+    if key == "1" then
+        self.paused = false
+        self.time, self.timer = 0.66, 0
+        self.count, self.counter = 100, 0
+        self.elements = {}
+        self.score = 0
+        self.scoretext = {}
+    end
 end
 
 function GameScreen:addButton(shape)
