@@ -12,7 +12,7 @@ function GameScreen:initialize()
 
     self.paused = false
     self.time, self.timer = 1, 0
-    self.count, self.counter = 100, 0
+    self.count, self.counter = 20, 0
     self.options = {"br","bc","btr","bmr","sr","str","smr"}
 
     self.elements = {}
@@ -74,15 +74,15 @@ function GameScreen:draw()
     -- Draw the Background
     love.graphics.setColor(1,1,1)
     local x = (Env.width/2)-(self.spriteBatchWidth/2)
+    love.graphics.draw(self.backgroundSpriteBatch, x)
 
     -- Draw the Background Screen (Hud)
-    love.graphics.draw(self.backgroundSpriteBatch, x)
     x = (Env.width/2)-(BackgroundScreenImg:getWidth())
     love.graphics.draw(BackgroundScreenImg, x, 64, 0, 2, 2)
     love.graphics.setColor(0,0.75,0)
     love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 76, Env.width/2, "center", 0, 2, 2)
-    love.graphics.printf(self.count-self.counter.." remaining", 0, 96, Env.width/2, "center", 0, 2, 2)
-    --love.graphics.rectangle("fill", x+8, 88, (BackgroundScreenImg:getWidth()*2)-16, 2)
+    love.graphics.rectangle("fill", x+8, 96, (BackgroundScreenImg:getWidth()*2)-16, 2)
+    love.graphics.printf(self.count-self.counter.." remaining", 0, 104, Env.width/2, "center", 0, 2, 2)
 
     love.graphics.setColor(0.21,0.21,0.21)
     love.graphics.print("fail line", 2, Env.height-self.foregroundHeight-48, 0, 2, 2)

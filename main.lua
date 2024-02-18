@@ -14,6 +14,7 @@ function love.load()
     Var = require("variables")
     Class = require("libs.middleclass")
 
+    require("class.menu")
     require("class.game")
 
     Screen = require("libs.BT_Screen")
@@ -56,7 +57,7 @@ function love.load()
     ForegroundImg = love.graphics.newImage("graphics/foreground.png")
     BackgroundScreenImg = love.graphics.newImage("graphics/backgroundScreen.png")
 
-    Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
+    Screen:changeState("menu", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
 function love.update(dt)
