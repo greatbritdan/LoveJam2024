@@ -12,7 +12,7 @@ function GameScreen:initialize()
 
     self.round = 1
     self.rounds = {
-        {count=99, wait=5, options={"br,","bc","btr","bmr","sr","sc","str","smr"}},
+        {count=99, wait=5, options={"br","bc","btr","bmr","sr","sc","str","smr"}},
     }
     self.roundcount, self.roundtimer = 0, -2
 

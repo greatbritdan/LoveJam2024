@@ -22,7 +22,6 @@ function Switch:initialize(scene, shape, x, y)
     self.gravity = 384
 
     self.state = false
-    self.timer = 1.8
 
     self.hovering = false
     self.clicking = false
@@ -55,15 +54,13 @@ function Switch:update(dt)
         self.clicking = false
     end
 
-    -- Update the timer
-    if not self.disabled then
-        self.timer = self.timer - dt
-        if self.timer <= 0 then
-            if self.state then
-                self.scene:addScore(10,self)
-            end
-            self.disabled = true
+    -- Check if the switch is in correct position
+    if self.disabled then return end
+    if self.polygon:center()[2] >= Env.height-self.scene.foregroundHeight-32 and self.velocity[2] > 0 then
+        if self.state then
+            self.scene:addScore(10,self)
         end
+        self.disabled = true
     end
 end
 
