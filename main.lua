@@ -22,6 +22,16 @@ function love.load()
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@", 1)
     love.graphics.setFont(Font)
 
+    ButtonImg = love.graphics.newImage("graphics/button.png")
+    ButtonShapes = {"circle","rectangle","thinrectangle"}
+    ButtonQuad = {}
+    for i,shape in pairs(ButtonShapes) do
+        ButtonQuad[shape] = {}
+        ButtonQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,96,96)
+        ButtonQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,96,96)
+        ButtonQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,96,96)
+    end
+
     Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
