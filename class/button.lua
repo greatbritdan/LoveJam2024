@@ -64,10 +64,20 @@ function Button:getQuad()
     return 1
 end
 
-function Button:draw()
+function Button:draw(shadow)
     -- Draw the Button
     local rot = math.rad(self.angle)
-    love.graphics.draw(ButtonImg, ButtonQuad[self.shape][self:getQuad()], self.x, self.y, rot, 2, 2, 16, 16)
+    local quad = self:getQuad()
+    if not shadow then
+        love.graphics.setColor(1,1,1)
+    end
+    love.graphics.draw(ButtonImg, ButtonQuad[self.shape][5], self.x, self.y, rot, 2, 2, 16, 16)
+    love.graphics.draw(ButtonImg, ButtonQuad[self.shape][quad], self.x, self.y, rot, 2, 2, 16, 16)
+end
+
+function Button:drawDebug()
+    love.graphics.setColor(1,1,1)
+    self.polygon:draw()
 end
 
 function Button:click(mx, my, b)

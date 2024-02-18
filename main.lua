@@ -37,10 +37,9 @@ function love.load()
     ButtonQuad = {}
     for i,shape in pairs(ButtonShapes) do
         ButtonQuad[shape] = {}
-        ButtonQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,128,128)
-        ButtonQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,128,128)
-        ButtonQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,128,128)
-        ButtonQuad[shape][4] = love.graphics.newQuad(96,(i-1)*32,32,32,128,128)
+        for j = 1, 5 do
+            ButtonQuad[shape][j] = love.graphics.newQuad((j-1)*32, (i-1)*32, 32, 32, 160, 128)
+        end
     end
 
     SwitchImg = love.graphics.newImage("graphics/switch.png")
@@ -48,11 +47,14 @@ function love.load()
     SwitchQuad = {}
     for i,shape in pairs(SwitchShapes) do
         SwitchQuad[shape] = {}
-        SwitchQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,128,128)
-        SwitchQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,128,128)
-        SwitchQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,128,128)
-        SwitchQuad[shape][4] = love.graphics.newQuad(96,(i-1)*32,32,32,128,128)
+        for j = 1, 5 do
+            SwitchQuad[shape][j] = love.graphics.newQuad((j-1)*32, (i-1)*32, 32, 32, 160, 128)
+        end
     end
+
+    BackgroundImg = love.graphics.newImage("graphics/background.png")
+    ForegroundImg = love.graphics.newImage("graphics/foreground.png")
+    BackgroundScreenImg = love.graphics.newImage("graphics/backgroundScreen.png")
 
     Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end

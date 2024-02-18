@@ -72,14 +72,22 @@ function Switch:getQuad()
     return 1
 end
 
-function Switch:draw()
+function Switch:draw(shadow)
     local sx = 2
-    if self.state then
-        sx = -2
-    end
+    if self.state then sx = -2 end
     -- Draw the Button
     local rot = math.rad(self.angle)
-    love.graphics.draw(SwitchImg, SwitchQuad[self.shape][self:getQuad()], self.x, self.y, rot, sx, 2, 16, 16)
+    local quad = self:getQuad()
+    if not shadow then
+        love.graphics.setColor(1,1,1)
+    end
+    love.graphics.draw(SwitchImg, SwitchQuad[self.shape][5], self.x, self.y, rot, sx, 2, 16, 16)
+    love.graphics.draw(SwitchImg, SwitchQuad[self.shape][quad], self.x, self.y, rot, sx, 2, 16, 16)
+end
+
+function Switch:drawDebug()
+    love.graphics.setColor(1,1,1)
+    self.polygon:draw()
 end
 
 function Switch:click(mx, my, b)

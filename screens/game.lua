@@ -16,5 +16,8 @@ end
 function game.mousereleased(mx, my, b)
     gameclass:mousereleased(mx, my, b)
 end
+function game.keypressed(key)
+    gameclass:keypressed(key)
+end
 
 return game

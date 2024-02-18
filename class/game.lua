@@ -5,14 +5,14 @@ function GameScreen:initialize()
 
     self.optionsKey = {
         br = {"button", "rectangle"}, bc = {"button", "circle"}, btr = {"button", "thinrectangle"}, bmr = {"button", "minirectangle"},
-        sr = {"switch", "rectangle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
+        sr = {"switch", "rectangle"}, sc = {"switch", "circle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
     }
 
     self.foregroundHeight = 100
 
     self.paused = false
     self.time, self.timer = 1, 0
-    self.count, self.counter = 25, 0
+    self.count, self.counter = 10, 0
     self.options = {"br","bc","btr","bmr","sr","str","smr"}
 
     self.elements = {}
@@ -20,6 +20,20 @@ function GameScreen:initialize()
     self.score = 0
     self.scoretext = {}
 
+    self.laststat = false
+
+    self.spriteBatchWidth = 0
+    self.backgroundSpriteBatch = love.graphics.newSpriteBatch(BackgroundImg, 100)
+    for i = 0, Env.width/128 do
+        for j = 0, Env.height/128 do
+            self.backgroundSpriteBatch:add(i*128, j*128, 0, 2, 2)
+        end
+        self.spriteBatchWidth = self.spriteBatchWidth + 128
+    end
+    self.foregroundSpriteBatch = love.graphics.newSpriteBatch(ForegroundImg, 100)
+    for i = 0, Env.width/128 do
+        self.foregroundSpriteBatch:add(i*128, 0, 0, 2, 2)
+    end
     math.randomseed(os.time())
 end
 function GameScreen:update(dt)
@@ -59,27 +73,49 @@ function GameScreen:update(dt)
     end
 end
 function GameScreen:draw()
+    -- Draw the Background
+    love.graphics.setColor(1,1,1)
+    local x = (Env.width/2)-(self.spriteBatchWidth/2)
+
+    -- Draw the Background Screen (Hud)
+    love.graphics.draw(self.backgroundSpriteBatch, x)
+    x = (Env.width/2)-(BackgroundScreenImg:getWidth())
+    love.graphics.draw(BackgroundScreenImg, x, 64, 0, 2, 2)
+    love.graphics.setColor(0,0.75,0)
+    love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 72, Env.width/2, "center", 0, 2, 2)
+    love.graphics.rectangle("fill", x+8, 88, (BackgroundScreenImg:getWidth()*2)-16, 2)
+
     -- Draw the elements
+    love.graphics.push()
+    love.graphics.translate(4,4)
+    love.graphics.setColor(0,0,0,0.5)
     for i, v in ipairs(self.elements) do
-        v:draw()
+        v:draw(true)
     end
-    -- Draw the ScoreText
-    for i, v in ipairs(self.scoretext) do
+    love.graphics.pop()
+    for i, v in ipairs(self.elements) do
         v:draw()
     end
 
     -- Draw the Foreground
     love.graphics.setColor(1,1,1)
-    love.graphics.rectangle("fill", 0, Env.height-self.foregroundHeight, Env.width, self.foregroundHeight)
+    love.graphics.draw(self.foregroundSpriteBatch, 0, Env.height-self.foregroundHeight, 0, 2, 2)
+    love.graphics.setColor(0.21,0.21,0.21)
+    love.graphics.rectangle("fill", 0, Env.height-self.foregroundHeight+40, Env.width, self.foregroundHeight-40)
+
+    -- Draw the ScoreText
+    for i, v in ipairs(self.scoretext) do
+        v:draw()
+    end
 
     -- Draw the Pointer
     love.graphics.setColor(1,1,1,0.5)
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     love.graphics.draw(PointerImg, mx, my, 0, 1, 1, 16, 16)
 
-    -- Draw the Score
-    love.graphics.setColor(1,1,1)
-    love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 4, Env.width/2, "center", 0, 2, 2)
+    --[[for i, v in ipairs(self.elements) do
+        v:drawDebug()
+    end]]
 end
 function GameScreen:mousepressed(mx, my, b)
     if my >= Env.height-self.foregroundHeight then
@@ -96,6 +132,8 @@ function GameScreen:mousereleased(mx, my, b)
     for i, v in ipairs(self.elements) do
         v:release(mx, my, b)
     end
+end
+function GameScreen:keypressed(key)
 end
 
 function GameScreen:addButton(shape)
@@ -119,4 +157,31 @@ function GameScreen:addScore(score, button)
     local text = "+"..score
     local scoretext = ScoreText:new(button, text)
     table.insert(self.scoretext, scoretext)
+end
+
+function HueToRGB(hue)
+    local r, g, b
+    if hue < 0 or hue > 1 then
+        return 0, 0, 0
+    end
+    local h = hue * 6
+    local i = math.floor(h)
+    local f = h - i
+    local p = 0
+    local q = 1 - f
+    local t = f
+    if i % 6 == 0 then
+        r, g, b = 1, t, p
+    elseif i % 6 == 1 then
+        r, g, b = q, 1, p
+    elseif i % 6 == 2 then
+        r, g, b = p, 1, t
+    elseif i % 6 == 3 then
+        r, g, b = p, q, 1
+    elseif i % 6 == 4 then
+        r, g, b = t, p, 1
+    elseif i % 6 == 5 then
+        r, g, b = 1, p, q
+    end
+    return r, g, b
 end

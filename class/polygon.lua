@@ -8,6 +8,10 @@ function Polygon:initialize(shape, x, y, w, h)
     end
 end
 
+function Polygon:draw()
+    love.graphics.polygon("line", self.points)
+end
+
 function Polygon:center()
     local center = {0,0}
     for i=1,#self.points,2 do
