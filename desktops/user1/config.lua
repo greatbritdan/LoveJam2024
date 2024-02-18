@@ -28,9 +28,13 @@ return {
                 content = ""
             },
             {
-                name = "new document (1)",
-                type = "text",
-                content = "recovery code - 344291"
+                name = "new folder",
+                type = "folder",
+                {
+                    name = "bug report",
+                    type = "image",
+                    img = love.graphics.newImage(path.."/bug.png")
+                }
             },
             {
                 name = "dwwf",
@@ -76,7 +80,7 @@ return {
         {
             name = "email",
             type = "text",
-            content = {{"(incase of memory loss)"},{"- email: user1@inbox.com\n- password: iloveboss22","left"}}
+            content = {{"(incase of memory loss)"},{"the password is iloveboss22","left"}}
         }
     },
     emails = {
@@ -102,6 +106,14 @@ return {
                     subject = "welcome to inbox.com",
                     content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
                 }
+            },
+            _emails = {
+                {
+                    from = "unknown",
+                    to = "unknown",
+                    subject = "unknown",
+                    content = "unknown"
+                },
             }
         }
     },
@@ -123,6 +135,7 @@ return {
             password = "284733",
             email = "user1@inbox.com",
             closed = false,
+            identifier = "user1_newaccount_1"
         }
     }
 }

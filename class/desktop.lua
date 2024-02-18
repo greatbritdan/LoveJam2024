@@ -423,15 +423,6 @@ function Desktop:deleteFile(path)
     end
 end
 
-function Desktop:sendEmail(to, from, subject, content)
-    for _,email in pairs(self.emails) do
-        if email.email == to then
-            table.insert(email.emails, 1, {to=to,from=from,subject=subject,content=content})
-            return
-        end
-    end
-end
-
 function Desktop:validateEmail(vemail,vpass)
     for _,email in pairs(self.emails) do
         if email.email == vemail and email.password == vpass then
@@ -447,6 +438,19 @@ function Desktop:getEmails(vemail)
         end
     end
     return {}
+end
+function Desktop:sendEmail(to, from, subject, content, identifyer)
+    for _,emails in pairs(self.emails) do
+        if emails.email == to then
+            for _,email in pairs(emails.emails) do
+                if email.identifyer == identifyer then
+                    return
+                end
+            end
+            table.insert(emails.emails, 1, {to=to,from=from,subject=subject,content=content,identifyer=identifyer})
+            break
+        end
+    end
 end
 
 function Desktop:validateBankReset(vname)
