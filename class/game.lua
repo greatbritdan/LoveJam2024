@@ -85,6 +85,10 @@ function GameScreen:draw()
     love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 72, Env.width/2, "center", 0, 2, 2)
     love.graphics.rectangle("fill", x+8, 88, (BackgroundScreenImg:getWidth()*2)-16, 2)
 
+    love.graphics.setColor(0.3,0.3,0.3)
+    love.graphics.print("fail line", 2, Env.height-self.foregroundHeight-48, 0, 2, 2)
+    love.graphics.rectangle("fill", 0, Env.height-self.foregroundHeight-32, Env.width, 2)
+
     -- Draw the elements
     love.graphics.push()
     love.graphics.translate(4,4)

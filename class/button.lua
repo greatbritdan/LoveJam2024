@@ -54,6 +54,11 @@ function Button:update(dt)
     if (not self.hovering) and self.clicking then
         self.clicking = false
     end
+
+    if self.disabled then return end
+    if self.polygon:center()[2] >= Env.height-self.scene.foregroundHeight-32 and self.velocity[2] > 0 then
+        self.disabled = true
+    end
 end
 
 function Button:getQuad()
