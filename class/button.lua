@@ -5,16 +5,16 @@ function Button:initialize(shape, x, y)
     self.angle = 0
     if shape == "circle" then
         self.x, self.y, self.r = x, y, 32
-        self.polygon = CreateCircle(x, y, 32, 16)
+        self.polygon = Polygon:new(self.shape, self.x, self.y, self.r)
     elseif shape == "rectangle" then
         self.x, self.y, self.w, self.h = x, y, 64, 64
-        self.polygon = CreateRectangle(x, y, 64, 64)
+        self.polygon = Polygon:new(self.shape, self.x, self.y, 64, 64)
     elseif shape == "thinrectangle" then
         self.x, self.y, self.w, self.h = x, y, 64, 32
-        self.polygon = CreateRectangle(x, y, 64, 32)
+        self.polygon = Polygon:new(self.shape, self.x, self.y, 64, 32)
     end
 
-    self.velocity = {0, -128}
+    self.velocity = {0, -128, 49} -- x, y, spin
     self.gravity = 128
 
     self.hovering = false
@@ -26,16 +26,16 @@ function Button:update(dt)
     self.x = self.x + (self.velocity[1] * dt)
     self.y = self.y + (self.velocity[2] * dt)
     self.velocity[2] = self.velocity[2] + self.gravity * dt
-    MovePolygon(self.polygon, self.x, self.y)
+    self:rotate(self.velocity[3], dt)
+    self.polygon:move(self.x,self.y)
 
-    local cent = PolygonCenter(self.polygon)[2]
-    if cent > Env.height then
+    if self.polygon:center()[2] > Env.height then
         self.y = 0
-        MovePolygon(self.polygon, self.x, self.y)
+        self.polygon:move(self.x,self.y)
     end
 
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
-    self.hovering = HoveringPolygon(self.polygon, mx, my)
+    self.hovering = self.polygon:hover(mx, my)
     if (not self.hovering) and self.clicking then
         self.clicking = false
     end
@@ -49,7 +49,7 @@ function Button:getQuad()
 end
 
 function Button:draw()
-    love.graphics.polygon("fill", unpack(self.polygon))
+    love.graphics.polygon("fill", unpack(self.polygon.points))
     local rot = math.rad(self.angle)
     love.graphics.draw(ButtonImg, ButtonQuad[self.shape][self:getQuad()], self.x, self.y, rot, 2, 2, 16, 16)
 end
@@ -71,5 +71,5 @@ end
 
 function Button:rotate(angle, dt)
     self.angle = (self.angle + angle * dt) % 360
-    RotatePolygon(self.polygon, angle * dt)
+    self.polygon:rotate(angle * dt)
 end

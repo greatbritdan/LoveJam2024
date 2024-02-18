@@ -1,5 +1,6 @@
 local game = {}
 
+require("class.polygon")
 require("class.button")
 
 local button
@@ -8,15 +9,14 @@ function game.load(last)
 end
 function game.update(dt)
     button:update(dt)
-    button:rotate(90, dt)
 end
 function game.draw()
-    love.graphics.setColor(1,1,1)
-
     -- Draw the Button
+    love.graphics.setColor(1,1,1)
     button:draw()
 
     -- Draw the Pointer
+    love.graphics.setColor(1,1,1,0.5)
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     love.graphics.draw(PointerImg, mx, my, 0, 1, 1, 16, 16)
 end
