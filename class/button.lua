@@ -13,6 +13,9 @@ function Button:initialize(scene, shape, x, y)
     elseif shape == "thinrectangle" then
         self.x, self.y, self.w, self.h = x, y, 64, 32
         self.polygon = Polygon:new(self.shape, self.x, self.y, 64, 32)
+    elseif shape == "minirectangle" then
+        self.x, self.y, self.w, self.h = x, y, 32, 32
+        self.polygon = Polygon:new(self.shape, self.x, self.y, 32, 32)
     end
 
     self.velocity = {0, 0, 0} -- x, y, spin
@@ -23,6 +26,7 @@ function Button:initialize(scene, shape, x, y)
 
     self.hovering = false
     self.clicking = false
+    self.disabled = false
 end
 
 function Button:update(dt)
@@ -61,7 +65,8 @@ function Button:update(dt)
 end
 
 function Button:getQuad()
-    if self.clicking then return 3
+    if self.disabled then return 4
+    elseif self.clicking then return 3
     elseif self.hovering then return 2
     end
     return 1
@@ -79,18 +84,19 @@ function Button:draw()
 end
 
 function Button:click(mx, my, b)
-    if b == 1 then
+    if b == 1 and not self.disabled then
         self.clicking = self.hovering
     end
 end
 
 function Button:release(mx, my, b)
-    if b == 1 then
+    if b == 1 and not self.disabled then
         if self.clicking and self.hovering then
-            if self.combo < 5 then
-                self.combo = self.combo + 1
-            end
+            self.combo = self.combo + 1
             self.scene:addScore(self.combo, self)
+            if self.combo == 4 then
+                self.disabled = true
+            end
         end
         self.clicking = false
     end

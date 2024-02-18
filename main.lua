@@ -32,13 +32,14 @@ function love.load()
     PointerImg = love.graphics.newImage("graphics/pointer.png")
 
     ButtonImg = love.graphics.newImage("graphics/button.png")
-    ButtonShapes = {"circle","rectangle","thinrectangle"}
+    ButtonShapes = {"circle","rectangle","thinrectangle","minirectangle"}
     ButtonQuad = {}
     for i,shape in pairs(ButtonShapes) do
         ButtonQuad[shape] = {}
-        ButtonQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,96,96)
-        ButtonQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,96,96)
-        ButtonQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,96,96)
+        ButtonQuad[shape][1] = love.graphics.newQuad(0, (i-1)*32,32,32,128,128)
+        ButtonQuad[shape][2] = love.graphics.newQuad(32,(i-1)*32,32,32,128,128)
+        ButtonQuad[shape][3] = love.graphics.newQuad(64,(i-1)*32,32,32,128,128)
+        ButtonQuad[shape][4] = love.graphics.newQuad(96,(i-1)*32,32,32,128,128)
     end
 
     Screen:changeState("game", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
