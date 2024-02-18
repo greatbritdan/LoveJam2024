@@ -78,10 +78,10 @@ function ui:initialize(t,data)
 
     self.style = {
         padding = 8,
-        shape = { curve=0, point=100, outline=1 },
+        shape = { curve=0, point=1 },
         text = { scale=1 },
         color = {
-            void = {normal={0,0,0,.5}, hover={0,0,0,.5}, pressed={0,0,0,.5}, inactive={0,0,0,.5}},
+            void = {normal={0.2,0.2,0.2}, hover={0.2,0.2,0.2}, pressed={0.2,0.2,0.2}, inactive={0.2,0.2,0.2}},
             back = {normal={0,0,0},    hover={.2,.2,.2}, pressed={.4,.4,.4}, inactive={0,0,0}},
             line = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},
             text = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},

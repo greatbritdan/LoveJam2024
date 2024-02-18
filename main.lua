@@ -13,17 +13,8 @@ function love.load()
     Env = require("env")
     Var = require("variables")
     Class = require("libs.middleclass")
-
-    require("class.menu")
-    require("class.game")
-
     Screen = require("libs.BT_Screen")
     UI = require("libs.BT_UI")
-
-    require("class.scoreText")
-    require("class.polygon")
-    require("class.button")
-    require("class.switch")
 
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
@@ -31,40 +22,41 @@ function love.load()
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@", 1)
     love.graphics.setFont(Font)
 
-    PointerImg = love.graphics.newImage("graphics/pointer.png")
-
-    ButtonImg = love.graphics.newImage("graphics/button.png")
-    ButtonShapes = {"circle","rectangle","thinrectangle","minirectangle"}
-    ButtonQuad = {}
-    for i,shape in pairs(ButtonShapes) do
-        ButtonQuad[shape] = {}
-        for j = 1, 5 do
-            ButtonQuad[shape][j] = love.graphics.newQuad((j-1)*32, (i-1)*32, 32, 32, 160, 128)
-        end
+    IconsImg = love.graphics.newImage("graphics/icons.png")
+    IconsImgNames = {"exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs","start","image","imageviewer","remotedesktop","inbox","bank"}
+    IconsQuads = {}
+    for i = 1, IconsImg:getWidth()/16 do
+        IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
     end
 
-    SwitchImg = love.graphics.newImage("graphics/switch.png")
-    SwitchShapes = {"circle","rectangle","thinrectangle","minirectangle"}
-    SwitchQuad = {}
-    for i,shape in pairs(SwitchShapes) do
-        SwitchQuad[shape] = {}
-        for j = 1, 5 do
-            SwitchQuad[shape][j] = love.graphics.newQuad((j-1)*32, (i-1)*32, 32, 32, 160, 128)
-        end
+    WindowIconsImg = love.graphics.newImage("graphics/windowIcons.png")
+    WindowIconsImgNames = {"minimize","fullscreen","close"}
+    WindowIconsQuads = {}
+    for i = 1, WindowIconsImg:getWidth()/13 do
+        WindowIconsQuads[WindowIconsImgNames[i]] = love.graphics.newQuad((i-1)*13, 0, 13, 13, WindowIconsImg:getWidth(), WindowIconsImg:getHeight())
     end
 
-    BackgroundImg = love.graphics.newImage("graphics/background.png")
-    ForegroundImg = love.graphics.newImage("graphics/foreground.png")
-    BackgroundScreenImg = love.graphics.newImage("graphics/backgroundScreen.png")
+    TitleImg = love.graphics.newImage("graphics/title.png")
 
-    Screen:changeState("menu", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
+    DesktopName = "user1" -- "britdan"
+    Desktops = {"britdan","user1"}
+
+    require("class.window")
+    require("class.windows.fileManager")
+    require("class.windows.textViewer")
+    require("class.windows.imageViewer")
+    require("class.windows.inbox")
+    require("class.windows.bank")
+
+    require("class.fileButton")
+    require("class.taskbarButton")
+    require("class.desktop")
+
+    Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
 function love.update(dt)
     dt = math.min(0.01666667, dt)
-    if love.mouse.isDown(3) then
-        dt = 0
-    end
     Screen:update(dt)
 end
 
