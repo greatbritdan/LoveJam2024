@@ -5,13 +5,15 @@ function GameScreen:initialize()
 
     self.optionsKey = {
         br = {"button", "rectangle"}, bc = {"button", "circle"}, btr = {"button", "thinrectangle"}, bmr = {"button", "minirectangle"},
-        sr = {"switch", "rectangle"}, sc = {"switch", "circle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
+        sr = {"switch", "rectangle"}, str = {"switch", "thinrectangle"}, smr = {"switch", "minirectangle"}
     }
 
     self.foregroundHeight = 100
 
-    self.time, self.timer = 2, 0
-    self.options = {"br","bc","btr","bmr","sr","sc","str","smr"}
+    self.paused = false
+    self.time, self.timer = 1, 0
+    self.count, self.counter = 25, 0
+    self.options = {"br","bc","btr","bmr","sr","str","smr"}
 
     self.elements = {}
 
@@ -37,6 +39,8 @@ function GameScreen:update(dt)
         end
     end
 
+    if self.paused then return end
+
     -- Add a new element
     self.timer = self.timer + dt
     if self.timer >= self.time then
@@ -47,6 +51,10 @@ function GameScreen:update(dt)
             self:addButton(shape)
         else
             self:addSwitch(shape)
+        end
+        self.counter = self.counter + 1
+        if self.counter >= self.count then
+            self.paused = true
         end
     end
 end
@@ -71,7 +79,7 @@ function GameScreen:draw()
 
     -- Draw the Score
     love.graphics.setColor(1,1,1)
-    love.graphics.printf("score: "..self.score, 0, 4, Env.width/2, "center", 0, 2, 2)
+    love.graphics.printf("score: "..self.score.." / "..self.count*10, 0, 4, Env.width/2, "center", 0, 2, 2)
 end
 function GameScreen:mousepressed(mx, my, b)
     if my >= Env.height-self.foregroundHeight then
