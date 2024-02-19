@@ -47,6 +47,10 @@ end
 function desktop.mousepressed(mx, my, b)
     if not desktopLoaded then return end
     desktopClass:mousepressed(mx, my, b)
+    if b == 1 then
+        ClickSounds[math.random(1, #ClickSounds)]:stop()
+        ClickSounds[math.random(1, #ClickSounds)]:play()
+    end
 end
 function desktop.mousereleased(mx, my, b)
     if not desktopLoaded then return end

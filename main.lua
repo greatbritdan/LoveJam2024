@@ -39,6 +39,21 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
+    FansSound = love.audio.newSource("audio/fans.mp3","static")
+    ClickSounds = {
+        love.audio.newSource("audio/click1.mp3","static"),
+        love.audio.newSource("audio/click2.mp3","static"),
+        love.audio.newSource("audio/click3.mp3","static")
+    }
+    KeySounds = {
+        love.audio.newSource("audio/key1.mp3","static"),
+        love.audio.newSource("audio/key2.mp3","static"),
+        love.audio.newSource("audio/key3.mp3","static"),
+        love.audio.newSource("audio/key4.mp3","static"),
+        love.audio.newSource("audio/key5.mp3","static")
+    }
+    NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
+
     DesktopName = "loveuser"
     Desktops = {"loveuser","user1"}
 

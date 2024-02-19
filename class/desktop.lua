@@ -167,6 +167,8 @@ function Desktop:keypressed(key, scancode, isrepeat)
     if self.focus then
         self.focus:keypressed(key, scancode, isrepeat)
     end
+    KeySounds[math.random(1, #KeySounds)]:stop()
+    KeySounds[math.random(1, #KeySounds)]:play()
 end
 
 --
@@ -448,6 +450,8 @@ function Desktop:sendEmail(to, from, subject, content, identifyer)
                 end
             end
             table.insert(emails.emails, 1, {to=to,from=from,subject=subject,content=content,identifyer=identifyer})
+            NewEmailSound:stop()
+            NewEmailSound:play()
             break
         end
     end
