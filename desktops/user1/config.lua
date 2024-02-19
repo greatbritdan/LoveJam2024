@@ -75,7 +75,12 @@ return {
     bin = {
         {
             name = "new folder",
-            type = "folder"
+            type = "folder",
+            {
+                name = "back",
+                type = "image",
+                img = love.graphics.newImage(path.."/background.png")
+            }
         },
         {
             name = "email",
@@ -105,6 +110,14 @@ return {
                     to = "user1@inbox.com",
                     subject = "welcome to inbox.com",
                     content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
+                }
+            },
+            _emails = {
+                {
+                    from = "unknown",
+                    to = "unknown",
+                    subject = "unknown",
+                    content = "unknown",
                 }
             }
         }
