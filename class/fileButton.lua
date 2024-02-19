@@ -52,7 +52,7 @@ function FileButton:draw()
         love.graphics.rectangle("fill", self.window.x+4, y, self.window.w-8, 20)
     else
         local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
-        love.graphics.printf(self.file.name, x-2, y+36, 36, "center")
+        love.graphics.printf(self.file.name, x-2, y+34, 36, "center")
         if self.file.icon then
             love.graphics.draw(IconsImg, IconsQuads[self.file.icon], x, y, 0, 2, 2)
         else

@@ -39,8 +39,8 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
-    DesktopName = "britdan"
-    Desktops = {"britdan","user1"}
+    DesktopName = "loveuser"
+    Desktops = {"loveuser","user1"}
 
     require("class.window")
     require("class.windows.fileManager")

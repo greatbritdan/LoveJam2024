@@ -5,7 +5,7 @@ return {
     name = "user1",
     theme = "dark",
     background = {
-        t = "color", color = {0.25,0.35,0.65}
+        t = "image", img = love.graphics.newImage(path.."/background.png")
     },
     avalablePrograms = {"remotedesktop","inbox","bank"},
     desktop = {
@@ -52,14 +52,14 @@ return {
             },
         },
         {
-            pos = {3,3},
+            pos = {4,1},
             name = "inbox",
             type = "program",
             program = "inbox",
             icon = "inbox",
         },
         {
-            pos = {4,5},
+            pos = {5,1},
             name = "bank",
             type = "program",
             program = "bank",

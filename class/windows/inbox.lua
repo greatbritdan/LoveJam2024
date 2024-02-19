@@ -1,8 +1,8 @@
 WindowInbox = Class("WindowInbox", Window)
 
 WindowInboxData = {
-    emailinput = "user1@inbox.com",
-    passwordinput = "iloveboss22",
+    --emailinput = "user1@inbox.com",
+    --passwordinput = "iloveboss22",
 }
 
 function WindowInbox:initialize(desktop, x, y, w, h)

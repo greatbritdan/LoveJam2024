@@ -1,8 +1,8 @@
 WindowBank = Class("WindowBank", Window)
 
 WindowBankData = {
-    accnameinput = "user1_newaccount",
-    passwordinput = "284733",
+    --accnameinput = "user1_newaccount",
+    --passwordinput = "284733",
 }
 
 function WindowBank:initialize(desktop, x, y, w, h)
