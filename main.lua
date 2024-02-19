@@ -54,8 +54,8 @@ function love.load()
     }
     NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
 
-    DesktopName = "loveuser"
-    Desktops = {"loveuser","user1"}
+    DesktopName = "floral16"
+    Desktops = {"loveuser","user1","floral16"}
 
     require("class.window")
     require("class.windows.fileManager")
