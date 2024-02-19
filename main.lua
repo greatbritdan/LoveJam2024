@@ -2,6 +2,7 @@
 --[[
     Bit-Breach
     Smashed Windows
+    Backwindow
 ]]
 
 function love.load()
@@ -38,7 +39,7 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
-    DesktopName = "user1" -- "britdan"
+    DesktopName = "britdan"
     Desktops = {"britdan","user1"}
 
     require("class.window")

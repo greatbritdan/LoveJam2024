@@ -23,11 +23,6 @@ return {
                 content = "hey, just quickly, what are the details for this account, i can not remember.\n\n- user1"
             },
             {
-                name = "new document",
-                type = "text",
-                content = ""
-            },
-            {
                 name = "new folder",
                 type = "folder",
                 {
@@ -42,7 +37,12 @@ return {
             }
         },
         {
-            pos = {1,6},
+            name = "new document",
+            type = "text",
+            content = ""
+        },
+        {
+            pos = {1,7},
             name = "balance",
             type = "text",
             content = {
@@ -52,14 +52,14 @@ return {
             },
         },
         {
-            pos = {2,3},
+            pos = {3,3},
             name = "inbox",
             type = "program",
             program = "inbox",
             icon = "inbox",
         },
         {
-            pos = {3,4},
+            pos = {4,5},
             name = "bank",
             type = "program",
             program = "bank",
@@ -106,14 +106,6 @@ return {
                     subject = "welcome to inbox.com",
                     content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
                 }
-            },
-            _emails = {
-                {
-                    from = "unknown",
-                    to = "unknown",
-                    subject = "unknown",
-                    content = "unknown"
-                },
             }
         }
     },

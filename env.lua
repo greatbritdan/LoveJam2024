@@ -1,6 +1,6 @@
 return {
     width = 624,
-    height = 400,
+    height = 372,
     vsync = 1,
     scale = 2,
 
