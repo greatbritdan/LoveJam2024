@@ -64,5 +64,9 @@ function desktop.textinput(text)
     if not desktopLoaded then return end
     desktopClass:textinput(text)
 end
+function desktop.wheelmoved(x,y)
+    if not desktopLoaded then return end
+    desktopClass:wheelmoved(x,y)
+end
 
 return desktop

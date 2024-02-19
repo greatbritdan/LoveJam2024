@@ -171,6 +171,12 @@ function Desktop:keypressed(key, scancode, isrepeat)
     KeySounds[math.random(1, #KeySounds)]:play()
 end
 
+function Desktop:wheelmoved(x,y)
+    if self.focus then
+        self.focus:wheelmoved(x,y)
+    end
+end
+
 --
 
 function Desktop:getFile(path)

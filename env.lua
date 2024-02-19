@@ -6,5 +6,5 @@ return {
 
     showfps = false,
     showdrawcalls = false,
-    showcursor = false
+    showcursor = true
 }

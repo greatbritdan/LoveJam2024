@@ -190,14 +190,6 @@ function WindowInbox:changeScreen(screen,subscreen)
             end
         end})
     else
-        self.elements.slider = UI.slider({x=self.w-16, y=20, w=16, h=self.h-self.navbar.h-20, dir="ver", fl=0.25, l={0,1,2}, desktop=self.desktop, resize=function (element)
-            element.x = self.x+self.w-16
-            element.sx = element.x
-            element.h = self.h-self.navbar.h-20
-            element.sh = element.h*element.fill
-            element.sy = element:posFromValue(element.value)
-        end})
-
         if self.screen == "inbox" then
             self.elements.logout = UI.button({x=(self.w/2)+2, y=2, w=(self.w/2)-4, h=16, text="logout", desktop=self.desktop, resize=function (element)
                 element.x = self.x+(self.w/2)+2

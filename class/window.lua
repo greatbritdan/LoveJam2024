@@ -69,6 +69,9 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH, resizable, mo
         self.resizeable = false
     end
     self.clicking = false
+
+    self.scroll = 0
+    self.scrollable = false
 end
 
 function Window:getColor(name,subname)
@@ -233,6 +236,17 @@ function Window:keypressed(key, scancode, isrepeat)
     end
 end
 
+function Window:wheelmoved(x,y)
+    if self.minimized then return end
+    if self.scrollable then
+        self.scroll = self.scroll+(y*5)
+        if self.scroll > 0 then
+            self.scroll = 0
+        end
+        print(self.scroll)
+    end
+end
+
 function Window:hovering(mx, my)
     -- Check if hovering over navbar buttons (closing, minimizing, etc)
     for i, button in pairs(self.navbar.buttons) do
@@ -278,15 +292,6 @@ function Window:sync()
             element.startX, element.startY = element.x, element.y
         end
         element.x, element.y = self.x+element.startX, self.y+self.navbar.h+element.startY
-
-        -- I hate sliders
-        if element.sx then
-            if not element.startSX then
-                element.startSX, element.startSY = element.sx, element.sy
-            end
-            element.sx, element.sy = self.x+element.startSX, self.y+self.navbar.h+element.startSY
-        end
-
         if element.resize then
             element:resize()
         end
