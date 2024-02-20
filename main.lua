@@ -26,7 +26,7 @@ function love.load()
     IconsImg = love.graphics.newImage("graphics/icons.png")
     IconsImgNames = {
         "exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs",
-        "start","image","imageviewer","remotedesktop","inbox","bank","zipcrash"}
+        "start","image","imageviewer","remotedesktop","inbox","bank","zipcrash","antivirus"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
@@ -66,6 +66,7 @@ function love.load()
     require("class.windows.inbox")
     require("class.windows.bank")
     require("class.windows.zipcrash")
+    require("class.windows.antivirus")
 
     require("class.fileButton")
     require("class.taskbarButton")

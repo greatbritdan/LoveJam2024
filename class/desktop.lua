@@ -7,7 +7,8 @@ function Desktop:initialize(config)
         imageviewer = WindowImageViewer,
         inbox = WindowInbox,
         bank = WindowBank,
-        zipcrash = WindowZipcrash
+        zipcrash = WindowZipcrash,
+        antivirus = WindowAntivirus
     }
 
     self.w, self.h = Env.width, Env.height
@@ -246,7 +247,8 @@ function Desktop:openFile(file,window)
         image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}},
         inbox = {program="inbox", window=WindowInbox, args={file=file}},
         bank = {program="bank", window=WindowBank, args={file=file}},
-        zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}}
+        zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}},
+        antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -348,7 +350,8 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="inbox",program="inbox",window=WindowInbox},
         {name="bank",program="bank",window=WindowBank},
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
-        {name="zipcrash",program="zipcrash",window=WindowZipcrash}
+        {name="zipcrash",program="zipcrash",window=WindowZipcrash},
+        {name="antivirus",program="antivirus",window=WindowAntivirus}
     }
     self.filesystem[3] = {
         name = "programs",
@@ -493,6 +496,7 @@ end
 
 function Desktop:complete()
     WindowInboxData = {}
+    WindowBankData = {}
     
     local idx = TableContains(Desktops, DesktopName)
     DesktopName = Desktops[idx+1]
