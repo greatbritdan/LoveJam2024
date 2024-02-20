@@ -6,7 +6,8 @@ function Desktop:initialize(config)
         textviewer = WindowTextViewer,
         imageviewer = WindowImageViewer,
         inbox = WindowInbox,
-        bank = WindowBank
+        bank = WindowBank,
+        zipcrash = WindowZipcrash
     }
 
     self.w, self.h = Env.width, Env.height
@@ -244,7 +245,8 @@ function Desktop:openFile(file,window)
         text = {program="textviewer", window=WindowTextViewer, args={file=file,content=file.content,filename=file.name..".text"}},
         image = {program="imageviewer", window=WindowImageViewer, args={file=file,img=file.img,filename=file.name..".image"}},
         inbox = {program="inbox", window=WindowInbox, args={file=file}},
-        bank = {program="bank", window=WindowBank, args={file=file}}
+        bank = {program="bank", window=WindowBank, args={file=file}},
+        zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -346,6 +348,7 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="inbox",program="inbox",window=WindowInbox},
         {name="bank",program="bank",window=WindowBank},
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
+        {name="zipcrash",program="zipcrash",window=WindowZipcrash}
     }
     self.filesystem[3] = {
         name = "programs",
