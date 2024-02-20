@@ -45,5 +45,12 @@ return {
             target = "b:/programs/zipcrash"
         }
     },
-    bin = {}
+    bin = {},
+    antivirus = {
+        {
+            username = "16floralflowers",
+            password = "daisy987",
+            enabled = true,
+        }
+    }
 }

@@ -27,6 +27,7 @@ function Desktop:initialize(config)
     self.windows = {}
     self.emails = config.emails or {}
     self.banks = config.banks or {}
+    self.antivirus = config.antivirus or {}
 
     self.avalablePrograms = {
         filemanager = true,
@@ -489,6 +490,23 @@ function Desktop:getBank(vname)
     for _,bank in pairs(self.banks) do
         if bank.name == vname then
             return bank
+        end
+    end
+    return false
+end
+
+function Desktop:validateAntivirus(avuser,avpass)
+    for _,antiv in pairs(self.antivirus) do
+        if antiv.username == avuser and antiv.password == avpass then
+            return true
+        end
+    end
+    return false
+end
+function Desktop:getAntivirus(avname)
+    for _,antiv in pairs(self.antivirus) do
+        if antiv.username == avname then
+            return antiv
         end
     end
     return false
