@@ -60,7 +60,10 @@ function WindowLevelSelect:draw()
     local smallestScale = (self.w-40)/self.config.background.img:getWidth()
     local x, y = self.x+(self.w-self.config.background.img:getWidth()*smallestScale)/2, self.y+self.navbar.h+(self.h-self.navbar.h-self.config.background.img:getHeight()*smallestScale)/2
     love.graphics.draw(self.config.background.img, x, y, 0, smallestScale, smallestScale)
-    love.graphics.print(self.config.name, x+4, y+4)
+
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(self.config.pfp, x+4, y+4)
+    love.graphics.print(self.config.name, x+44, y+16)
 
     -- Draw UI
     Window.drawUI(self)

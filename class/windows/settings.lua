@@ -12,6 +12,9 @@ function WindowSettings:draw()
     -- Draw window
     Window.draw(self)
 
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf("settings will be here at some point!", self.x+4, self.y+self.navbar.h+3, self.w-8, "center")
+
     -- Draw UI
     Window.drawUI(self)
 end

@@ -17,9 +17,12 @@ function Desktop:initialize(config)
     self.w, self.h = Env.width, Env.height
     self.background = config.background or {t = "color", color = {0.75,0.75,0.75}}
 
+    self.name = config.name
+    self.pfp = config.pfp
+
     self.focus = false
     self.startMenu = {
-        w = 182, h = 68,
+        w = 182, h = 104,
         open = false,
         buttons = {
             FileButton:new(self, "startmenu", 1, "levelselect"),
@@ -107,6 +110,9 @@ function Desktop:draw()
         for _,button in pairs(self.startMenu.buttons) do
             button:draw()
         end
+        love.graphics.setColor(self:getColor("text"))
+        love.graphics.draw(self.pfp, 4, self.h-self.taskbar.h-36)
+        love.graphics.print(self.name, 44, self.h-self.taskbar.h-24)
     end
 
     -- Draw task bar

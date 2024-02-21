@@ -56,7 +56,7 @@ function love.load()
 
     DesktopName = "floral16"
     Desktops = {"loveuser","user1","floral16"}
-
+    
     require("class.window")
     require("class.windows.fileManager")
     require("class.windows.textViewer")

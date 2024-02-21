@@ -3,6 +3,7 @@ local path = "desktops/loveuser"
 return {
     path = path,
     name = "loveuser",
+    pfp = love.graphics.newImage(path.."/pfp.png"),
     theme = "dark",
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")

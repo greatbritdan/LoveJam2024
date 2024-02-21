@@ -3,6 +3,7 @@ local path = "desktops/floral16"
 return {
     path = path,
     name = "floral16",
+    pfp = love.graphics.newImage(path.."/pfp.png"),
     theme = "dark",
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
