@@ -1,9 +1,4 @@
--- Game name ideas
---[[
-    Bit-Breach
-    Smashed Windows
-    Backwindow
-]]
+-- MADE BY BRITDAN
 
 function love.load()
     local lversion = string.format("%02d.%02d.%02d", love._version_major, love._version_minor, love._version_revision)
@@ -19,6 +14,9 @@ function love.load()
 
     love.graphics.setDefaultFilter("nearest")
     love.graphics.setLineStyle("rough")
+
+    love.window.setTitle("Back-Window")
+    love.window.setIcon(love.image.newImageData("graphics/icon.png"))
 
     Font = love.graphics.newImageFont("graphics/font.png", "abcdefghijklmnopqrstuvwxyz 0123456789.,:=+%*-()/\\|<>'_£@!?", 1)
     love.graphics.setFont(Font)
