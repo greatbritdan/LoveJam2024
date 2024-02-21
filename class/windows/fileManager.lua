@@ -9,7 +9,7 @@ function WindowFileManager:initialize(desktop, x, y, w, h, args)
     end})
     self.elements.back = UI.button({x=self.w-18, y=2, w=16, h=16, text="<", desktop=desktop, func=function() self:goBack() end, resize=function (element)
         element.x = self.x+self.w-18
-    end}) 
+    end})
     self:sync()
 
     self:createIcons()

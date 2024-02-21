@@ -5,6 +5,7 @@
     "Lua.diagnostics.disable": [
         "deprecated",
         "undefined-field",
-        "cast-local-type"
+        "cast-local-type",
+        "param-type-mismatch"
     ]
 }

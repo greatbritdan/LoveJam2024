@@ -8,7 +8,8 @@ function Desktop:initialize(config)
         inbox = WindowInbox,
         bank = WindowBank,
         zipcrash = WindowZipcrash,
-        antivirus = WindowAntivirus
+        antivirus = WindowAntivirus,
+        crypter = WindowCrypter
     }
 
     self.w, self.h = Env.width, Env.height
@@ -249,7 +250,8 @@ function Desktop:openFile(file,window)
         inbox = {program="inbox", window=WindowInbox, args={file=file}},
         bank = {program="bank", window=WindowBank, args={file=file}},
         zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}},
-        antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}}
+        antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}},
+        crypter = {program="crypter", window=WindowCrypter, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -352,7 +354,8 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="bank",program="bank",window=WindowBank},
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
         {name="zipcrash",program="zipcrash",window=WindowZipcrash},
-        {name="antivirus",program="antivirus",window=WindowAntivirus}
+        {name="antivirus",program="antivirus",window=WindowAntivirus},
+        {name="crypter",program="crypter",window=WindowCrypter}
     }
     self.filesystem[3] = {
         name = "programs",
@@ -376,13 +379,16 @@ function Desktop:populateFilesystem(desktop,bin)
         name = "debug",
         type = "folder",
         hidden = true,
-        {
-            name = "remotedesktop",
-            type = "program",
-            program = "remotedesktop",
-            icon = "remotedesktop"
-        }
     }
+    for program,_ in pairs(self.programWindows) do
+        table.insert(self.filesystem[4], {
+            name = program,
+            type = "program",
+            program = program,
+            icon = program
+        })
+    
+    end
 end
 
 function Desktop:createDesktopIcons()
