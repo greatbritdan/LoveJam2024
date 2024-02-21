@@ -5,7 +5,7 @@ function FileButton:initialize(desktop, window, i, file)
     self.window = window or false
 
     self.i = i
-    if not self.window then
+    if self.window == "desktop" then
         if type(self.i) == "table" then
             self.x, self.y = self.i[1], self.i[2]
         else
@@ -14,11 +14,15 @@ function FileButton:initialize(desktop, window, i, file)
     end
 
     self.isShortcut = false
-    if file.type == "shortcut" then
-        self.file = self.desktop:getFileFromShortcut(file)
-        self.isShortcut = true
-    else
+    if self.window == "startmenu" then
         self.file = file
+    else
+        if file.type == "shortcut" then
+            self.file = self.desktop:getFileFromShortcut(file)
+            self.isShortcut = true
+        else
+            self.file = file
+        end
     end
 
     self.clicking = false
@@ -36,33 +40,37 @@ function FileButton:setHightlightColor()
 end
 
 function FileButton:draw()
-    love.graphics.setColor({1,1,1})
-    if self.window and self.file.hidden ~= true then
-        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
-        love.graphics.print(self.file.name, self.window.x+24, y+6)
-        if self.file.icon then
-            love.graphics.draw(IconsImg, IconsQuads[self.file.icon], self.window.x+4, y+2)
-        else
-            love.graphics.draw(IconsImg, IconsQuads[self.file.type], self.window.x+4, y+2)
-        end
-        if self.isShortcut then
-            love.graphics.draw(IconsImg, IconsQuads["shortcut"], self.window.x+4, y+2)
-        end
-        self:setHightlightColor()
-        love.graphics.rectangle("fill", self.window.x+4, y, self.window.w-8, 20)
+    local name, icon
+    if self.window == "startmenu" then
+        name, icon = self.file, self.file
     else
+        name, icon = self.file.name, self.file.icon or self.file.type
+    end
+    love.graphics.setColor({1,1,1})
+    if self.window == "desktop" then
         local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
-        love.graphics.printf(self.file.name, x-2, y+34, 36, "center")
-        if self.file.icon then
-            love.graphics.draw(IconsImg, IconsQuads[self.file.icon], x, y, 0, 2, 2)
-        else
-            love.graphics.draw(IconsImg, IconsQuads[self.file.type], x, y, 0, 2, 2)
-        end
-        if self.isShortcut then
-            love.graphics.draw(IconsImg, IconsQuads["shortcut"], x, y, 0, 2, 2)
-        end
+        love.graphics.printf(name, x-2, y+34, 36, "center")
+        self:drawIcon(icon, x, y, 2)
         self:setHightlightColor()
         love.graphics.rectangle("fill", x, y, 32, 32)
+    elseif self.window == "startmenu" then
+        local y = self.desktop.h-self.desktop.taskbar.h-self.desktop.startMenu.h+4
+        love.graphics.print(name, 26, y+((self.i-1)*20)+6)
+        self:drawIcon(icon, 6, y+((self.i-1)*20)+2, 1)
+        self:setHightlightColor()
+        love.graphics.rectangle("fill", 4, y+((self.i-1)*20), self.desktop.startMenu.w-8, 20)
+    elseif self.window then
+        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
+        love.graphics.print(name, self.window.x+24, y+6)
+        self:drawIcon(icon, self.window.x+4, y+2, 1)
+        self:setHightlightColor()
+        love.graphics.rectangle("fill", self.window.x+4, y, self.window.w-8, 20)
+    end
+end
+function FileButton:drawIcon(icon,x,y,s)
+    love.graphics.draw(IconsImg, IconsQuads[icon], x, y, 0, s, s)
+    if self.isShortcut then
+        love.graphics.draw(IconsImg, IconsQuads["shortcut"], x, y, 0, s, s)
     end
 end
 
@@ -86,17 +94,22 @@ function FileButton:mousereleased(mx,my,b)
 end
 
 function FileButton:hover(mx,my)
-    if self.window then
-        if not AABB(mx, my, 1, 1, self.window.x+4, self.window.y+self.window.navbar.h+24, self.window.w-8, self.window.h-self.window.navbar.h-28) then
+    if self.window == "desktop" then
+        local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, x, y, 32, 32) then
+            return true
+        end
+    elseif self.window == "startmenu" then
+        local y = self.desktop.h-self.desktop.taskbar.h-self.desktop.startMenu.h+4+((self.i-1)*20)
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, 4, y, self.desktop.startMenu.w-8, 20) then
+            return true
+        end
+    elseif self.window then
+        if not AABB(mx, my, 1/Env.scale, 1/Env.scale, self.window.x+4, self.window.y+self.window.navbar.h+24, self.window.w-8, self.window.h-self.window.navbar.h-28) then
             return
         end
         local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
         if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.window.x+4, y, self.window.w-8, 20) then
-            return true
-        end
-    else
-        local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
-        if AABB(mx, my, 1/Env.scale, 1/Env.scale, x, y, 32, 32) then
             return true
         end
     end
@@ -104,10 +117,24 @@ function FileButton:hover(mx,my)
 end
 
 function FileButton:click()
-    if self.window then
+    if self.window == "desktop" then
+        self.desktop:openFile(self.file)
+    elseif self.window == "startmenu" then
+        if self.file == "levelselect" then
+            local file = self.desktop:getFile("b:/programs/levelselect")
+            if file then
+                self.desktop:openFile(file)
+            end
+        elseif self.file == "settings" then
+            local file = self.desktop:getFile("b:/programs/settings")
+            if file then
+                self.desktop:openFile(file)
+            end
+        elseif self.file == "power" then
+            love.event.quit()
+        end
+    elseif self.window then
         self.desktop:openFile(self.file, self.window)
         self.desktop.dontOverwriteFocus = true
-    else
-        self.desktop:openFile(self.file)
     end
 end

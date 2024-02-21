@@ -66,6 +66,8 @@ function love.load()
     require("class.windows.zipcrash")
     require("class.windows.antivirus")
     require("class.windows.crypter")
+    require("class.windows.levelSelect")
+    require("class.windows.settings")
 
     require("class.fileButton")
     require("class.taskbarButton")

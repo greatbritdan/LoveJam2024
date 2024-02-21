@@ -9,7 +9,9 @@ function Desktop:initialize(config)
         bank = WindowBank,
         zipcrash = WindowZipcrash,
         antivirus = WindowAntivirus,
-        crypter = WindowCrypter
+        crypter = WindowCrypter,
+        levelselect = WindowLevelSelect,
+        settings = WindowSettings
     }
 
     self.w, self.h = Env.width, Env.height
@@ -17,9 +19,13 @@ function Desktop:initialize(config)
 
     self.focus = false
     self.startMenu = {
-        w = 200, h = 300,
+        w = 182, h = 68,
         open = false,
-        buttons = {}
+        buttons = {
+            FileButton:new(self, "startmenu", 1, "levelselect"),
+            FileButton:new(self, "startmenu", 2, "settings"),
+            FileButton:new(self, "startmenu", 3, "power")
+        }
     }
     self.taskbar = {
         h = 20,
@@ -33,7 +39,9 @@ function Desktop:initialize(config)
     self.avalablePrograms = {
         filemanager = true,
         textviewer = true,
-        imageviewer = true
+        imageviewer = true,
+        levelselect = true,
+        settings = true
     }
     for _,program in pairs(config.avalablePrograms) do
         self.avalablePrograms[program] = true
@@ -96,8 +104,9 @@ function Desktop:draw()
     if self.startMenu.open then
         love.graphics.setColor(self:getColor("background"))
         love.graphics.rectangle("fill", 0, self.h-self.taskbar.h-self.startMenu.h, self.startMenu.w, self.startMenu.h)
-        love.graphics.setColor(self:getColor("text"))
-        love.graphics.print("no idea what i'll use this for", 4, self.h-self.taskbar.h-self.startMenu.h+4)
+        for _,button in pairs(self.startMenu.buttons) do
+            button:draw()
+        end
     end
 
     -- Draw task bar
@@ -116,6 +125,12 @@ function Desktop:draw()
 end
 
 function Desktop:mousepressed(mx, my, b)
+    if self.startMenu.open then
+        for _, button in pairs(self.startMenu.buttons) do
+            button:mousepressed(mx, my, b)
+        end
+        return
+    end
     if my < self.h-self.taskbar.h then
         self.dontOverwriteFocus = false
         self.focus = false
@@ -143,6 +158,9 @@ function Desktop:mousepressed(mx, my, b)
 end
 function Desktop:mousereleased(mx, my, b)
     if self.startMenu.open then
+        for _, button in pairs(self.startMenu.buttons) do
+            button:mousereleased(mx, my, b)
+        end
         self.startMenu.open = false
         return
     end
@@ -358,7 +376,9 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
         {name="zipcrash",program="zipcrash",window=WindowZipcrash},
         {name="antivirus",program="antivirus",window=WindowAntivirus},
-        {name="crypter",program="crypter",window=WindowCrypter}
+        {name="crypter",program="crypter",window=WindowCrypter},
+        {name="levelselect",program="levelselect",window=WindowLevelSelect,hidden=true},
+        {name="settings",program="settings",window=WindowSettings,hidden=true}
     }
     self.filesystem[3] = {
         name = "programs",
@@ -388,9 +408,15 @@ function Desktop:populateFilesystem(desktop,bin)
             name = program,
             type = "program",
             program = program,
-            icon = program
+            icon = string.lower(program)
         })
     end
+    table.insert(self.filesystem[4], {
+        name = "remotedesktop",
+        type = "program",
+        program = "remotedesktop",
+        icon = "remotedesktop"
+    }) 
 end
 
 function Desktop:createDesktopIcons()
@@ -401,9 +427,9 @@ function Desktop:createDesktopIcons()
         for _, file in ipairs(files) do
             if file.hidden ~= true then
                 if file.pos then
-                    table.insert(self.desktopIcons, FileButton:new(self, false, file.pos, file))
+                    table.insert(self.desktopIcons, FileButton:new(self, "desktop", file.pos, file))
                 else
-                    table.insert(self.desktopIcons, FileButton:new(self, false, i, file))
+                    table.insert(self.desktopIcons, FileButton:new(self, "desktop", i, file))
                     i = i + 1
                 end
             end

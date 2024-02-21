@@ -62,7 +62,6 @@ function WindowCrypter:search()
         else
             self.output = self:decrypt(self.output)
         end
-        print(self.output)
     elseif file and file.type ~= "text" then
         self.errorOutput = "only text files are supported"
     else

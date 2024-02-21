@@ -31,6 +31,7 @@ function WindowFileManager:createIcons()
             end
         end
     end
+    self.scroll = 0
     self:updateScroll()
 end
 
