@@ -554,7 +554,8 @@ end
 function Desktop:complete()
     WindowInboxData = {}
     WindowBankData = {}
-    
+    WindowAntivirusData = {}
+
     local idx = TableContains(Desktops, DesktopName)
     DesktopName = Desktops[idx+1]
     Screen:changeState("desktop", {"fade", 0.25, {0,0,0}}, {"fade", 0.25, {0,0,0}})
