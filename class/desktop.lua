@@ -116,7 +116,6 @@ function Desktop:draw()
 end
 
 function Desktop:mousepressed(mx, my, b)
-    self.startMenu.open = false
     if my < self.h-self.taskbar.h then
         self.dontOverwriteFocus = false
         self.focus = false
@@ -143,6 +142,10 @@ function Desktop:mousepressed(mx, my, b)
     end
 end
 function Desktop:mousereleased(mx, my, b)
+    if self.startMenu.open then
+        self.startMenu.open = false
+        return
+    end
     if my < self.h-self.taskbar.h then
         for _, window in pairs(self.windows) do
             window:mousereleased(mx, my, b)

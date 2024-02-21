@@ -4,15 +4,16 @@ function WindowFileManager:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 300, 200, "file manager", 300, 200)
     local path = args and args.path or "b:/"
 
+    self.scrollable = true
+
     self.elements.path = UI.input({x=2, y=2, w=self.w-22, h=16, text=path, mc=50, desktop=desktop, func=function() self:search() end, resize=function (element)
         element.w = self.w-22
     end})
     self.elements.back = UI.button({x=self.w-18, y=2, w=16, h=16, text="<", desktop=desktop, func=function() self:goBack() end, resize=function (element)
         element.x = self.x+self.w-18
     end})
-    self:sync()
-
     self:createIcons()
+    self:sync()
 
     self.program = "filemanager"
     self.icon = "filemanager"
@@ -30,6 +31,7 @@ function WindowFileManager:createIcons()
             end
         end
     end
+    self:updateScroll()
 end
 
 function WindowFileManager:draw()
@@ -41,9 +43,11 @@ function WindowFileManager:draw()
     love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
     -- Draw icons
+    love.graphics.setScissor(self.x*Env.scale, (self.y+self.navbar.h+24)*Env.scale, self.w*Env.scale, (self.h-self.navbar.h-28)*Env.scale)
     for _, icon in ipairs(self.icons) do
         icon:draw()
     end
+    love.graphics.setScissor()
 
     -- Draw UI
     Window.drawUI(self)
@@ -91,4 +95,14 @@ end
 
 function WindowFileManager:search()
     self:createIcons()
+end
+
+function WindowFileManager:updateScroll()
+    local height = (#self.icons*20)+4
+    self.scrollMax = -(height-(self.h-self.navbar.h-24))
+    if self.scrollMax < 0 then
+        self.scrollable = true
+    else
+        self.scrollMax = 0
+    end
 end

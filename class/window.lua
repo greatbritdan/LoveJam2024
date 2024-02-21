@@ -239,7 +239,7 @@ end
 function Window:wheelmoved(x,y)
     if self.minimized then return end
     if self.scrollable then
-        self.scroll = self.scroll+(y*5)
+        self.scroll = self.scroll+(y*10)
         if self.scroll > 0 then
             self.scroll = 0
         end

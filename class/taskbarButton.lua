@@ -45,7 +45,7 @@ end
 
 function TaskbarButton:mousereleased(mx,my,i,b)
     if self.clicking == b and self.window then
-        if self.clicking and self:hover(mx,my,i) then
+        if self:hover(mx,my,i) then
             if b == 1 then
                 self:click()
             elseif b == 2 then
@@ -53,8 +53,10 @@ function TaskbarButton:mousereleased(mx,my,i,b)
             end
         end
         self.clicking = false
-    elseif self.clicking == b and not self.window then
-        self.desktop.startMenu.open = not self.desktop.startMenu.open
+    elseif self.clicking == b and (not self.window) then
+        if self:hover(mx,my,i) then
+            self.desktop.startMenu.open = not self.desktop.startMenu.open
+        end
         self.clicking = false
     end
 end

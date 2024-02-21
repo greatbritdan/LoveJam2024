@@ -38,7 +38,7 @@ end
 function FileButton:draw()
     love.graphics.setColor({1,1,1})
     if self.window and self.file.hidden ~= true then
-        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)
+        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
         love.graphics.print(self.file.name, self.window.x+24, y+6)
         if self.file.icon then
             love.graphics.draw(IconsImg, IconsQuads[self.file.icon], self.window.x+4, y+2)
@@ -87,7 +87,10 @@ end
 
 function FileButton:hover(mx,my)
     if self.window then
-        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)
+        if not AABB(mx, my, 1, 1, self.window.x+4, self.window.y+self.window.navbar.h+24, self.window.w-8, self.window.h-self.window.navbar.h-28) then
+            return
+        end
+        local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
         if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.window.x+4, y, self.window.w-8, 20) then
             return true
         end
