@@ -49,10 +49,11 @@ function WindowInbox:draw()
 
         -- I'm sorry...
         local hover = self:hover()
-        local y = self.y+self.navbar.h+22
+        love.graphics.setScissor(self.x*Env.scale, (self.y+self.navbar.h+22)*Env.scale, self.w*Env.scale, (self.h-self.navbar.h-24)*Env.scale)
+        local y = self.y+self.navbar.h+22+self.scroll
         for i, email in ipairs(self.emails) do
             love.graphics.setColor(0,0,0)
-            love.graphics.rectangle("fill", self.x+2, y, self.w-20, 32)
+            love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
             love.graphics.setColor(1,1,1)
             love.graphics.print(email.subject, self.x+6, y+4)
             love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
@@ -61,7 +62,7 @@ function WindowInbox:draw()
             local splitn = Split(email.content,"\n")
             local split = Split(splitn[1]," ")
             for _,word in ipairs(split) do
-                if love.graphics.getFont():getWidth(content.." "..word) > self.w-32 then
+                if love.graphics.getFont():getWidth(content.." "..word) > self.w-16 then
                     content = content.."..."
                     break
                 end
@@ -73,10 +74,11 @@ function WindowInbox:draw()
                 if self.clickingEmail == i then
                     love.graphics.setColor(0.5,0.5,0.5,0.25)
                 end
-                love.graphics.rectangle("fill", self.x+2, y, self.w-20, 32)
+                love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
             end
             y = y + 34
         end
+        love.graphics.setScissor()
     elseif self.screen == "email" then
         -- Print out email
         local email = self.emails[self.subscreen]
@@ -139,8 +141,12 @@ end
 function WindowInbox:hover()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     local y = self.y+self.navbar.h+22
+    if not AABB(mx, my, 1, 1, self.x+2, y, self.w-4, self.h-self.navbar.h-24) then
+        return
+    end
+    y = y + self.scroll
     for i,_ in ipairs(self.emails) do
-        if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+2, y, self.w-20, 32) then
+        if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+2, y, self.w-4, 32) then
             return i
         end
         y = y + 34
@@ -155,11 +161,14 @@ function WindowInbox:changeScreen(screen,subscreen)
         element.w = self.w-16
     end
 
+    self.scrollable = false
+
     self.elements = {}
     self.screen = screen
     self.subscreen = subscreen or false
 
     if self.screen == "login" then
+        self.scroll = 0
         local emailinput = WindowInboxData.emailinput or ""
         local passwordinput = WindowInboxData.passwordinput or ""
 
@@ -207,4 +216,18 @@ function WindowInbox:changeScreen(screen,subscreen)
         end
     end
     self:sync()
+end
+
+function WindowInbox:updateScroll()
+    if self.screen ~= "inbox" then
+        self.scrollable = false
+        return
+    end
+    local height = (#self.emails*34) - 2
+    self.scrollMax = -(height-(self.h-self.navbar.h-24))
+    if self.scrollMax < 0 then
+        self.scrollable = true
+    else
+        self.scrollMax = 0
+    end
 end

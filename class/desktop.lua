@@ -387,7 +387,6 @@ function Desktop:populateFilesystem(desktop,bin)
             program = program,
             icon = program
         })
-    
     end
 end
 
@@ -471,6 +470,11 @@ function Desktop:sendEmail(to, from, subject, content, identifyer)
             table.insert(emails.emails, 1, {to=to,from=from,subject=subject,content=content,identifyer=identifyer})
             NewEmailSound:stop()
             NewEmailSound:play()
+            for _,window in pairs(self.windows) do
+                if window.program == "inbox" then
+                    window:sync()
+                end
+            end
             break
         end
     end

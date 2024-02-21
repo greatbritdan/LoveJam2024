@@ -73,5 +73,6 @@ return {
             password = "daisy987",
             enabled = true,
         }
-    }
+    },
+    emails = {},
 }

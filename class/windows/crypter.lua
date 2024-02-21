@@ -29,10 +29,10 @@ function WindowCrypter:draw()
     love.graphics.rectangle("fill", self.x+2, self.y+self.navbar.h+60, self.w-4, self.h-self.navbar.h-62)
     if self.errorOutput then
         love.graphics.setColor(1,0.5,0.5)
-        love.graphics.printf(self.errorOutput, self.x+4, self.y+self.navbar.h+62, self.w-8, "left")
+        love.graphics.printf(self.errorOutput, self.x+4, self.y+self.navbar.h+62, self.w-8, "center")
     else
         love.graphics.setColor(1,1,1)
-        love.graphics.printf(self.output, self.x+4, self.y+self.navbar.h+62, self.w-8, "left")
+        love.graphics.printf(self.output, self.x+4, self.y+self.navbar.h+62, self.w-8, "center")
     end
 
     -- Draw UI

@@ -243,7 +243,9 @@ function Window:wheelmoved(x,y)
         if self.scroll > 0 then
             self.scroll = 0
         end
-        print(self.scroll)
+        if self.scrollMax and self.scroll < self.scrollMax then
+            self.scroll = self.scrollMax
+        end
     end
 end
 
@@ -295,5 +297,8 @@ function Window:sync()
         if element.resize then
             element:resize()
         end
+    end
+    if self.updateScroll then
+        self:updateScroll()
     end
 end

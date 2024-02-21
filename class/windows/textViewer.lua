@@ -8,6 +8,7 @@ function WindowTextViewer:initialize(desktop, x, y, w, h, args)
     self.icon = "textviewer"
 
     self.scrollable = true
+    self:updateScroll()
 end
 
 function WindowTextViewer:draw()
@@ -38,7 +39,7 @@ function WindowTextViewer:draw()
                 allign = section[2] or "center"
             end
             local split = Split(text,"\n")
-            for j,line in pairs(split) do
+            for _,line in pairs(split) do
                 love.graphics.printf(line, self.x+4, y, self.w-8, allign)
                 y = y + TextHeight(line, self.w-8)
             end
@@ -52,4 +53,26 @@ function WindowTextViewer:draw()
 
     -- Draw UI
     Window.drawUI(self)
+end
+
+function WindowTextViewer:updateScroll()
+    local height = -8
+    local content = Deepcopy(self.content)
+    if type(content) ~= "table" then
+        content = {content}
+    end
+    for _,section in pairs(content) do
+        local text = type(section) == "table" and section[1] or section
+        local split = Split(text,"\n")
+        for _,line in pairs(split) do
+            height = height + TextHeight(line, self.w-8)
+        end
+        height = height + 4
+    end
+    self.scrollMax = -(height-(self.h-self.navbar.h-24))
+    if self.scrollMax < 0 then
+        self.scrollable = true
+    else
+        self.scrollMax = 0
+    end
 end
