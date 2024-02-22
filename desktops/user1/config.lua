@@ -107,6 +107,12 @@ return {
                     }
                 },
                 {
+                    from = "user1@inbox.com",
+                    to = "user1@inbox.com",
+                    subject = "to loveuser",
+                    content = "you're in his game you know, ann0nymous112 is not one to back down, you will be his toy until the day you die or get caught and take on all his wrongs, you have to stop him, i don't know how but i'm sure someone will, we all know his deeds.\n\n- user1",
+                },
+                {
                     from = "noreply@inbox.com",
                     to = "user1@inbox.com",
                     subject = "welcome to inbox.com",
