@@ -1,8 +1,8 @@
 WindowAntivirus = Class("WindowAntivirus", Window)
 
 WindowAntivirusData = {
-    --userinput = "",
-    --passwordinput = "",
+    userinput = "16floralflowers",
+    passwordinput = "daisy987"
 }
 
 function WindowAntivirus:initialize(desktop, x, y, w, h)
@@ -11,10 +11,12 @@ function WindowAntivirus:initialize(desktop, x, y, w, h)
     self.icon = "antivirus"
 
     self.username = false
+    self.antivirus = {}
     if not WindowAntivirusData.authenticated then
         self:changeScreen("login")
     else
         self.username = WindowAntivirusData.authenticated
+        self.antivirus = self.desktop:getAntivirus(self.username)
         self:changeScreen("main")
     end
 end
@@ -31,6 +33,21 @@ function WindowAntivirus:draw()
             love.graphics.setColor(1,0.5,0.5)
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
+    else
+        love.graphics.setColor(self:getColor("subbackground"))
+        love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
+        if self.antivirus.enabled then
+            love.graphics.setColor(0.5,1,0.5)
+            love.graphics.printf("protection: on", self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
+        else
+            love.graphics.setColor(1,0.5,0.5)
+            love.graphics.printf("protection: off", self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
+        end
+
+        if self.screen == "security" then
+            love.graphics.setColor(1,0.5,0.5)
+            love.graphics.printf("unusual activity detected, answer these security questions to access account:", self.x+3, self.y+self.navbar.h+23, self.w-6, "center")
+        end
     end
 
     -- Draw UI
@@ -38,16 +55,16 @@ function WindowAntivirus:draw()
 end
 
 function WindowAntivirus:changeScreen(screen)
-    local function resizeElement(element, offsetY)
-        local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
-        element.y = self.y+sy+offsetY
-        element.w = self.w-16
-    end
-
     self.elements = {}
     self.screen = screen
 
     if self.screen == "login" then
+        local function resizeElement(element, offsetY)
+            local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
+            element.y = self.y+sy+offsetY
+            element.w = self.w-16
+        end
+
         local userinput = WindowAntivirusData.userinput or ""
         local passwordinput = WindowAntivirusData.passwordinput or ""
 
@@ -85,6 +102,62 @@ function WindowAntivirus:changeScreen(screen)
             WindowInboxData.authenticated = false
             self:changeScreen("login")
         end})
+
+        if self.screen == "main" then
+            local function resizeElement(element, offsetY)
+                local sy = ((self.h-self.navbar.h)/2)-20+self.navbar.h
+                element.y = self.y+sy+offsetY
+                element.w = self.w-16
+            end
+
+            local text = self.antivirus.enabled and "enabled" or "disabled"
+            self.elements.enablelabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="antivirus:", desktop=self.desktop, resize=function (element)
+                resizeElement(element, 0)
+            end})
+            self.elements.enable = UI.button({x=8, y=0, w=self.w-16, h=16, text=text, desktop=self.desktop, resize=function (element)
+                resizeElement(element, 20)
+            end, func=function()
+                if WindowAntivirusData.securityAuthenticated then
+                    self.antivirus.enabled = not self.antivirus.enabled
+                    self.elements.enable.text = self.antivirus.enabled and "enabled" or "disabled"
+                else
+                    self:changeScreen("security")
+                end
+            end})
+        elseif self.screen == "security" then
+            local function resizeElement(element, offsetY)
+                local sy = ((self.h-self.navbar.h)/2)-50+self.navbar.h
+                element.y = self.y+sy+offsetY
+                element.w = self.w-16
+            end
+
+            local q1input = WindowAntivirusData.q1input or ""
+            local q2input = WindowAntivirusData.q2input or ""
+
+            self.elements.q1label = UI.label({x=8, y=0, w=self.w-16, h=16, text=self.antivirus.security[1].question, desktop=self.desktop, resize=function (element)
+                resizeElement(element, 0)
+            end})
+            self.elements.q1 = UI.input({x=8, y=0, w=self.w-16, h=16, text=q1input, mc=50, desktop=self.desktop, resize=function (element)
+                resizeElement(element, 20)
+            end, func=function() WindowAntivirusData.q1input = self.elements.q1.text end})
+            self.elements.q2label = UI.label({x=8, y=0, w=self.w-16, h=16, text=self.antivirus.security[2].question, desktop=self.desktop, resize=function (element)
+                resizeElement(element, 40)
+            end})
+            self.elements.q2 = UI.input({x=8, y=0, w=self.w-16, h=16, text=q2input, mc=50, desktop=self.desktop, resize=function (element)
+                resizeElement(element, 60)
+            end, func=function() WindowAntivirusData.q2input = self.elements.q2.text end})
+            self.elements.submit = UI.button({x=8, y=0, w=self.w-16, h=16, text="submit", desktop=self.desktop, resize=function (element)
+                resizeElement(element, 80)
+            end, func=function()
+                if self.elements.q1.text == self.antivirus.security[1].answer and self.elements.q2.text == self.antivirus.security[2].answer then
+                    self.errorMessage = false
+                    WindowAntivirusData.securityAuthenticated = true
+                    self:changeScreen("main")
+                else
+                    self.errorMessage = "incorrect"
+                end
+            end})
+        end
     end
     self:sync()
 end

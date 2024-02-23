@@ -8,7 +8,7 @@ return {
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
     },
-    avalablePrograms = {"remotedesktop","inbox","zipcrash","antivirus","crypter"},
+    avalablePrograms = {"remotedesktop","inbox","zipcrash","antivirus"},
     desktop = {
         {
             name = "filemanager",
@@ -23,9 +23,9 @@ return {
         },
         {
             pos = {2,4},
-            name = "protection",
+            name = "todo",
             type = "text",
-            content = {{"todo:"},{"- encrypt all passwords\n- setup antivirus\n- don't use twitter","left"}}
+            content = {{"todo:"},{"- setup antivirus\n- don't use twitter","left"}}
         },
         {
             pos = {1,5},
@@ -34,27 +34,7 @@ return {
             target = "b:/programs/inbox",
         },
         {
-            pos = {1,7},
-            name = "utils",
-            type = "folder",
-            {
-                name = "crypter",
-                type = "shortcut",
-                target = "b:/programs/crypter",
-            },
-            {
-                name = "test",
-                type = "text",
-                content = "hello there",
-            },
-            {
-                name = "test encrypted",
-                type = "text",
-                content = "ifmmp!uifsf",
-            }
-        },
-        {
-            pos = {2,7},
+            pos = {9,7},
             name = "game (6)",
             type = "folder",
             {
@@ -71,8 +51,18 @@ return {
                 name = "level",
                 type = "text",
                 content = {
-                    {"function level.load()\n    local path = 'b:/bin/hidden/img'\n    local file = sys.getfile(path)\n    if file then\n        return file\n    end\nend","left"}
+                    {"function level.load()\n    local path = 'b:/bin/hidden'\n    local file = sys.getfile(path)\n    if file then\n        return file\n    end\nend","left"}
                 }
+            },
+            {
+                name = "movetest bug",
+                type = "text",
+                content = "i can't seem to get the rectangle to move, i've tried everything and it just won't budge, i'm so confused."
+            },
+            {
+                name = "to lexi",
+                type = "text",
+                content = {{"function love.load()\n    print('i love you mom!')\nend","left"}}
             }
         },
         {
@@ -90,6 +80,30 @@ return {
     },
     bin = {
         {
+            name = "diary",
+            type = "folder",
+            {
+                name = "17th feb",
+                type = "text",
+                content = "i'm so excited to start using this new computer, i've been saving up for so long and i finally have enough to buy one.\n\ni'm going to use it to start my own business, i'm so excited!\n\n- floral16"
+            },
+            {
+                name = "18th feb",
+                type = "text",
+                content = "i've been using the computer for a day now and i'm already in love with it, i'm doing art commissions and i wanna make games too, i'm so excited!!\n\n- floral16"
+            },
+            {
+                name = "25th feb",
+                type = "text",
+                content = "i just made a new wallpaper and i love it, it's teal too (my favourite color), i'm so happy with it.\n\n- floral16"
+            },
+            {
+                name = "3rd mar",
+                type = "text",
+                content = "who is ann0nymous112? they keep sending me weird emails, i don't know who they are but they seem to know me, i'm so confused.\n\n- floral16"
+            }
+        },
+        {
             name = "hidden",
             type = "folder",
             hidden = true,
@@ -102,9 +116,9 @@ return {
                 type = "folder",
             },
             {
-                name = "to loveuser",
+                name = "password temp",
                 type = "text",
-                content = "its happened to you too? user1 told me about what happened. he will never let you go you know, you'll always be his plaything. ann0nymous112 is a monster and you know it...\n\nyou can stop this, do what he says, burn my pc just do me 1 favour, when you run the virus do not open the remote desktop program, trust me\n\nmy antivirus username is 16floralflowers and my password is daisy987\n\n- floral16"
+                content = {{"switching accounts,"},{"old username: floral16\nold password: love111","left"},{"new username: 16floralflowers\nnew password: daisy987","left"}}
             }
         }
     },
@@ -113,6 +127,16 @@ return {
             username = "16floralflowers",
             password = "daisy987",
             enabled = true,
+            security = {
+                {
+                    question = "what is your mother's first name?",
+                    answer = "lexi"
+                },
+                {
+                    question = "what is your favourite color?",
+                    answer = "teal"
+                }
+            }
         }
     },
     emails = {},
