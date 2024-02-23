@@ -192,10 +192,6 @@ function Desktop:textinput(text)
 end
 
 function Desktop:keypressed(key, scancode, isrepeat)
-    if key == "f1" then
-        self:complete()
-        return
-    end
     if self.focus then
         self.focus:keypressed(key, scancode, isrepeat)
     end
