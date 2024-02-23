@@ -44,7 +44,7 @@ function FileButton:draw()
     if self.window == "startmenu" then
         name, icon = self.file, self.file
     else
-        name, icon = self.file.name, self.file.icon or self.file.type
+        name, icon = self.file.label or self.file.name, self.file.icon or self.file.type
     end
     love.graphics.setColor({1,1,1})
     if self.window == "desktop" then

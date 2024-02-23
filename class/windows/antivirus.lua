@@ -2,7 +2,9 @@ WindowAntivirus = Class("WindowAntivirus", Window)
 
 WindowAntivirusData = {
     userinput = "16floralflowers",
-    passwordinput = "daisy987"
+    passwordinput = "daisy987",
+    q1input = "lexi",
+    q2input = "teal",
 }
 
 function WindowAntivirus:initialize(desktop, x, y, w, h)
@@ -120,6 +122,11 @@ function WindowAntivirus:changeScreen(screen)
                 if WindowAntivirusData.securityAuthenticated then
                     self.antivirus.enabled = not self.antivirus.enabled
                     self.elements.enable.text = self.antivirus.enabled and "enabled" or "disabled"
+                    local window = self.desktop:windowExists("zipcrash")
+                    if window then
+                        window.accessable = not self.antivirus.enabled
+                        window:updateScreen()
+                    end
                 else
                     self:changeScreen("security")
                 end

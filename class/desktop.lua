@@ -38,6 +38,7 @@ function Desktop:initialize(config)
     self.emails = config.emails or {}
     self.banks = config.banks or {}
     self.antivirus = config.antivirus or {}
+    self.zipcrash = config.zipcrash or {}
 
     self.avalablePrograms = {
         filemanager = true,
@@ -308,6 +309,20 @@ function Desktop:openFile(file,window)
     end
 end
 
+function Desktop:forAllFiles(func,source,path)
+    local source = source or self.filesystem
+    local path = path or "b:/"
+    for _, file in ipairs(source) do
+        if file.type == "folder" then
+            -- recursive code, yuck
+            self:forAllFiles(func,file,path..file.name.."/")
+            func(file,path..file.name.."/")
+        else
+            func(file,path..file.name)
+        end
+    end
+end
+
 --
 
 function Desktop:windowExists(program)
@@ -561,6 +576,7 @@ function Desktop:complete()
     WindowInboxData = {}
     WindowBankData = {}
     WindowAntivirusData = {}
+    WindowZipcrashToolate = false
 
     local idx = TableContains(Desktops, DesktopName)
     DesktopName = Desktops[idx+1]

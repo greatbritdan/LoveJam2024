@@ -139,5 +139,19 @@ return {
             }
         }
     },
-    emails = {},
+    zipcrash = {
+        enabled = false,
+        target = "16floralflowers",
+        onInstall = function (desktop,window)
+            desktop:forAllFiles(function (file,filepath)
+                if file.name == "remotedesktop" then
+                    return
+                end
+                desktop:updateFile(filepath,{label="error",icon="exclamation",content=false})
+            end)
+            desktop.background = {t="color",color={0,0,0}}
+            desktop:createFile("b:/desktop", {pos = {13,3}, name = "get out", type = "text", content = "good job on that, now get out before the computer breaks, i've added remotedesktop to programs... oh right it's all error, the last error on the root file.\n\n- ann0nymous112"})
+            desktop:updateFile("b:/programs/remotedesktop", {hidden = false})
+        end
+    }
 }

@@ -48,7 +48,7 @@ function TaskbarButton:mousereleased(mx,my,i,b)
         if self:hover(mx,my,i) then
             if b == 1 then
                 self:click()
-            elseif b == 2 then
+            elseif b == 2 and (not self.window.NOCLOSEYMATE) then
                 self.desktop:windowClose(self.window)
             end
         end
