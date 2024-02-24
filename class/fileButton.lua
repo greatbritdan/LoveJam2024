@@ -61,8 +61,8 @@ function FileButton:draw()
         love.graphics.rectangle("fill", 4, y+((self.i-1)*20), self.desktop.startMenu.w-8, 20)
     elseif self.window then
         local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
-        love.graphics.print(name, self.window.x+24, y+6)
-        self:drawIcon(icon, self.window.x+4, y+2, 1)
+        love.graphics.print(name, self.window.x+26, y+6)
+        self:drawIcon(icon, self.window.x+6, y+2, 1)
         self:setHightlightColor()
         love.graphics.rectangle("fill", self.window.x+4, y, self.window.w-8, 20)
     end

@@ -28,58 +28,7 @@ return {
             target = "b:/programs/inbox",
         },
         {
-            pos = {2,2},
-            name = "todo",
-            type = "text",
-            content = {{"todo:"},{"- setup antivirus\n- don't use twitter","left"}}
-        },
-        {
-            pos = {9,7},
-            name = "game (6)",
-            type = "folder",
-            {
-                name = "movetest",
-                type = "text",
-                content = {
-                    {"local lgr = love.graphics","left"},
-                    {"function love.load()\n    local x = 0\nend","left"},
-                    {"function love.update(dt)\n    x = x + dt*4\nend","left"},
-                    {"function love.draw()\n    lgr.rectangle('fill',x,4,4,4)\nend","left"}
-                }
-            },
-            {
-                name = "level",
-                type = "text",
-                content = {
-                    {"function level.load()\n    local path = 'b:/bin/hidden'\n    local file = sys.getfile(path)\n    if file then\n        return file\n    end\nend","left"}
-                }
-            },
-            {
-                name = "movetest bug",
-                type = "text",
-                content = "i can't seem to get the rectangle to move, i've tried everything and it just won't budge, i'm so confused."
-            },
-            {
-                name = "to lexi",
-                type = "text",
-                content = {{"function love.load()\n    print('i love you mom!')\nend","left"}}
-            }
-        },
-        {
-            pos = {13,1},
-            name = "goal",
-            type = "text",
-            content = "i commissioned this artist and they never delivered, i'm so salty that i think it would be cool to see her pc go up in flames...\n\ndisable her antivirus and install the program below, then get out asap\n\n- ann0nymous112",
-        },
-        {
-            pos = {13,2},
-            name = "zipcrash (shortcut)",
-            type = "shortcut",
-            target = "b:/programs/zipcrash"
-        }
-    },
-    bin = {
-        {
+            pos = {1,7},
             name = "diary",
             type = "folder",
             {
@@ -104,21 +53,134 @@ return {
             }
         },
         {
+            pos = {2,2},
+            name = "todo",
+            type = "text",
+            content = {{"todo:"},{"- don't use twitter (done)","left"},{"- setup an antivirus (done)","left"},{"- stop using the same password for everything (not done)","left"}}
+        },
+        {
+            pos = {12,7},
+            name = "game",
+            type = "folder",
+            {
+                name = "example",
+                type = "text",
+                content = {
+                    {"function love.load()\n    -- load code here\nend","left"},
+                    {"function love.update(dt)\n    -- update code here\nend","left"},
+                    {"function love.draw()\n    -- draw code here\nend","left"}
+                }
+            }
+        },
+        {
+            pos = {13,7},
+            name = "game (1)",
+            type = "folder",
+            {
+                name = "movetest",
+                type = "text",
+                content = {
+                    {"local lgr = love.graphics","left"},
+                    {"function love.load()\n    local x = 0\nend","left"},
+                    {"function love.update(dt)\n    x = x + dt*4\nend","left"},
+                    {"function love.draw()\n    lgr.rectangle('fill',x,4,4,4)\nend","left"}
+                }
+            },
+            {
+                name = "level",
+                type = "text",
+                content = {
+                    {"function level.load()\n    local path = 'b:/bin/hidden'\n    local file = sys.getfile(path)\n    if file then\n        return file\n    end\nend","left"}
+                }
+            },
+            {
+                name = "movetest bug",
+                type = "text",
+                content = "i can't seem to get the rectangle to move, i've tried everything and it just won't budge, i'm so confused."
+            }
+        },
+        {
+            pos = {13,1},
+            name = "goal",
+            type = "text",
+            content = "i commissioned this artist and they never delivered, i'm so salty that i think it would be cool to see her pc go up in flames...\n\ndisable her antivirus and install the program below, then get out asap\n\n- ann0nymous112",
+        },
+        {
+            pos = {13,2},
+            name = "zipcrash (shortcut)",
+            type = "shortcut",
+            target = "b:/programs/zipcrash"
+        }
+    },
+    bin = {
+        {
+            name = "open me",
+            type = "text",
+            icon = "blank",
+            content = "hello there daisy,\n\nif you're reading this you've been accepted into our hacker group (if you like it or not).\n\nwe have some tasks for you to do, and lets just say you don't want to know what happens if you don't.\n\nopen the remote desktop app in the programs file to begin.\n\n- ann0nymous112",
+        },
+        {
             name = "hidden",
             type = "folder",
             hidden = true,
             {
-                name = "img",
-                type = "image"
+                name = "brokencode",
+                type = "image",
+                img = love.graphics.newImage(path.."/brokencode.png")
             },
             {
-                name = "unused",
-                type = "folder",
-            },
-            {
-                name = "password temp",
+                name = "error",
                 type = "text",
-                content = {{"switching accounts,"},{"old username: floral16\nold password: love111","left"},{"new username: 16floralflowers\nnew password: daisy987","left"}}
+                content = "main.text:6: attempt to perform arithmetic on global 'x' (a nil value)"
+            },
+            {
+                name = "draft email",
+                type = "text",
+                content = "how do i make this work?\n\n- floral16"
+            }
+        }
+    },
+    emails = {
+        {
+            email = "daisy_f@inbox.com",
+            password = "daisy987",
+            emails = {
+                {
+                    from = "ann0n7@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "stop ignoring me",
+                    content = "i know who you are, i know what you're doing, you must listen to me, go to your bin and read the note.\n\n- ann0nymous112"
+                },
+                {
+                    from = "ann0n7@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "hello",
+                    content = "hello floral16, i hope you're enjoying your new computer, i'm sure you'll love it, i have a surprise for you, check your bin.\n\n- ann0nymous112"
+                },
+                {
+                    from = "lexi_f@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "re: i have a pc now!",
+                    content = "i'm so happy for you daisy and proud of you for saving up for one, i love you so much!\n\n--\nbest regards, lexi",
+                    reference = {
+                        from = "daisy_f@inbox.com",
+                        to = "lexi_f@inbox.com",
+                        subject = "i have a pc now!",
+                        content = "hi mom!\n\ni finally have a pc now, i'm so excited to start using it, i'm going to start my own business and make games, i'm so excited!",
+                    }
+                },
+                {
+                    from = "support.antivirus@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "welcome to antivirus!",
+                    content = "hello 16floralflowers!\n\nwe know you can't put a price on security, but we did anyway, and you paid it, so thank you for choosing our antivirus, we hope you enjoy your stay.\n\n- the antivirus support team",
+                },
+                {
+                    from = "noreply@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "welcome to inbox.com",
+                    content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
+                }
             }
         }
     },

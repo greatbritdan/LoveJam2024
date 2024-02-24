@@ -87,7 +87,13 @@ return {
             name = "email",
             type = "text",
             content = {{"(incase of memory loss)"},{"the password is iloveboss22","left"}}
-        }
+        },
+        {
+            name = "todo",
+            type = "text",
+            icon = "blank",
+            content = "hi again user1,\n\nif you're reading this you've been accepted into our hacker group (if you like it or not).\n\nwe have some tasks for you to do, and just know you don't want to know what happens if you don't.\n\nopen the remote desktop app in the programs file to begin.\n\n- ann0nymous112",
+        },
     },
     emails = {
         {
