@@ -495,7 +495,7 @@ end
 function Desktop:validateEmail(vemail,vpass)
     for _,email in pairs(self.emails) do
         if email.email == vemail and email.password == vpass then
-            return true
+            return email
         end
     end
     return false

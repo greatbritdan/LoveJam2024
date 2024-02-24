@@ -51,37 +51,39 @@ function WindowInbox:draw()
         love.graphics.setScissor(self.x*Env.scale, (self.y+self.navbar.h+22)*Env.scale, self.w*Env.scale, (self.h-self.navbar.h-24)*Env.scale)
         local y = self.y+self.navbar.h+22+self.scroll
         for i, email in ipairs(self.emails) do
-            -- Draw email box
-            love.graphics.setColor(self.desktop:getColor("window","darkfill"))
-            love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
-            love.graphics.setColor(self.desktop:getColor("window","text"))
-            love.graphics.print(email.subject, self.x+6, y+4)
-            love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
-            
-            -- Print out email content
-            love.graphics.setColor(self.desktop:getColor("window","subtext"))
-            local content = ""
-            local splitn = Split(email.content,"\n")
-            local split = Split(splitn[1]," ")
-            for _,word in ipairs(split) do
-                if love.graphics.getFont():getWidth(content.." "..word) > self.w-16 then
-                    content = content.."..."
-                    break
+            if not email.hidden then
+                -- Draw email box
+                love.graphics.setColor(self.desktop:getColor("window","darkfill"))
+                love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
+                love.graphics.setColor(self.desktop:getColor("window","text"))
+                love.graphics.print(email.subject, self.x+6, y+4)
+                love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
+                
+                -- Print out email content
+                love.graphics.setColor(self.desktop:getColor("window","subtext"))
+                local content = ""
+                local splitn = Split(email.content,"\n")
+                local split = Split(splitn[1]," ")
+                for _,word in ipairs(split) do
+                    if love.graphics.getFont():getWidth(content.." "..word) > self.w-16 then
+                        content = content.."..."
+                        break
+                    end
+                    content = content.." "..word
                 end
-                content = content.." "..word
-            end
-            love.graphics.print(content, self.x+6, y+16)
+                love.graphics.print(content, self.x+6, y+16)
 
-            -- Highlight email
-            love.graphics.setColor(self.desktop:getColor("highlight","normal"))
-            if self.clickingEmail == i then
-                love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
-            elseif hover == i then
-                love.graphics.setColor(self.desktop:getColor("highlight","hover"))
-            end
-            love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
+                -- Highlight email
+                love.graphics.setColor(self.desktop:getColor("highlight","normal"))
+                if self.clickingEmail == i then
+                    love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
+                elseif hover == i then
+                    love.graphics.setColor(self.desktop:getColor("highlight","hover"))
+                end
+                love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
 
-            y = y + 34
+                y = y + 34
+            end
         end
         love.graphics.setScissor()
     elseif self.screen == "email" then
@@ -135,6 +137,9 @@ function WindowInbox:mousereleased(mx, my, b)
     if self.screen == "inbox" then
         local hover = self:hover()
         if hover and hover == self.clickingEmail then
+            if self.emails[hover].onOpen then
+                self.emails[hover].onOpen(self.desktop, self)
+            end
             self:changeScreen("email", hover)
             self.clickingEmail = false
             return true
@@ -193,12 +198,14 @@ function WindowInbox:changeScreen(screen,subscreen)
             resizeElement(element, 80)
         end, func=function()
             local validemail = self.desktop:validateEmail(self.elements.email.text, self.elements.password.text)
-            if validemail then
+            if validemail and (not validemail.deleted) then
                 self.email = self.elements.email.text
                 self.emails = self.desktop:getEmails(self.email)
                 WindowInboxData.authenticated = self.email
                 self.errorMessage = false
                 self:changeScreen("inbox")
+            elseif validemail and validemail.deleted then
+                self.errorMessage = "account deleted"
             else
                 self.errorMessage = "invalid email or password"
             end
@@ -228,7 +235,13 @@ function WindowInbox:updateScroll()
         self.scrollable = false
         return
     end
-    local height = (#self.emails*34) - 2
+    local count = 0
+    for _,email in pairs(self.emails) do
+        if not email.hidden then
+            count = count + 1
+        end
+    end
+    local height = (count*34) - 2
     self.scrollMax = -(height-(self.h-self.navbar.h-24))
     if self.scrollMax < 0 then
         self.scrollable = true
