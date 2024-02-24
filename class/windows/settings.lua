@@ -28,6 +28,7 @@ function WindowSettings:initialize(desktop, x, y, w, h)
         if released then
             element.sx = element:posFromValue(element.value)
             UpdateVolume()
+            SaveSettings()
         end
         element.startSX = element.sx-self.x
     end})
@@ -41,6 +42,7 @@ function WindowSettings:initialize(desktop, x, y, w, h)
     end, func=function (element)
         SETTINGS.theme = element:getValue()
         UpdateTheme(self.desktop)
+        SaveSettings()
     end})
 
     self:sync()

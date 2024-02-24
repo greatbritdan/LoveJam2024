@@ -11,6 +11,7 @@ function love.load()
     Env = require("env")
     Var = require("variables")
     Class = require("libs.middleclass")
+    JSON = require("libs.JSON")
     Screen = require("libs.BT_Screen")
     UI = require("libs.BT_UI")
 
@@ -57,6 +58,10 @@ function love.load()
     }
     NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
 
+    if love.filesystem.getInfo("savefile") then
+        local data = love.filesystem.read("savefile")
+        SETTINGS = JSON:decode(data)
+    end
     UpdateVolume()
     UpdateTheme()
 
@@ -80,21 +85,6 @@ function love.load()
     require("class.desktop")
 
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
-end
-
-function UpdateVolume()
-    local volume = SETTINGS.volume or 10
-    love.audio.setVolume(volume/10)
-    --NewEmailSound:stop()
-    --NewEmailSound:play()
-end
-
-function UpdateTheme(desktop)
-    local theme = SETTINGS.theme or "dark"
-    UI:setTheme(theme)
-    if desktop then
-        desktop.theme = theme
-    end
 end
 
 function love.update(dt)
@@ -150,6 +140,32 @@ end
 function love.resize(w, h)
     Env.width, Env.height = w/Env.scale, h/Env.scale
     Screen:resize()
+end
+
+--
+
+function LoadSettings()
+    if love.filesystem.getInfo("savefile") then
+        local data = love.filesystem.read("savefile")
+        SETTINGS = JSON:decode(data)
+    end
+end
+function SaveSettings()
+    love.filesystem.write("savefile", JSON:encode(SETTINGS))
+end
+
+function UpdateVolume()
+    local volume = SETTINGS.volume or 10
+    love.audio.setVolume(volume/10)
+    --NewEmailSound:stop()
+    --NewEmailSound:play()
+end
+function UpdateTheme(desktop)
+    local theme = SETTINGS.theme or "dark"
+    UI:setTheme(theme)
+    if desktop then
+        desktop.theme = theme
+    end
 end
 
 --
