@@ -1,5 +1,7 @@
 WindowCrypter = Class("WindowCrypter", Window)
 
+-- UNUSED
+
 function WindowCrypter:initialize(desktop, x, y, w, h)
     Window.initialize(self, desktop, x, y, 300, 200, "crypter", 300, 200)
     self.program = "crypter"

@@ -181,7 +181,11 @@ function ui:unpress(x,y,b)
         if self.t == "toggle" then
             self.item = ((self.item)%#self.items)+1
         end
-        self:func()
+        if self.t == "slider" then
+            self:func("released")
+        else
+            self:func()
+        end
     end
     if self.repeating then
         self.repeattimer = 0
@@ -203,7 +207,7 @@ function ui:scroll(x,y)
                 self.sy = self:posFromValue()
             end
             if self.value ~= oldval then
-                self:func()
+                self:func("released")
             end
             return true
         end

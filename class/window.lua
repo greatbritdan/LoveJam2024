@@ -294,6 +294,15 @@ function Window:sync()
             element.startX, element.startY = element.x, element.y
         end
         element.x, element.y = self.x+element.startX, self.y+self.navbar.h+element.startY
+
+        -- I hate sliders
+        if element.sx then
+            if not element.startSX then
+                element.startSX, element.startSY = element.sx, element.sy
+            end
+            element.sx, element.sy = self.x+element.startSX, self.y+self.navbar.h+element.startSY
+        end
+
         if element.resize then
             element:resize()
         end

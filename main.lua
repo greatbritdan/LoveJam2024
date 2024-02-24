@@ -77,6 +77,13 @@ function love.load()
     Screen:changeState("desktop", {"none", 0, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
 
+function UpdateVolume()
+    local volume = SETTINGS.volume or 10
+    love.audio.setVolume(volume/10)
+    --NewEmailSound:stop()
+    --NewEmailSound:play()
+end
+
 function love.update(dt)
     dt = math.min(0.01666667, dt)
     Screen:update(dt)
