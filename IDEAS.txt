@@ -1,0 +1,65 @@
+INTERFACE
+
+a point where two systems, subjects, organizations, etc. meet and interact.
+"the interface between accountancy and the law"
+
+a device or program enabling a user to communicate with a computer.
+"a graphical user interface"
+
+
+interact with (another system, person, etc.).
+"you will interface with counterparts from sister companies"
+
+connect with (another computer or piece of equipment) by an interface.
+"the hotel's computer system can interface automatically with the booking system"
+
+--
+
+Hacker's Delight:
+Genre: Puzzle/Strategy
+Description: Players take on the role of elite hackers navigating through a virtual world. The interface is a mix of command-line prompts,
+code snippets, and visually striking hacking tools. Players must solve puzzles, break into secure systems, and uncover a conspiracy using their interface skills.
+
+Pixel Puzzler:
+Genre: Puzzle
+Description: Navigate through a retro-inspired world where the interface itself is a puzzle. Players must manipulate buttons, levers,
+and switches to overcome obstacles and progress through levels. The challenge lies in understanding and manipulating the 2D interface elements strategically.
+
+Code Commander:
+Genre: Strategy/Real-Time Tactics
+Description: Lead a squad of 2D characters through a digital battlefield using a command-line interface. Write commands to control movements, attacks,
+and tactics. The challenge is to create efficient code to outsmart and defeat enemies.
+
+--
+
+You control a virtual desktop, using programs and the command line to hack into peoples accounts, emails, get theit passwords,
+as you progress through the game you unlock new tools to hack more efficiently. Could have some kind of currancy system, for example you could hack
+into peoples banks to take money, or get payed to hack spesific people, the money can be used to buy new tools or change skins.
+
+NEEDS:
+3 scenes: menu, desktop, shop?
+Multiple desktops
+Tools (code editor, decrypter)
+CLASSES:
+desktop, filesystem, file (image, text), programs (file expolrer, message, email, command line, banking)
+LIBS:
+windows, gui (button, scroll bar, input)
+UNEEDED FEATURES:
+call system, for password resets you can use their number to get a call giving a code.
+
+You control a big metal system with lots of buttons, sliders, switches.
+Above is a screen where an AI player is live and trying to beat the level, you must manipulate the devices to help them win.
+This could involve having a button to make you jump, or sliders controlling moving platforms and switches opening and closing doors.
+
+NEEDS:
+2 scenes: menu, device
+CLASSES:
+level, player, platform
+LIBS:
+gui (button, slider, switch)
+
+A zero player RPG where you help an AI player defeat bosses and explore the world using your command line.
+As time goes on you can learn new commands to help make fighting more streamlined and traversing the world easier.
+
+A platformer where you control the enviroment but not the player, you have to control moving platforms, turrets that shoot springs
+and other objects to move the player to the goal.
