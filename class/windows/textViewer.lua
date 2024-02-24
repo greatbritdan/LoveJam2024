@@ -18,15 +18,15 @@ function WindowTextViewer:draw()
     Window.draw(self)
 
     -- Draw title
-    love.graphics.setColor(self:getColor("subbackground"))
+    love.graphics.setColor(self.desktop:getColor("window","subfill"))
     love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 13)
-    love.graphics.setColor({0.5,0.5,0.5})
+    love.graphics.setColor(self.desktop:getColor("window","subtext"))
     love.graphics.printf(self.filename, self.x+4, self.y+self.navbar.h+3, self.w-8, "left")
 
     -- Print out content
     love.graphics.setScissor(self.x*Env.scale, (self.y+self.navbar.h+17)*Env.scale, self.w*Env.scale, (self.h-self.navbar.h-21)*Env.scale)
     if self.content then
-        love.graphics.setColor({1,1,1})
+        love.graphics.setColor(self.desktop:getColor("window","text"))
         local y = self.y+self.navbar.h+17+self.scroll
         local content = Deepcopy(self.content)
         if type(content) ~= "table" then
@@ -46,7 +46,7 @@ function WindowTextViewer:draw()
             y = y + 4
         end
     else
-        love.graphics.setColor({1,0.5,0.5})
+        love.graphics.setColor(self.desktop:getColor("window","error"))
         love.graphics.printf("error: no content provided, please open a valid text file.", self.x+4, self.y+self.navbar.h+17, self.w-8, "center")
     end
     love.graphics.setScissor()

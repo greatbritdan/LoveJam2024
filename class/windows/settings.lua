@@ -1,10 +1,5 @@
 WindowSettings = Class("WindowSettings", Window)
 
-SETTINGS = {
-    volume = 10,
-    theme = "dark"
-}
-
 function WindowSettings:initialize(desktop, x, y, w, h)
     Window.initialize(self, desktop, x, y, 150, 104, "settings", 150, 104, false, true, {fullscreen=false})
     self.program = "settings"
@@ -43,8 +38,9 @@ function WindowSettings:initialize(desktop, x, y, w, h)
     end})
     self.elements.theme = UI.toggle({x=8, y=8, w=self.w-16, h=16, is={"dark","light"}, i=theme, desktop=self.desktop, resize=function (element)
         resizeElement(element,60)
-    end, func=function (element, released)
+    end, func=function (element)
         SETTINGS.theme = element:getValue()
+        UpdateTheme(self.desktop)
     end})
 
     self:sync()
@@ -56,6 +52,7 @@ function WindowSettings:draw()
     -- Draw window
     Window.draw(self)
 
+    -- Update labels (too lazy to make an update function for this...)
     self.elements.volumelabel.text = "volume: "..self.elements.volume:getValue()
     self.elements.themelabel.text = "theme: "..self.elements.theme:getValue()
 

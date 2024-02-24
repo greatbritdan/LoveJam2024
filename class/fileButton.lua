@@ -31,11 +31,11 @@ end
 function FileButton:setHightlightColor()
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.clicking then
-        love.graphics.setColor(1,1,1,0.5)
+        love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
     elseif self:hover(mx, my) then
-        love.graphics.setColor(1,1,1,0.25)
+        love.graphics.setColor(self.desktop:getColor("highlight","hover"))
     else
-        love.graphics.setColor(1,1,1,0)
+        love.graphics.setColor(self.desktop:getColor("highlight","normal"))
     end
 end
 
@@ -46,20 +46,22 @@ function FileButton:draw()
     else
         name, icon = self.file.label or self.file.name, self.file.icon or self.file.type
     end
-    love.graphics.setColor({1,1,1})
     if self.window == "desktop" then
+        love.graphics.setColor(1,1,1)
         local x, y = 8+((self.x-1)*48), 8+((self.y-1)*48)
         love.graphics.printf(name, x-2, y+34, 36, "center")
         self:drawIcon(icon, x, y, 2)
         self:setHightlightColor()
         love.graphics.rectangle("fill", x, y, 32, 32)
     elseif self.window == "startmenu" then
+        love.graphics.setColor(self.desktop:getColor("window","text"))
         local y = self.desktop.h-self.desktop.taskbar.h-self.desktop.startMenu.h+4
         love.graphics.print(name, 26, y+((self.i-1)*20)+6)
         self:drawIcon(icon, 6, y+((self.i-1)*20)+2, 1)
         self:setHightlightColor()
         love.graphics.rectangle("fill", 4, y+((self.i-1)*20), self.desktop.startMenu.w-8, 20)
     elseif self.window then
+        love.graphics.setColor(self.desktop:getColor("window","text"))
         local y = self.window.y+self.window.navbar.h+24+((self.i-1)*20)+self.window.scroll
         love.graphics.print(name, self.window.x+26, y+6)
         self:drawIcon(icon, self.window.x+6, y+2, 1)
@@ -68,6 +70,7 @@ function FileButton:draw()
     end
 end
 function FileButton:drawIcon(icon,x,y,s)
+    love.graphics.setColor(1,1,1)
     love.graphics.draw(IconsImg, IconsQuads[icon], x, y, 0, s, s)
     if self.isShortcut then
         love.graphics.draw(IconsImg, IconsQuads["shortcut"], x, y, 0, s, s)

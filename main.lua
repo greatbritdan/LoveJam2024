@@ -6,6 +6,8 @@ function love.load()
 		error("You have an outdated version of Love! Get 0.11.4 or higher and retry.")
 	end
 
+    SETTINGS = { volume = 10, theme = "dark" }
+
     Env = require("env")
     Var = require("variables")
     Class = require("libs.middleclass")
@@ -55,6 +57,9 @@ function love.load()
     }
     NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
 
+    UpdateVolume()
+    UpdateTheme()
+
     DesktopName = "ann0nymous112"
     Desktops = {"loveuser","user1","floral16","ann0nymous112"}
 
@@ -82,6 +87,14 @@ function UpdateVolume()
     love.audio.setVolume(volume/10)
     --NewEmailSound:stop()
     --NewEmailSound:play()
+end
+
+function UpdateTheme(desktop)
+    local theme = SETTINGS.theme or "dark"
+    UI:setTheme(theme)
+    if desktop then
+        desktop.theme = theme
+    end
 end
 
 function love.update(dt)

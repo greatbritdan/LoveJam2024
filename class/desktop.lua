@@ -55,7 +55,7 @@ function Desktop:initialize(config)
 
     self:createDesktopIcons()
 
-    self.theme = config.theme or "dark"
+    self.theme = SETTINGS.theme or "dark"
     self.themes = Var.themes
 
     if config.openByDefault then
@@ -66,9 +66,9 @@ end
 
 function Desktop:getColor(name,subname)
     if subname then
-        return self.themes[self.theme]["taskbar"][name][subname]
+        return self.themes[self.theme][name][subname]
     end
-    return self.themes[self.theme]["taskbar"][name]
+    return self.themes[self.theme][name]
 end
 
 function Desktop:update(dt)
@@ -98,7 +98,7 @@ function Desktop:draw()
     for i = #self.windows, 1, -1 do
         local window = self.windows[i]
         if not window.minimized then
-            love.graphics.setColor(0,0,0,0.25)
+            love.graphics.setColor(self:getColor("window","shadow"))
             love.graphics.rectangle("fill", window.x+2, window.y+2, window.w, window.h)
         end
         window:draw()
@@ -106,18 +106,19 @@ function Desktop:draw()
 
     -- Draw start menu
     if self.startMenu.open then
-        love.graphics.setColor(self:getColor("background"))
+        love.graphics.setColor(self:getColor("taskbar","fill"))
         love.graphics.rectangle("fill", 0, self.h-self.taskbar.h-self.startMenu.h, self.startMenu.w, self.startMenu.h)
         for _,button in pairs(self.startMenu.buttons) do
             button:draw()
         end
-        love.graphics.setColor(self:getColor("text"))
+        love.graphics.setColor(1,1,1)
         love.graphics.draw(self.pfp, 4, self.h-self.taskbar.h-36)
+        love.graphics.setColor(self:getColor("taskbar","text"))
         love.graphics.print(self.name, 44, self.h-self.taskbar.h-24)
     end
 
     -- Draw task bar
-    love.graphics.setColor(self:getColor("background"))
+    love.graphics.setColor(self:getColor("taskbar","fill"))
     love.graphics.rectangle("fill", 0, self.h-self.taskbar.h, self.w, self.taskbar.h)
 
     -- Draw task bar buttons
@@ -126,7 +127,7 @@ function Desktop:draw()
     end
 
     -- Draw time
-    love.graphics.setColor(self:getColor("text"))
+    love.graphics.setColor(self:getColor("taskbar","text"))
     love.graphics.printf(os.date("%H:%M"), self.w-50, self.h-self.taskbar.h+2, 50, "center")
     love.graphics.printf(os.date("%x"), self.w-50, self.h-self.taskbar.h+11, 50, "center")
 end

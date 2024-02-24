@@ -40,7 +40,7 @@ function WindowFileManager:draw()
 
     -- Draw window
     Window.draw(self)
-    love.graphics.setColor(self:getColor("subbackground"))
+    love.graphics.setColor(self.desktop:getColor("window","subfill"))
     love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
     -- Draw icons

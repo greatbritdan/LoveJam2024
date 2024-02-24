@@ -21,15 +21,16 @@ function WindowZipcrash:draw()
     -- Draw window
     Window.draw(self)
 
-    love.graphics.setColor(1,0.5,0.5)
     if WindowZipcrashToolate then
+        love.graphics.setColor(self.desktop:getColor("window","error"))
         love.graphics.printf("installing zipcrash.torrent\nexiting the program is not allowed.\n\nenjoy...", self.x+4, self.y+self.navbar.h+3, self.w-8, "center")
     elseif self.accessable then
-        love.graphics.setColor(1,1,1)
+        love.graphics.setColor(self.desktop:getColor("window","text"))
         love.graphics.printf("welcome to zipcrash!", self.x+4, self.y+self.navbar.h+3, self.w-8, "center")
-        love.graphics.setColor(0.75,0.75,0.75)
+        love.graphics.setColor(self.desktop:getColor("window","subtext"))
         love.graphics.printf("this is a beta of zipcrash, an exciting new zipping tool for any pc, any spec!\n\nby pressing install you agree to our terms and conditions and no we will not be linking them, not like anyone reads them... to be fair i doubt your reading this, i could say 'pickle fart' and you wouldn't know. cool huh!\n\nanyway yeah press install.", self.x+4, self.y+self.navbar.h+23, self.w-8, "center")
     else
+        love.graphics.setColor(self.desktop:getColor("window","error"))
         love.graphics.printf("error: please disalbe antivirus to contine free instalation.", self.x+4, self.y+self.navbar.h+3, self.w-8, "center")
     end
 

@@ -29,14 +29,14 @@ function WindowBank:draw()
     if self.screen == "login" then
         -- Print out error message
         if self.errorMessage then
-            love.graphics.setColor(1,0.5,0.5)
+            love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
     else
-        love.graphics.setColor(self:getColor("subbackground"))
+        love.graphics.setColor(self.desktop:getColor("window","subfill"))
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
 
-        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.setColor(self.desktop:getColor("window","subtext"))
         if self.screen == "home" then
             love.graphics.printf(self.accname, self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
         elseif self.screen == "withdraw" then
@@ -45,14 +45,14 @@ function WindowBank:draw()
 
         -- Print out error message
         if self.errorMessage then
-            love.graphics.setColor(1,0.5,0.5)
+            love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         elseif self.successMessage then
-            love.graphics.setColor(0.5,1,0.5)
+            love.graphics.setColor(self.desktop:getColor("window","success"))
             love.graphics.printf(self.successMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
 
-        love.graphics.setColor(1,1,1)
+        love.graphics.setColor(self.desktop:getColor("window","subtext"))
         love.graphics.print("balance: £"..self.account.balance..".00", self.x+3, self.y+self.navbar.h+24)
     end
 

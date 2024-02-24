@@ -74,13 +74,6 @@ function Window:initialize(desktop, x, y, w, h, title, minW, minH, resizable, mo
     self.scrollable = false
 end
 
-function Window:getColor(name,subname)
-    if subname then
-        return self.desktop.themes[self.desktop.theme]["window"][name][subname]
-    end
-    return self.desktop.themes[self.desktop.theme]["window"][name]
-end
-
 function Window:update(dt)
     if self.minimized then return end
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
@@ -135,30 +128,31 @@ function Window:drawWindow()
     local hover = self:hovering(mx, my)
 
     -- Draw window
-    love.graphics.setColor(self:getColor("background"))
+    love.graphics.setColor(self.desktop:getColor("window","fill"))
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
 
-    love.graphics.setColor(self:getColor("navbar","background"))
+    -- Draw navbar
+    love.graphics.setColor(self.desktop:getColor("navbar","fill"))
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.navbar.h)
-    love.graphics.setColor({0.5,0.5,0.5})
+    love.graphics.setColor(self.desktop:getColor("navbar","subtext"))
     if self.desktop.focus == self then
-        love.graphics.setColor(self:getColor("navbar","text"))
+        love.graphics.setColor(self.desktop:getColor("navbar","text"))
     end
     love.graphics.print(self.title, self.x+3, self.y+3)
 
     -- Draw navbar buttons
     for i, button in pairs(self.navbar.buttons) do
         local x = self.x+self.w-(#self.navbar.buttons*self.navbar.h)+((i-1)*self.navbar.h)
-        love.graphics.setColor({1,1,1,0})
+        love.graphics.setColor(self.desktop:getColor("highlight","normal"))
         if hover and hover[1] == "navbarbutton" and hover[2] == button then
             if love.mouse.isDown(1) then
-                love.graphics.setColor({1,1,1,0.25})
+                love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
             else
-                love.graphics.setColor({1,1,1,0.5})
+                love.graphics.setColor(self.desktop:getColor("highlight","hover"))
             end
         end
         love.graphics.rectangle("fill", x, self.y, self.navbar.h, self.navbar.h)
-        love.graphics.setColor(self:getColor("navbar","buttons"))
+        love.graphics.setColor(self.desktop:getColor("navbar","buttons"))
         love.graphics.draw(WindowIconsImg, WindowIconsQuads[button.name], x, self.y, 0)
     end
 end

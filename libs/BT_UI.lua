@@ -76,17 +76,19 @@ function ui:initialize(t,data)
 
     self.desktop = data.desktop or false
     self.resize = data.resize or nil
+end
 
+function ui:setTheme(name)
+    local theme = Var.themes[name]
     self.style = {
         padding = 8,
         shape = { curve=0, point=1 },
         text = { scale=1 },
         color = {
-            void = {normal={0.2,0.2,0.2}, hover={0.2,0.2,0.2}, pressed={0.2,0.2,0.2}, inactive={0.2,0.2,0.2}},
-            back = {normal={0,0,0},    hover={.2,.2,.2}, pressed={.4,.4,.4}, inactive={0,0,0}},
-            line = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},
-            text = {normal={.6,.6,.6}, hover={.8,.8,.8}, pressed={1,1,1},    inactive={.2,.2,.2}},
-            white = {1,1,1},
+            void = theme.uivoid,
+            back = theme.uifill,
+            text = theme.uitext,
+            white = theme.ui.white,
         }
     }
 end

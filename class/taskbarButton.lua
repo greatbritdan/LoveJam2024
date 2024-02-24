@@ -10,22 +10,20 @@ function TaskbarButton:draw(i)
     -- Draw task bar button highlight
     local mx, my = love.mouse.getX()/Env.scale, love.mouse.getY()/Env.scale
     if self.clicking then
-        love.graphics.setColor(1,1,1,0.25)
+        love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
     elseif self:hover(mx,my,i) then
-        love.graphics.setColor(1,1,1,0.5)
+        love.graphics.setColor(self.desktop:getColor("highlight","hover"))
     else
-        love.graphics.setColor(1,1,1,0)
+        love.graphics.setColor(self.desktop:getColor("highlight","normal"))
     end
     love.graphics.rectangle("fill", ((i-1)*self.desktop.taskbar.h), self.desktop.h-self.desktop.taskbar.h, self.desktop.taskbar.h, self.desktop.taskbar.h)
 
+    -- Draw task bar button icon
+    love.graphics.setColor(1,1,1)
     if not self.window then
-        love.graphics.setColor(1,1,1)
         love.graphics.draw(IconsImg, IconsQuads["start"], ((i-1)*self.desktop.taskbar.h)+2, self.desktop.h-self.desktop.taskbar.h+2, 0)
         return
     end
-
-    -- Draw task bar button icon
-    love.graphics.setColor(1,1,1)
     love.graphics.draw(IconsImg, IconsQuads[self.window.icon], ((i-1)*self.desktop.taskbar.h)+2, self.desktop.h-self.desktop.taskbar.h+2, 0)
 
     -- Draw task bar button indicator

@@ -37,14 +37,13 @@ function WindowInbox:draw()
     if self.screen == "login" then
         -- Print out error message
         if self.errorMessage then
-            love.graphics.setColor(1,0.5,0.5)
+            love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
     elseif self.screen == "inbox" then
-        love.graphics.setColor(self:getColor("subbackground"))
+        love.graphics.setColor(self.desktop:getColor("window","subfill"))
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
-
-        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.setColor(self.desktop:getColor("window","subtext"))
         love.graphics.printf(self.email, self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
 
         -- I'm sorry...
@@ -52,12 +51,15 @@ function WindowInbox:draw()
         love.graphics.setScissor(self.x*Env.scale, (self.y+self.navbar.h+22)*Env.scale, self.w*Env.scale, (self.h-self.navbar.h-24)*Env.scale)
         local y = self.y+self.navbar.h+22+self.scroll
         for i, email in ipairs(self.emails) do
-            love.graphics.setColor(0,0,0)
+            -- Draw email box
+            love.graphics.setColor(self.desktop:getColor("window","darkfill"))
             love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
-            love.graphics.setColor(1,1,1)
+            love.graphics.setColor(self.desktop:getColor("window","text"))
             love.graphics.print(email.subject, self.x+6, y+4)
             love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
-            love.graphics.setColor(0.5,0.5,0.5)
+            
+            -- Print out email content
+            love.graphics.setColor(self.desktop:getColor("window","subtext"))
             local content = ""
             local splitn = Split(email.content,"\n")
             local split = Split(splitn[1]," ")
@@ -69,26 +71,29 @@ function WindowInbox:draw()
                 content = content.." "..word
             end
             love.graphics.print(content, self.x+6, y+16)
-            if hover == i or self.clickingEmail == i then
-                love.graphics.setColor(0.5,0.5,0.5,0.5)
-                if self.clickingEmail == i then
-                    love.graphics.setColor(0.5,0.5,0.5,0.25)
-                end
-                love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
+
+            -- Highlight email
+            love.graphics.setColor(self.desktop:getColor("highlight","normal"))
+            if self.clickingEmail == i then
+                love.graphics.setColor(self.desktop:getColor("highlight","pressed"))
+            elseif hover == i then
+                love.graphics.setColor(self.desktop:getColor("highlight","hover"))
             end
+            love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
+
             y = y + 34
         end
         love.graphics.setScissor()
     elseif self.screen == "email" then
         -- Print out email
         local email = self.emails[self.subscreen]
-        love.graphics.setColor(self:getColor("subbackground"))
+        love.graphics.setColor(self.desktop:getColor("window","subfill"))
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
-        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.setColor(self.desktop:getColor("window","subtext"))
         love.graphics.print(email.subject, self.x+24, self.y+self.navbar.h+6)
 
         -- Print out email content
-        love.graphics.setColor(1,1,1)
+        love.graphics.setColor(self.desktop:getColor("window","text"))
         love.graphics.print("from: "..email.from, self.x+3, self.y+self.navbar.h+24)
         love.graphics.print("to: "..email.to, self.x+3, self.y+self.navbar.h+34)
         love.graphics.printf(email.content, self.x+3, self.y+self.navbar.h+50, self.w-24, "left")
@@ -97,7 +102,7 @@ function WindowInbox:draw()
         -- Print out reference to email
         local refemail = email.reference
         if refemail then
-            love.graphics.setColor(self:getColor("subbackground"))
+            love.graphics.setColor(self.desktop:getColor("window","subtext"))
             love.graphics.rectangle("fill", self.x+2, self.y+self.navbar.h+height+58, self.w-20, 2)
             love.graphics.setColor(0.5,0.5,0.5)
             love.graphics.print(refemail.subject, self.x+3, self.y+self.navbar.h+height+62)
