@@ -281,12 +281,14 @@ function Desktop:openFile(file,window)
     if lookup then
         if file.type == "folder" and window and window.program == "filemanager" then
             window.elements.path.text = path
+            window:createIcons()
             return
         end
         local windowP = self:windowExists(lookup.program)
         if windowP then
             if file.type == "folder" then
                 windowP.elements.path.text = path
+                windowP:createIcons()
             else
                 for key, val in pairs(lookup.args) do
                     windowP[key] = val
