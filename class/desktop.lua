@@ -11,8 +11,7 @@ function Desktop:initialize(config)
         antivirus = WindowAntivirus,
         crypter = WindowCrypter,
         levelselect = WindowLevelSelect,
-        settings = WindowSettings,
-        exit = WindowExit
+        settings = WindowSettings
     }
 
     self.w, self.h = Env.width, Env.height
@@ -276,8 +275,7 @@ function Desktop:openFile(file,window)
         bank = {program="bank", window=WindowBank, args={file=file}},
         zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}},
         antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}},
-        crypter = {program="crypter", window=WindowCrypter, args={file=file}},
-        exit = {program="exit", window=WindowExit, args={file=file}}
+        crypter = {program="crypter", window=WindowCrypter, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -399,8 +397,7 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="antivirus",program="antivirus",window=WindowAntivirus},
         {name="crypter",program="crypter",window=WindowCrypter},
         {name="levelselect",program="levelselect",window=WindowLevelSelect,hidden=true},
-        {name="settings",program="settings",window=WindowSettings,hidden=true},
-        {name="exit",program="exit",window=WindowExit,hidden=true}
+        {name="settings",program="settings",window=WindowSettings,hidden=true}
     }
     self.filesystem[3] = {
         name = "programs",

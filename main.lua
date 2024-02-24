@@ -57,7 +57,7 @@ function love.load()
 
     DesktopName = "ann0nymous112"
     Desktops = {"loveuser","user1","floral16","ann0nymous112"}
-    
+
     require("class.window")
     require("class.windows.fileManager")
     require("class.windows.textViewer")
@@ -69,7 +69,6 @@ function love.load()
     --require("class.windows.crypter")
     require("class.windows.levelSelect")
     require("class.windows.settings")
-    require("class.windows.exit")
 
     require("class.fileButton")
     require("class.taskbarButton")

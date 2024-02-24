@@ -1,10 +1,10 @@
 WindowAntivirus = Class("WindowAntivirus", Window)
 
 WindowAntivirusData = {
-    userinput = "16floralflowers",
-    passwordinput = "daisy987",
-    q1input = "lexi",
-    q2input = "teal",
+    --userinput = "16floralflowers",
+    --passwordinput = "daisy987",
+    --q1input = "lexi",
+    --q2input = "teal",
 }
 
 function WindowAntivirus:initialize(desktop, x, y, w, h)

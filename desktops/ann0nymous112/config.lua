@@ -8,7 +8,7 @@ return {
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
     },
-    avalablePrograms = {"remotedesktop","exit"},
+    avalablePrograms = {"remotedesktop"},
     desktop = {
         {
             name = "victimfiles",
@@ -66,11 +66,8 @@ return {
             pos = {13,2},
             name = "you'rehere",
             type = "text",
-            content = "oh i see, your on my pc... you think you have some kind of control? well you don't.\n\ni'm going to make sure you never leave nowm you asked for this.\n\n- ann0nymous112",
-            hidden = true,
-            onOpen = function (desktop,window,file)
-                desktop:createFile("b:/desktop/", {pos = {7,4}, name = "exit", type = "shortcut", target = "b:/programs/exit"})
-            end
+            content = "oh i see, your on my pc... you think you have some kind of control? well you don't.\n\ni'm going to make sure you never leave now. enjoy trying to leave!!!\n\n- ann0nymous112",
+            hidden = true
         }
     },
     bin = {}
