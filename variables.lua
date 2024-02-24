@@ -7,7 +7,7 @@ return {
                 pressed = {1,1,1,0.1}
             },
             taskbar = {
-                fill = {0,0,0,0.5},
+                fill = {0,0,0,0.625},
                 text = {1,1,1}
             },
             navbar = {
@@ -55,7 +55,7 @@ return {
                 pressed = {0,0,0,0.1}
             },
             taskbar = {
-                fill = {1,1,1,0.5},
+                fill = {1,1,1,0.625},
                 text = {0,0,0}
             },
             navbar = {

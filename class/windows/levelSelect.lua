@@ -1,7 +1,7 @@
 WindowLevelSelect = Class("WindowLevelSelect", Window)
 
 function WindowLevelSelect:initialize(desktop, x, y, w, h)
-    Window.initialize(self, desktop, x, y, 300, 200, "level select", 300, 200)
+    Window.initialize(self, desktop, x, y, 250, 142, "level select", 250, 142, false, true, {fullscreen=false})
     self.program = "levelselect"
     self.icon = "levelselect"
 
@@ -9,9 +9,7 @@ function WindowLevelSelect:initialize(desktop, x, y, w, h)
     self.config = love.filesystem.load("desktops/"..self.level.."/config.lua")()
 
     self.elements = {}
-    self.elements.next = UI.button({x=self.w-18, y=2, w=16, h=self.h-self.navbar.h-4, text=">", desktop=desktop, resize=function()
-        self.elements.next.h = self.h-self.navbar.h-4
-    end, func=function()
+    self.elements.next = UI.button({x=self.w-18, y=2, w=16, h=self.h-self.navbar.h-4, text=">", desktop=desktop, func=function()
         local idx = TableContains(Desktops, self.level)
         if idx then
             if idx == #Desktops then
@@ -22,9 +20,7 @@ function WindowLevelSelect:initialize(desktop, x, y, w, h)
             self.config = love.filesystem.load("desktops/"..self.level.."/config.lua")()
         end
     end})
-    self.elements.prev = UI.button({x=2, y=2, w=16, h=self.h-self.navbar.h-4, text="<", desktop=desktop, resize=function()
-        self.elements.next.h = self.h-self.navbar.h-4
-    end, func=function()
+    self.elements.prev = UI.button({x=2, y=2, w=16, h=self.h-self.navbar.h-4, text="<", desktop=desktop, func=function()
         local idx = TableContains(Desktops, self.level)
         if idx then
             if idx == 1 then
@@ -35,10 +31,7 @@ function WindowLevelSelect:initialize(desktop, x, y, w, h)
             self.config = love.filesystem.load("desktops/"..self.level.."/config.lua")()
         end
     end})
-    self.elements.play = UI.button({x=22, y=self.h-34, w=self.w-44, h=16, text="play", desktop=desktop, resize=function()
-        self.elements.play.y = self.y+self.h-34
-        self.elements.play.w = self.w-44
-    end, func=function()
+    self.elements.play = UI.button({x=22, y=self.h-33, w=self.w-44, h=16, text="play", desktop=desktop, func=function()
         WindowInboxData = {}
         WindowBankData = {}
         WindowAntivirusData = {}
