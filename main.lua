@@ -24,7 +24,8 @@ function love.load()
     IconsImg = love.graphics.newImage("graphics/icons.png")
     IconsImgNames = {
         "exclamation","filemanager","text","folder","blank","shortcut","textviewer","desktop","bin","programs",
-        "start","image","imageviewer","remotedesktop","inbox","bank","zipcrash","antivirus","crypter","levelselect","settings","power"}
+        "start","image","imageviewer","remotedesktop","inbox","bank","zipcrash","antivirus","crypter","levelselect",
+        "settings","power","exit"}
     IconsQuads = {}
     for i = 1, IconsImg:getWidth()/16 do
         IconsQuads[IconsImgNames[i]] = love.graphics.newQuad((i-1)*16, 0, 16, 16, IconsImg:getWidth(), IconsImg:getHeight())
@@ -54,7 +55,7 @@ function love.load()
     }
     NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
 
-    DesktopName = "loveuser"
+    DesktopName = "ann0nymous112"
     Desktops = {"loveuser","user1","floral16","ann0nymous112"}
     
     require("class.window")
@@ -68,6 +69,7 @@ function love.load()
     --require("class.windows.crypter")
     require("class.windows.levelSelect")
     require("class.windows.settings")
+    require("class.windows.exit")
 
     require("class.fileButton")
     require("class.taskbarButton")
