@@ -95,6 +95,9 @@ function WindowFileManager:goBack()
 end
 
 function WindowFileManager:search()
+    if string.sub(self.elements.path.text, -1) ~= "/" then
+        self.elements.path.text = self.elements.path.text.."/"
+    end
     self:createIcons()
 end
 

@@ -8,7 +8,7 @@ return {
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
     },
-    avalablePrograms = {"remotedesktop","zipcrash","antivirus"},
+    avalablePrograms = {"remotedesktop","inbox","zipcrash","antivirus"},
     desktop = {
         {
             name = "filemanager",
@@ -16,13 +16,19 @@ return {
             target = "b:/programs/filemanager",
         },
         {
-            pos = {1,4},
+            pos = {1,2},
             name = "antivirus",
             type = "shortcut",
             target = "b:/programs/antivirus",
         },
         {
-            pos = {1,5},
+            pos = {1,3},
+            name = "inbox",
+            type = "shortcut",
+            target = "b:/programs/inbox",
+        },
+        {
+            pos = {2,2},
             name = "todo",
             type = "text",
             content = {{"todo:"},{"- setup antivirus\n- don't use twitter","left"}}
