@@ -46,7 +46,6 @@ local data = {
     openByDefault = "b:/desktop/goodbye"
 }
 
-WindowFactoryresetEnding = "no"
 if WindowFactoryresetEnding == "no" then
     data.emails = {
         {
