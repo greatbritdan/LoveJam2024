@@ -58,6 +58,7 @@ function love.load()
         love.audio.newSource("audio/key5.mp3","static")
     }
     NewEmailSound = love.audio.newSource("audio/newemail.mp3","static")
+    SendCashSound = love.audio.newSource("audio/sendcash.mp3","static")
 
     if love.filesystem.getInfo("savefile") then
         local data = love.filesystem.read("savefile")
@@ -167,6 +168,7 @@ function UpdateVolume()
         KeySounds[i]:setVolume(volume/10)
     end
     NewEmailSound:setVolume(volume/10)
+    SendCashSound:setVolume(volume/10)
 end
 function UpdateMusic()
     local music = SETTINGS.music or 2

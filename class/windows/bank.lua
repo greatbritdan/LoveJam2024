@@ -227,7 +227,7 @@ function WindowBank:changeScreen(screen,subscreen)
                 self.elements.ammount.text = ""
             end
         end})
-        self.elements.withdraw = UI.button({x=8, y=0, w=self.w-16, h=16, text="withdraw", desktop=self.desktop, resize=function (element)
+        self.elements.withdraw = UI.button({x=8, y=0, w=self.w-16, h=16, text="send", desktop=self.desktop, resize=function (element)
             resizeElement(element, 80)
         end, func=function (element)
             if self.elements.ammount.text == "" then
@@ -254,6 +254,8 @@ function WindowBank:changeScreen(screen,subscreen)
             self.account.balance = self.account.balance - tonumber(self.elements.ammount.text)
             bank.balance = bank.balance + tonumber(self.elements.ammount.text)
             self.successMessage = "money sent"
+            SendCashSound:stop()
+            SendCashSound:play()
             if self.account.onSend then
                 self.account.onSend(self.desktop,self.account,bank,tonumber(self.elements.ammount.text))
             end
