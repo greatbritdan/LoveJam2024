@@ -187,6 +187,12 @@ return {
             type = "text",
             content = "oh i see, your on my pc... you think you have some kind of control? well you don't.\n\ni'm going to make sure you never leave now. enjoy trying to leave!!!\n\n- ann0nymous112",
             hidden = true
+        },
+        {
+            name = "last pleed",
+            type = "text",
+            hidden = true,
+            content = "please don't do this!\n\ni know i've been a terrible person but i can change, i promise!\n\nthe truth is i'm very jealous of everyone, i just want to feel accomplished for once.\n\ni'm sorry for everything i've done, i'll do anything to make it right if you just press no.\n\n- ann0nymous112",
         }
     },
     bin = {

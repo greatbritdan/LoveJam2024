@@ -581,13 +581,18 @@ function Desktop:getAntivirus(avname)
     return false
 end
 
-function Desktop:complete()
+function Desktop:complete(slow)
     WindowInboxData = {}
     WindowBankData = {}
     WindowAntivirusData = {}
     WindowZipcrashToolate = false
 
+    local speed = 0.25
+    if slow then
+        speed = 2.5
+    end
+
     local idx = TableContains(Desktops, DesktopName)
     DesktopName = Desktops[idx+1]
-    Screen:changeState("desktop", {"fade", 0.25, {0,0,0}}, {"fade", 0.25, {0,0,0}})
+    Screen:changeState("desktop", {"fade", speed, {0,0,0}}, {"fade", 0.25, {0,0,0}})
 end
