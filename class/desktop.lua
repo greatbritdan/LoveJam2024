@@ -66,6 +66,8 @@ function Desktop:initialize(config)
         local file = self:getFile(config.openByDefault)
         self:openFile(file)
     end
+
+    Music:play()
 end
 
 function Desktop:getColor(name,subname)
@@ -78,6 +80,11 @@ end
 function Desktop:update(dt)
     for _, window in pairs(self.windows) do
         window:update(dt)
+    end
+
+    if not Music:isPlaying() then
+        Music:stop()
+        Music:play()
     end
 end
 

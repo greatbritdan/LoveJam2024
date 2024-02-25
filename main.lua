@@ -6,7 +6,7 @@ function love.load()
 		error("You have an outdated version of Love! Get 0.11.4 or higher and retry.")
 	end
 
-    SETTINGS = { volume = 10, theme = "dark" }
+    SETTINGS = { volume = 8, music = 2, theme = "dark" }
 
     Env = require("env")
     Var = require("variables")
@@ -43,7 +43,8 @@ function love.load()
 
     TitleImg = love.graphics.newImage("graphics/title.png")
 
-    FansSound = love.audio.newSource("audio/fans.mp3","static")
+    Music = love.audio.newSource("audio/music.mp3","stream")
+    --FansSound = love.audio.newSource("audio/fans.mp3","static")
     ClickSounds = {
         love.audio.newSource("audio/click1.mp3","static"),
         love.audio.newSource("audio/click2.mp3","static"),
@@ -63,6 +64,7 @@ function love.load()
         SETTINGS = JSON:decode(data)
     end
     UpdateVolume()
+    UpdateMusic()
     UpdateTheme()
 
     DesktopName = "loveuser"
@@ -157,10 +159,18 @@ function SaveSettings()
 end
 
 function UpdateVolume()
-    local volume = SETTINGS.volume or 10
-    love.audio.setVolume(volume/10)
-    --NewEmailSound:stop()
-    --NewEmailSound:play()
+    local volume = SETTINGS.volume or 8
+    for i = 1, #ClickSounds do
+        ClickSounds[i]:setVolume(volume/10)
+    end
+    for i = 1, #KeySounds do
+        KeySounds[i]:setVolume(volume/10)
+    end
+    NewEmailSound:setVolume(volume/10)
+end
+function UpdateMusic()
+    local music = SETTINGS.music or 2
+    Music:setVolume(music/10)
 end
 function UpdateTheme(desktop)
     local theme = SETTINGS.theme or "dark"
