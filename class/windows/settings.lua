@@ -25,11 +25,9 @@ function WindowSettings:initialize(desktop, x, y, w, h)
         resizeElement(element,20)
     end, func=function (element, released)
         SETTINGS.volume = element:getValue()
-        if released then
-            element.sx = element:posFromValue(element.value)
-            UpdateVolume()
-            SaveSettings()
-        end
+        element.sx = element:posFromValue(element.value)
+        UpdateVolume()
+        SaveSettings()
         element.startSX = element.sx-self.x
     end})
 
@@ -41,11 +39,9 @@ function WindowSettings:initialize(desktop, x, y, w, h)
         resizeElement(element,60)
     end, func=function (element, released)
         SETTINGS.music = element:getValue()
-        if released then
-            element.sx = element:posFromValue(element.value)
-            UpdateMusic()
-            SaveSettings()
-        end
+        element.sx = element:posFromValue(element.value)
+        UpdateMusic()
+        SaveSettings()
         element.startSX = element.sx-self.x
     end})
 
