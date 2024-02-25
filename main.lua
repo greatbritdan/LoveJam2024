@@ -83,7 +83,7 @@ function love.load()
     require("class.windows.levelSelect")
     require("class.windows.settings")
     require("class.windows.howtoplay")
-    require("class.windows.factoryReset")
+    require("class.windows.factoryreset")
 
     require("class.fileButton")
     require("class.taskbarButton")
