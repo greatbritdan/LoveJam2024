@@ -11,7 +11,8 @@ function Desktop:initialize(config)
         antivirus = WindowAntivirus,
         crypter = WindowCrypter,
         levelselect = WindowLevelSelect,
-        settings = WindowSettings
+        settings = WindowSettings,
+        howtoplay = WindowHowtoplay
     }
 
     self.w, self.h = Env.width, Env.height
@@ -22,12 +23,13 @@ function Desktop:initialize(config)
 
     self.focus = false
     self.startMenu = {
-        w = 182, h = 104,
+        w = 182, h = 124,
         open = false,
         buttons = {
             FileButton:new(self, "startmenu", 1, "levelselect"),
             FileButton:new(self, "startmenu", 2, "settings"),
-            FileButton:new(self, "startmenu", 3, "power")
+            FileButton:new(self, "startmenu", 3, "howtoplay"),
+            FileButton:new(self, "startmenu", 4, "power")
         }
     }
     self.taskbar = {
@@ -45,7 +47,8 @@ function Desktop:initialize(config)
         textviewer = true,
         imageviewer = true,
         levelselect = true,
-        settings = true
+        settings = true,
+        howtoplay = true
     }
     for _,program in pairs(config.avalablePrograms) do
         self.avalablePrograms[program] = true
@@ -276,7 +279,8 @@ function Desktop:openFile(file,window)
         bank = {program="bank", window=WindowBank, args={file=file}},
         zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}},
         antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}},
-        crypter = {program="crypter", window=WindowCrypter, args={file=file}}
+        crypter = {program="crypter", window=WindowCrypter, args={file=file}},
+        howtoplay = {program="howtoplay", window=WindowHowtoplay, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -388,17 +392,20 @@ function Desktop:populateFilesystem(desktop,bin)
 
     -- Add programs to filesystem
     local programs = {
+        {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
+        {name="levelselect",program="levelselect",window=WindowLevelSelect,hidden=true},
+        {name="settings",program="settings",window=WindowSettings,hidden=true},
+        {name="howtoplay",program="howtoplay",window=WindowHowtoplay,hidden=true},
+
         {name="filemanager",program="filemanager",window=WindowFileManager},
         {name="textviewer",program="textviewer",window=WindowTextViewer},
         {name="imageviewer",program="imageviewer",window=WindowImageViewer},
+        
         {name="inbox",program="inbox",window=WindowInbox},
         {name="bank",program="bank",window=WindowBank},
-        {name="remotedesktop",program="remotedesktop",window=WindowTextViewer,hidden=true},
         {name="zipcrash",program="zipcrash",window=WindowZipcrash},
         {name="antivirus",program="antivirus",window=WindowAntivirus},
-        {name="crypter",program="crypter",window=WindowCrypter},
-        {name="levelselect",program="levelselect",window=WindowLevelSelect,hidden=true},
-        {name="settings",program="settings",window=WindowSettings,hidden=true}
+        {name="crypter",program="crypter",window=WindowCrypter}
     }
     self.filesystem[3] = {
         name = "programs",

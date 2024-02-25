@@ -123,18 +123,13 @@ function FileButton:click()
     if self.window == "desktop" then
         self.desktop:openFile(self.file)
     elseif self.window == "startmenu" then
-        if self.file == "levelselect" then
-            local file = self.desktop:getFile("b:/programs/levelselect")
-            if file then
-                self.desktop:openFile(file)
-            end
-        elseif self.file == "settings" then
-            local file = self.desktop:getFile("b:/programs/settings")
-            if file then
-                self.desktop:openFile(file)
-            end
-        elseif self.file == "power" then
+        if self.file == "power" then
             love.event.quit()
+        else
+            local file = self.desktop:getFile("b:/programs/"..self.file)
+            if file then
+                self.desktop:openFile(file)
+            end
         end
     elseif self.window then
         self.desktop:openFile(self.file, self.window)

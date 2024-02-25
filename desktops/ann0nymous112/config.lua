@@ -205,4 +205,5 @@ return {
             }
         }
     },
+    openByDefault = "b:/programs/howtoplay"
 }
