@@ -6,7 +6,7 @@ WindowInboxData = {
 }
 
 function WindowInbox:initialize(desktop, x, y, w, h)
-    Window.initialize(self, desktop, x, y, 300, 200, "inbox", 300, 200)
+    Window.initialize(self, desktop, x, y, 300, 200, "inbox.com", 300, 200)
     self.program = "inbox"
     self.icon = "inbox"
     
