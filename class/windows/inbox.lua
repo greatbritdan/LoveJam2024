@@ -5,10 +5,11 @@ WindowInboxData = {
     --passwordinput = "iloveboss22",
 }
 
-function WindowInbox:initialize(desktop, x, y, w, h)
+function WindowInbox:initialize(desktop, x, y, w, h, args)
     Window.initialize(self, desktop, x, y, 300, 200, "inbox.com", 300, 200)
     self.program = "inbox"
     self.icon = "inbox"
+    self.args = args
     
     self.email = false
     self.emails = {}
@@ -57,7 +58,7 @@ function WindowInbox:draw()
                 love.graphics.rectangle("fill", self.x+2, y, self.w-4, 32)
                 love.graphics.setColor(self.desktop:getColor("window","text"))
                 love.graphics.print(email.subject, self.x+6, y+4)
-                love.graphics.print(email.from, self.x+self.w-22-Font:getWidth(email.from), y+4)
+                love.graphics.print(email.from, self.x+self.w-6-Font:getWidth(email.from), y+4)
                 
                 -- Print out email content
                 love.graphics.setColor(self.desktop:getColor("window","subtext"))
@@ -182,7 +183,13 @@ function WindowInbox:changeScreen(screen,subscreen)
     if self.screen == "login" then
         self.scroll = 0
         local emailinput = WindowInboxData.emailinput or ""
+        if emailinput == "" and self.args.file.email then
+            emailinput = self.args.file.email
+        end
         local passwordinput = WindowInboxData.passwordinput or ""
+        if passwordinput == "" and self.args.file.password then
+            passwordinput = self.args.file.password
+        end
 
         self.elements.emaillabel = UI.label({x=8, y=0, w=self.w-16, h=16, text="email:", desktop=self.desktop, resize=function (element)
             resizeElement(element, 0)

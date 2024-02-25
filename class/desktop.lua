@@ -231,6 +231,8 @@ function Desktop:getFileFromShortcut(file)
         -- this is ugly, but it's a jam game
         target.target = file.target
         target.pos = file.pos
+        target.email = file.email
+        target.password = file.password
         return target
     end
     return false
@@ -255,7 +257,7 @@ function Desktop:openFile(file,window)
             windowP.minimized = false
             return
         end
-        table.insert(self.windows, self.programWindows[file.program]:new(self,nil,nil,nil,nil))
+        table.insert(self.windows, self.programWindows[file.program]:new(self,nil,nil,nil,nil,{file=file}))
         table.insert(self.taskbar.buttons, TaskbarButton:new(self, self.windows[#self.windows]))
         self.focus = self.windows[#self.windows]
         self:windowBringToFront(self.windows[#self.windows])

@@ -13,7 +13,7 @@ return {
         {
             name = "welcome",
             type = "text",
-            content = "welcome to backwindow!\n\nclick the icon below this file to open the file manager.\n\nhave fun, oh and don't open the bin, nothing is there.\n\n- britdan"
+            content = "welcome to back-window!\n\nclick the icon below this file to open the file manager.\n\nhave fun, oh and don't open the bin, nothing is there..."
         },
         {
             name = "filemanager",

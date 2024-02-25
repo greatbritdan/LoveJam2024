@@ -65,7 +65,7 @@ function love.load()
     UpdateVolume()
     UpdateTheme()
 
-    DesktopName = "ann0nymous112"
+    DesktopName = "loveuser2"
     Desktops = {"loveuser","user1","floral16","ann0nymous112","loveuser2"}
 
     require("class.window")

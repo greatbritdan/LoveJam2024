@@ -1,7 +1,9 @@
 WindowFactoryreset = Class("WindowFactoryreset", Window)
 
+WindowFactoryresetEnding = nil
+
 function WindowFactoryreset:initialize(desktop, x, y, w, h)
-    Window.initialize(self, desktop, x, y, 300, 200, "factory reset", 300, 200, false, true, {fullscreen=false})
+    Window.initialize(self, desktop, x, y, 200, 150, "factory reset", 200, 150, false, true, {fullscreen=false})
     self.program = "factoryreset"
     self.icon = "factoryreset"
 
@@ -39,13 +41,13 @@ function WindowFactoryreset:draw()
             local i = 0
             if antivirus.enabled then
                 i = i + 1
-                love.graphics.printf(i..". you must disable your antivirus", self.x+8, self.y+self.navbar.h+24+((i-1)*12), self.w-16, "center")
+                love.graphics.printf(i..". you must disable your antivirus", self.x+8, self.y+self.navbar.h+24+((i-1)*24), self.w-16, "center")
             end
             if not bank.closed then
                 i = i + 1
-                love.graphics.printf(i..". you must close your bank account", self.x+8, self.y+self.navbar.h+24+((i-1)*12), self.w-16, "center")
+                love.graphics.printf(i..". you must close your bank account", self.x+8, self.y+self.navbar.h+24+((i-1)*24), self.w-16, "center")
             end
-            self.elements.reset.active = true
+            self.elements.reset.active = false
         else
             love.graphics.setColor(self.desktop:getColor("window","success"))
             love.graphics.printf("no missing requirements:", self.x+8, self.y+self.navbar.h+4, self.w-16, "center")
@@ -61,6 +63,7 @@ function WindowFactoryreset:updateScreen()
     self.elements = {}
 
     if self.choice then
+        WindowFactoryresetEnding = self.choice
         self.desktop:complete(true)
     elseif self.areYouSure then
         self.elements.yes = UI.button({x=4, y=self.h-20, w=self.w/2-6, h=16, text="yes", func=function()

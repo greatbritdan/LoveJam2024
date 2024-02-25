@@ -57,7 +57,12 @@ function WindowLevelSelect:draw()
 
     -- Draw profile picture and name
     love.graphics.draw(self.config.pfp, x+4, y+4)
-    love.graphics.print(self.config.name, x+44, y+16)
+    if self.config.subname then
+        love.graphics.print(self.config.name, x+44, y+10)
+        love.graphics.print(self.config.subname, x+44, y+22)
+    else
+        love.graphics.print(self.config.name, x+44, y+16)
+    end
 
     -- Draw UI
     Window.drawUI(self)
