@@ -31,6 +31,9 @@ function WindowBank:draw()
         if self.errorMessage then
             love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
+        elseif self.successMessage then
+            love.graphics.setColor(self.desktop:getColor("window","success"))
+            love.graphics.printf(self.successMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
         end
     else
         love.graphics.setColor(self.desktop:getColor("window","subfill"))
@@ -148,6 +151,9 @@ function WindowBank:changeScreen(screen,subscreen)
             end
         end})
         self.elements.forgot.active = false
+        if self.elements.accname.text ~= "" then
+            self.elements.forgot.active = true
+        end
     elseif self.screen == "home" then
         local function resizeElement(element, offsetY)
             local sy = ((self.h-self.navbar.h-30)/2)+self.navbar.h
@@ -178,7 +184,9 @@ function WindowBank:changeScreen(screen,subscreen)
             resizeElement(element, 40)
         end, func=function (element)
             if self.account.balance == 0 then
-                
+                self.account.closed = true
+                self.successMessage = "account closed!"
+                self:changeScreen("login")
             else
                 self.errorMessage = "you can't close an account with a balance"
             end
@@ -192,6 +200,7 @@ function WindowBank:changeScreen(screen,subscreen)
             element.x = self.x+2
         end, func=function()
             self.errorMessage = false
+            self.successMessage = false
             self:changeScreen("home")
         end})
 

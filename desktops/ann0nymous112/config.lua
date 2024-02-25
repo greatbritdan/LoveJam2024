@@ -76,7 +76,7 @@ return {
                 }
             },
             {
-                name = "factoryreset",
+                name = "zipcrash source",
                 type = "text",
                 icon = "blank"
             },
@@ -127,7 +127,8 @@ return {
                         {"inbox.com data report: ann0n7@inbox.com"},
                         {"pc name: ann0nymous112","left"},
                         {"password: ********","left"},
-                        {"bank accounts: (0 found)","left"}
+                        {"bank accounts: (1 found)","left"},
+                        {"- ann0n7: £26730","left"}
                     }
                 }
             },
@@ -220,7 +221,20 @@ return {
                         from = "ann0n7@inbox.com",
                         to = "support.antivirus@inbox.com",
                         subject = "antivirus issue",
-                        content = "i have a problem with my antivirus, i can't log in.\n\npassword is nopass837, fix asap."
+                        content = "i have a problem with my antivirus, i can't log in.\n\npassword is nopass837, fix asap.\n\n- ann0nymous112"
+                    }
+                },
+                {
+                    from = "unknown",
+                    to = "loveuser@inbox.com",
+                    subject = "re: bank funds",
+                    content = "fyi",
+                    hidden = true,
+                    reference = {
+                        from = "ann0n7@inbox.com",
+                        to = "ann0n12",
+                        subject = "bank funds",
+                        content = "he just sent me the money straight to my account (ann0n7), no questions asked lol.\n\nthat's the one with password cashin77.\n\n- ann0nymous112"
                     }
                 },
                 {
@@ -269,10 +283,16 @@ return {
     banks = {
         {
             name = "ann0n7",
-            password = "",
+            password = "cashin77",
             closed = false,
             canClose = true,
             balance = 26730
+        },
+        {
+            name = "inboxdonate",
+            password = "fkefkjkfwksfoofwokf",
+            closed = false,
+            balance = 0
         }
     }
 }

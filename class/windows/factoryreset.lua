@@ -29,11 +29,11 @@ function WindowFactoryreset:draw()
         local i = 0
         if antivirus.enabled then
             i = i + 1
-            love.graphics.printf(i..". you must disable your antivirus", self.x+8, self.y+self.navbar.h+24+(i-1), self.w-16, "center")
+            love.graphics.printf(i..". you must disable your antivirus", self.x+8, self.y+self.navbar.h+24+((i-1)*12), self.w-16, "center")
         end
         if not bank.closed then
             i = i + 1
-            love.graphics.printf(i..". you must close your bank account", self.x+8, self.y+self.navbar.h+24+(i-1), self.w-16, "center")
+            love.graphics.printf(i..". you must close your bank account", self.x+8, self.y+self.navbar.h+24+((i-1)*12), self.w-16, "center")
         end
         self.elements.reset.active = false
     else
