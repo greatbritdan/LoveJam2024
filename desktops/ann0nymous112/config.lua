@@ -8,7 +8,7 @@ return {
     background = {
         t = "image", img = love.graphics.newImage(path.."/background.png")
     },
-    avalablePrograms = {"remotedesktop","inbox","bank","antivirus"},
+    avalablePrograms = {"remotedesktop","inbox","bank","antivirus","factoryreset"},
     desktop = {
         {
             pos = {1,1},
@@ -119,6 +119,16 @@ return {
                         {"password: lovewhale11","left"},
                         {"bank accounts: (0 found)","left"}
                     }
+                },
+                {
+                    name = "ann0nymous112",
+                    type = "text",
+                    content = {
+                        {"inbox.com data report: ann0n7@inbox.com"},
+                        {"pc name: ann0nymous112","left"},
+                        {"password: ********","left"},
+                        {"bank accounts: (0 found)","left"}
+                    }
                 }
             },
             {
@@ -128,6 +138,16 @@ return {
             {
                 name = "antivirus",
                 type = "folder",
+                {
+                    name = "ann0nymous112",
+                    type = "text",
+                    content = {
+                        {"antivirus data report: ann0n112"},
+                        {"username: ann0n112","left"},
+                        {"password: ********","left"},
+                        {"status: self","left"}
+                    }
+                }
             }
         },
         {
@@ -149,6 +169,12 @@ return {
             target = "b:/programs/antivirus"
         },
         {
+            pos = {7,4},
+            name = "factoryreset",
+            type = "shortcut",
+            target = "b:/programs/factoryreset"
+        },
+        {
             pos = {13,1},
             name = "goal",
             type = "text",
@@ -162,7 +188,13 @@ return {
             hidden = true
         }
     },
-    bin = {},
+    bin = {
+        {
+            name = "stupid security questions",
+            type = "text",
+            content = "question 2: stupid1\nquestion 3: stupid2",
+        }
+    },
     emails = {
         {
             email = "user1@inbox.com",
@@ -181,17 +213,6 @@ return {
                 {
                     from = "unknown",
                     to = "loveuser@inbox.com",
-                    subject = "one last hope",
-                    content = "you don't know who i am, but you need to trust me when i say i brought you here, ann0nymous112 has been ruining peoples lives for too long, i need you to help me stop him. all you need to do is find the factory reset button. the emails i just should be of help.\n\ngood luck\n\n- unknown",
-                    onOpen = function(desktop,window)
-                        for _,email in pairs(window.emails) do
-                            email.hidden = false
-                        end
-                    end
-                },
-                {
-                    from = "unknown",
-                    to = "loveuser@inbox.com",
                     subject = "re: antivirus issue",
                     content = "fyi",
                     hidden = true,
@@ -199,11 +220,59 @@ return {
                         from = "ann0n7@inbox.com",
                         to = "support.antivirus@inbox.com",
                         subject = "antivirus issue",
-                        content = "i have a problem with my antivirus, i can't log in.\n\nusername is ann0n112, fix asap."
+                        content = "i have a problem with my antivirus, i can't log in.\n\npassword is nopass837, fix asap."
                     }
+                },
+                {
+                    from = "unknown",
+                    to = "loveuser@inbox.com",
+                    subject = "one last hope",
+                    content = "you don't know who i am, but you need to trust me when i say i brought you here, ann0nymous112 has been ruining peoples lives for too long, i need you to help me stop him. all you need to do is find the factory reset button. the emails i just sent should be of help.\n\ngood luck\n\n- unknown",
+                    onOpen = function(desktop,window)
+                        for _,email in pairs(window.emails) do
+                            email.hidden = false
+                        end
+                    end
+                },
+                {
+                    from = "noreply@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "donate to inbox.com today!",
+                    content = "inbox.com is a free service, but we need your help to keep it that way, please donate today to keep communication free.\n\naccount name: inboxdonate\n\n- the inbox.com team",
+                },
+                {
+                    from = "noreply@inbox.com",
+                    to = "daisy_f@inbox.com",
+                    subject = "welcome to inbox.com",
+                    content = "welcome to inbox.com, the best email service in the world, we hope you enjoy your stay.\n\n- the inbox.com team",
                 }
             }
         }
     },
-    openByDefault = "b:/programs/howtoplay"
+    antivirus = {
+        {
+            username = "ann0n112",
+            password = "nopass837",
+            enabled = true,
+            security = {
+                {
+                    question = "password 2",
+                    answer = "stupid1"
+                },
+                {
+                    question = "password 3",
+                    answer = "stupid2"
+                }
+            }
+        }
+    },
+    banks = {
+        {
+            name = "ann0n7",
+            password = "",
+            closed = false,
+            canClose = true,
+            balance = 26730
+        }
+    }
 }

@@ -38,14 +38,15 @@ function WindowAntivirus:draw()
     else
         love.graphics.setColor(self.desktop:getColor("window","subfill"))
         love.graphics.rectangle("fill", self.x, self.y+self.navbar.h, self.w, 20)
-        love.graphics.setColor(self.desktop:getColor("window","error"))
         if self.antivirus.enabled then
             love.graphics.setColor(self.desktop:getColor("window","success"))
             love.graphics.printf("protection: on", self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
         else
+            love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf("protection: off", self.x+3, self.y+self.navbar.h+6, (self.w/2)-6, "center")
         end
         if self.screen == "security" then
+            love.graphics.setColor(self.desktop:getColor("window","error"))
             love.graphics.printf("unusual activity detected, answer these security questions to access account:", self.x+3, self.y+self.navbar.h+23, self.w-6, "center")
         end
     end

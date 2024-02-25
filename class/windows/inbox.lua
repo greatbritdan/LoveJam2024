@@ -155,11 +155,13 @@ function WindowInbox:hover()
         return
     end
     y = y + self.scroll
-    for i,_ in ipairs(self.emails) do
-        if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+2, y, self.w-4, 32) then
-            return i
+    for i,email in ipairs(self.emails) do
+        if not email.hidden then
+            if AABB(mx, my, 1/Env.scale, 1/Env.scale, self.x+2, y, self.w-4, 32) then
+                return i
+            end
+            y = y + 34
         end
-        y = y + 34
     end
     return false
 end

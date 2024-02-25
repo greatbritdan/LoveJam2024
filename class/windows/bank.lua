@@ -46,10 +46,10 @@ function WindowBank:draw()
         -- Print out error message
         if self.errorMessage then
             love.graphics.setColor(self.desktop:getColor("window","error"))
-            love.graphics.printf(self.errorMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
+            love.graphics.printf(self.errorMessage, self.x+3, self.y+self.h-13, self.w-6, "center")
         elseif self.successMessage then
             love.graphics.setColor(self.desktop:getColor("window","success"))
-            love.graphics.printf(self.successMessage, self.x+3, self.y+self.navbar.h+3, self.w-6, "center")
+            love.graphics.printf(self.successMessage, self.x+3, self.y+self.h-13, self.w-6, "center")
         end
 
         love.graphics.setColor(self.desktop:getColor("window","subtext"))
@@ -137,8 +137,12 @@ function WindowBank:changeScreen(screen,subscreen)
             local bankn = self.elements.accname.text
             local bank = self.desktop:getBank(bankn)
             if bank and (not bank.closed) then
-                self.errorMessage = "email with recovery code sent"
-                self.desktop:sendEmail(bank.email, "bank@inbox.com", "bank password recovery", "your recovery code is: "..bank.password,bank.identifier)
+                if bank.email then
+                    self.errorMessage = "email with recovery code sent"
+                    self.desktop:sendEmail(bank.email, "bank@inbox.com", "bank password recovery", "your recovery code is: "..bank.password,bank.identifier)
+                else
+                    self.errorMessage = "no email associated with this account"
+                end
             else
                 self.errorMessage = "this account is now closed"
             end
@@ -146,7 +150,7 @@ function WindowBank:changeScreen(screen,subscreen)
         self.elements.forgot.active = false
     elseif self.screen == "home" then
         local function resizeElement(element, offsetY)
-            local sy = ((self.h-self.navbar.h-20)/2)+self.navbar.h
+            local sy = ((self.h-self.navbar.h-30)/2)+self.navbar.h
             element.y = self.y+sy+offsetY
             element.w = self.w-16
         end
@@ -163,15 +167,31 @@ function WindowBank:changeScreen(screen,subscreen)
             resizeElement(element, 0)
         end})
         self.elements.deposit.active = false
+
         self.elements.withdraw = UI.button({x=8, y=0, w=self.w-16, h=16, text="send money", desktop=self.desktop, resize=function (element)
             resizeElement(element, 20)
         end, func=function (element)
             self:changeScreen("withdraw")
         end})
+
+        self.elements.close = UI.button({x=8, y=0, w=self.w-16, h=16, text="close account", desktop=self.desktop, resize=function (element)
+            resizeElement(element, 40)
+        end, func=function (element)
+            if self.account.balance == 0 then
+                
+            else
+                self.errorMessage = "you can't close an account with a balance"
+            end
+        end})
+        self.elements.close.active = false
+        if self.account and self.account.canClose then
+            self.elements.close.active = true
+        end
     elseif self.screen == "withdraw" then
         self.elements.back = UI.button({x=2, y=2, w=16, h=16, text="<", desktop=self.desktop, resize=function (element)
             element.x = self.x+2
         end, func=function()
+            self.errorMessage = false
             self:changeScreen("home")
         end})
 

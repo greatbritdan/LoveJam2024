@@ -12,7 +12,8 @@ function Desktop:initialize(config)
         crypter = WindowCrypter,
         levelselect = WindowLevelSelect,
         settings = WindowSettings,
-        howtoplay = WindowHowtoplay
+        howtoplay = WindowHowtoplay,
+        factoryreset = WindowFactoryreset
     }
 
     self.w, self.h = Env.width, Env.height
@@ -280,7 +281,8 @@ function Desktop:openFile(file,window)
         zipcrash = {program="zipcrash", window=WindowZipcrash, args={file=file}},
         antivirus = {program="antivirus", window=WindowAntivirus, args={file=file}},
         crypter = {program="crypter", window=WindowCrypter, args={file=file}},
-        howtoplay = {program="howtoplay", window=WindowHowtoplay, args={file=file}}
+        howtoplay = {program="howtoplay", window=WindowHowtoplay, args={file=file}},
+        factoryreset = {program="factoryreset", window=WindowFactoryreset, args={file=file}}
     }
     local lookup = lookups[file.type]
     if lookup then
@@ -405,7 +407,8 @@ function Desktop:populateFilesystem(desktop,bin)
         {name="bank",program="bank",window=WindowBank},
         {name="zipcrash",program="zipcrash",window=WindowZipcrash},
         {name="antivirus",program="antivirus",window=WindowAntivirus},
-        {name="crypter",program="crypter",window=WindowCrypter}
+        {name="crypter",program="crypter",window=WindowCrypter},
+        {name="factoryreset",program="factoryreset",window=WindowFactoryreset}
     }
     self.filesystem[3] = {
         name = "programs",

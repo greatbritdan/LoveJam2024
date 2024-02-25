@@ -30,19 +30,19 @@ return {
                 normal = {0.15,0.15,0.15},
                 hover = {0.15,0.15,0.15},
                 pressed = {0.15,0.15,0.15},
-                inactive = {0.15,0.15,0.15}
+                inactive = {0.15,0.15,0.15,0.25}
             },
             uifill = {
                 normal = {0,0,0},
                 hover = {0.1,0.1,0.1},
                 pressed = {0.1,0.1,0.1},
-                inactive = {0,0,0}
+                inactive = {0,0,0,0.25}
             },
             uitext = {
                 normal = {0.5,0.5,0.5},
                 hover = {1,1,1},
                 pressed = {1,1,1},
-                inactive = {0.5,0.5,0.5}
+                inactive = {0.5,0.5,0.5,0.25}
             },
             ui = {
                 white = {1,1,1},
@@ -78,19 +78,19 @@ return {
                 normal = {0.85,0.85,0.85},
                 hover = {0.85,0.85,0.85},
                 pressed = {0.85,0.85,0.85},
-                inactive = {0.85,0.85,0.85}
+                inactive = {0.85,0.85,0.85,0.25}
             },
             uifill = {
                 normal = {1,1,1},
                 hover = {0.9,0.9,0.9},
                 pressed = {0.9,0.9,0.9},
-                inactive = {1,1,1}
+                inactive = {1,1,1,0.25}
             },
             uitext = {
                 normal = {0.5,0.5,0.5},
                 hover = {0,0,0},
                 pressed = {0,0,0},
-                inactive = {0.5,0.5,0.5}
+                inactive = {0.5,0.5,0.5,0.25}
             },
             ui = {
                 white = {0,0,0},
